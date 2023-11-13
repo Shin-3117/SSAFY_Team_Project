@@ -6,7 +6,6 @@ from django.http import JsonResponse
 import requests
 from .serializers import DepositProductsSerializer, DepositOptionsSerializer, SavingProductsSerializer, SavingOptionsSerializer, DepositSerializer, SavingSerializer
 from .models import DepositProducts, DepositOptions, SavingProducts, SavingOptions
-from django.core import serializers
 
 
 # 기본 url
