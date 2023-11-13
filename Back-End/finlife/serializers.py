@@ -14,6 +14,14 @@ class DepositOptionsSerializer(serializers.ModelSerializer):
         read_only_fields = ('fin_prdt_cd',)
 
 
+class DepositSerializer(serializers.ModelSerializer):
+    fin_prdt_cd = DepositProductsSerializer(read_only=True)
+
+    class Meta:
+        model = DepositOptions
+        fields = '__all__'
+
+
 class SavingProductsSerializer(serializers.ModelSerializer):
     class Meta:
         model = SavingProducts
@@ -25,3 +33,11 @@ class SavingOptionsSerializer(serializers.ModelSerializer):
         model = SavingOptions
         fields = '__all__'
         read_only_fields = ('fin_prdt_cd',)
+
+
+class SavingSerializer(serializers.ModelSerializer):
+    fin_prdt_cd = SavingProductsSerializer(read_only=True)
+
+    class Meta:
+        model = SavingOptions
+        fields = '__all__'

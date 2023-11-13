@@ -44,6 +44,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'finlife',
     'rest_framework',
     'drf_spectacular',
     'django.contrib.admin',
