@@ -41,7 +41,55 @@
 <summary>2023.11.14 은행 예적금 Data를 서버에 저장후, 프론트 통신</summary>
 <div markdown="1">
 
-### table tag를 쓰면 안되는 이유
+## CORS 처리
+장고에서 `corsheaders`라이브러리를 이용하여 Header 부분에 `CORS_ALLOWED_ORIGINS` 추가
+```python
+# settings.py
+INSTALLED_APPS = [
+    ...,
+    'corsheaders',
+    ...,
+]
+
+MIDDLEWARE = [
+    ...,
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    ...,
+]
+
+CORS_ALLOWED_ORIGINS = [
+    'http://127.0.0.1:5173',
+    'http://localhost:5173',
+]
+```
+
+## 통신 Data TS interface로 Type 정의
+
+`/src/interface/BankData.ts`에 데이터 타입 정의
+
+Type import의 경우 `import type SavingType from '@/interface/BankData'`
+형식으로 `import type` 사용
+
+import한 Type 적용
+```TS
+import type SavingType from '@/interface/BankData'
+
+const depositList = ref<SavingType[] | null>(null);
+const isModalOpen = ref({
+  state: false,
+  data: null as SavingType | null,
+})
+```
+
+### Data Table
+`BankDeposit.vue`컴포넌트에서 
+table tag에서 article, div tag로 변경
+
+#### table tag를 쓰면 안되는 이유
+웹표준을 지키는 것과 테이블 레이아웃은 별개의 문제
+
+웹 접근성을 지키기 위해서 테이블을 쓰지 말라는 것
 
 </div>
 </details>
