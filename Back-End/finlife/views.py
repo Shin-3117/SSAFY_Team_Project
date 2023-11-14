@@ -150,6 +150,7 @@ def save_saving(request):
 
 # 예금 데이터 - 저축기간 + 금리(일반, 우대) 필터에 맞게 응답
 @api_view(['GET'])
+# 캐싱 적용
 @cache_page(60 * 15)
 def deposit_products(request, term, sort_field):
     try:
@@ -158,8 +159,13 @@ def deposit_products(request, term, sort_field):
 
         # 입력된 정렬 필드가 유효한지 확인
         if sort_field in valid_sort_fields:
-            # select_related를 사용(Improve Query)
-            products = DepositOptions.objects.filter(save_trm=term).select_related('fin_prdt_cd').order_by('-' + sort_field)
+            # term이 0이면 전체 기간
+            if term == 0:
+                # select_related를 사용(Improve Query)
+                products = DepositOptions.objects.all().select_related('fin_prdt_cd').order_by('-' + sort_field)
+            else:
+                # select_related를 사용(Improve Query)
+                products = DepositOptions.objects.filter(save_trm=term).select_related('fin_prdt_cd').order_by('-' + sort_field)
             serializer = DepositSerializer(products, many=True)
             return Response(serializer.data)
         else:
@@ -173,6 +179,7 @@ def deposit_products(request, term, sort_field):
 
 # 적금 데이터 - 저축기간 + 금리(일반, 우대) 필터에 맞게 응답
 @api_view(['GET'])
+# 캐싱 적용
 @cache_page(60 * 15)
 def saving_products(request, term, sort_field):
     try:
@@ -181,9 +188,13 @@ def saving_products(request, term, sort_field):
 
         # 입력된 정렬 필드가 유효한지 확인
         if sort_field in valid_sort_fields:
-            # select_related를 사용(Improve Query)
-            products = SavingOptions.objects.filter(save_trm=term).select_related('fin_prdt_cd').order_by('-' + sort_field)
-            print(len(products))
+            # term이 0이면 전체 기간
+            if term == 0:
+                # select_related를 사용(Improve Query)
+                products = SavingOptions.objects.all().select_related('fin_prdt_cd').order_by('-' + sort_field)
+            else:
+                # select_related를 사용(Improve Query)
+                products = SavingOptions.objects.filter(save_trm=term).select_related('fin_prdt_cd').order_by('-' + sort_field)
             serializer = SavingSerializer(products, many=True)
             return Response(serializer.data)
         else:
