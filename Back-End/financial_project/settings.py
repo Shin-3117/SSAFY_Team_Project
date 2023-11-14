@@ -28,6 +28,7 @@ environ.Env.read_env(
 
 # 환경변수 읽어오기
 API_KEY = env('API_KEY')
+API_KEY2 = env('API_KEY2')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
@@ -45,6 +46,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'finlife',
+    'exchangerate',
     'rest_framework',
     'drf_spectacular',
     'corsheaders',
