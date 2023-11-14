@@ -25,14 +25,14 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
-import getDepositList from '../../api/bank';
+import getDepositListDirect from '../../api/bankDirect';
 // const apiKey = import.meta.env.VITE_API_KEY
 // const apiUrl = import.meta.env.VITE_API_URL
 
 const depositList = ref('데이터 로딩중 입니다');
 onMounted(async () => {
   try {
-    const response = await getDepositList();
+    const response = await getDepositListDirect();
     for (const bank of response.result.baseList){
       bank.options = []
       for(const option of response.result.optionList){

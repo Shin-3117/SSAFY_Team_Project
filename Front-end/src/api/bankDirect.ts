@@ -3,8 +3,8 @@
 import config from '../config';
 import axios from 'axios';
 
-const baseURL = config.apiUrl;
-const key = config.apiKey;
+const baseURL = config.apiDirectUrl;
+const key = config.apiDirectKey;
 
 /**
  * topFinGrpNo (금융회사가 속한 권역 코드): default = '020000'
@@ -14,7 +14,7 @@ const key = config.apiKey;
  * @param {number} pageNo 
  * @returns 
  */
-const getDepositList = async (topFinGrpNo='020000', pageNo=1) => {
+const getDepositListDirect = async (topFinGrpNo='020000', pageNo=1) => {
   try{
     const response = await axios.get(
       `${baseURL}/finlifeapi/depositProductsSearch.json`, {
@@ -35,7 +35,7 @@ const getDepositList = async (topFinGrpNo='020000', pageNo=1) => {
     console.error(error)
   }
 }
-export default getDepositList
+export default getDepositListDirect
 
 /*
 {

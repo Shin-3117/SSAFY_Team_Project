@@ -1,10 +1,10 @@
 <script setup lang="ts">
-// import BankListDirect from '../components/Bank/BankListDirect.vue';
+import BankDeposit from '@/components/Bank/BankDeposit.vue';
 </script>
 
 <template>
   <main>
     <h1 class="text-xl">예금, 적금 추천</h1>
-    <!-- <BankListDirect/> -->
+    <BankDeposit/>
   </main>
 </template>

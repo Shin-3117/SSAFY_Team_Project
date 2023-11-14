@@ -1,9 +1,11 @@
-const apiUrl = import.meta.env.VITE_BANK_URL;
-const apiKey = import.meta.env.VITE_BANK_KEY;
+const apiDirectUrl = import.meta.env.VITE_BANK_DIRECT_URL;
+const apiDirectKey = import.meta.env.VITE_BANK_DIRECT_KEY;
 const mapKey = import.meta.env.VITE_MAP_KEY
+const bankUrl = import.meta.env.VITE_BANK_URL
 
 export default {
-  apiUrl,
-  apiKey,
-  mapKey
+  apiDirectUrl,
+  apiDirectKey,
+  mapKey,
+  bankUrl
 };
