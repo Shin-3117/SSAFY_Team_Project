@@ -21,6 +21,10 @@ const initMap = () => {
   // 지도 객체를 등록합니다.
   // 지도 객체는 반응형 관리 대상이 아니므로 initMap에서 선언합니다.
   map = new kakao.maps.Map(container, options);
+
+  infowindow = new kakao.maps.InfoWindow({zIndex:1})
+  ps = new kakao.maps.services.Places(map);
+  ps.categorySearch('BK9', placesSearchCB, {useMapBounds:true});
 };
 
 
@@ -48,29 +52,18 @@ function displayMarker(place) {
     });
 }
 
-onMounted(() => {
+onMounted(async () => {
   if (window.kakao && window.kakao.maps) {
     initMap();
     console.log('if b',infowindow)
-    infowindow = new kakao.maps.InfoWindow({zIndex:1})
-    console.log('if a',infowindow)
-    ps = new kakao.maps.services.Places(map)
-    // 카테고리로 은행을 검색합니다
-ps.categorySearch('BK9', placesSearchCB, {useMapBounds:true});
   } else {
     const script = document.createElement('script');
     /* global kakao */
-    script.onload = () => {
-      kakao.maps.load(initMap);
-      console.log('else b',infowindow)
-      infowindow = new kakao.maps.InfoWindow({zIndex:1})
-      console.log('else a',infowindow)
-      ps = new kakao.maps.services.Places(map)
-      // 카테고리로 은행을 검색합니다
-ps.categorySearch('BK9', placesSearchCB, {useMapBounds:true});
-    }
     script.src = `//dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=${config.mapKey}&libraries=services`;
     document.head.appendChild(script);
+    script.onload = () => {
+      kakao.maps.load(initMap);
+    }
   }
 });
 
