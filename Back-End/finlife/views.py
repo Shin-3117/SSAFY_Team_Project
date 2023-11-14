@@ -6,6 +6,7 @@ from django.http import JsonResponse
 import requests
 from .serializers import DepositProductsSerializer, DepositOptionsSerializer, SavingProductsSerializer, SavingOptionsSerializer, DepositSerializer, SavingSerializer
 from .models import DepositProducts, DepositOptions, SavingProducts, SavingOptions
+from django.views.decorators.cache import cache_page
 
 
 # 기본 url
@@ -149,6 +150,7 @@ def save_saving(request):
 
 # 예금 데이터 - 저축기간 + 금리(일반, 우대) 필터에 맞게 응답
 @api_view(['GET'])
+@cache_page(60 * 15)
 def deposit_products(request, term, sort_field):
     try:
         # 정렬 필드 목록(일반, 우대)
@@ -171,6 +173,7 @@ def deposit_products(request, term, sort_field):
 
 # 적금 데이터 - 저축기간 + 금리(일반, 우대) 필터에 맞게 응답
 @api_view(['GET'])
+@cache_page(60 * 15)
 def saving_products(request, term, sort_field):
     try:
         # 정렬 필드 목록(일반, 우대)
