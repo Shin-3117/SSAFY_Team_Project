@@ -3,7 +3,7 @@ import { useAuthStore } from '../../stores/auth';
 import { ref } from 'vue';
 
 const authStore = useAuthStore()
-const props = defineProps(['loginState'])
+
 const ID = ref('')
 const IDerror = ref({
   'isError': false,
@@ -14,33 +14,39 @@ const PWerror = ref({
   'isError': false,
   'errorMsg': '비밀번호를 입력해 주세요!'
 })
-
-const onSubmit = () => {
-  if(ID.value && PW.value){
-    authStore.toggleLogin()
-    IDerror.value.isError = false
-    PWerror.value.isError = false
-    props.loginState.open()
-  } else {
-    if(!ID.value){
-      IDerror.value.isError = true
-    } else {
-      IDerror.value.isError = false
-    }
-    if(!PW.value){
-      PWerror.value.isError = true
-    } else {
-      PWerror.value.isError = false
-    }
+const logIn = function () {
+  const payload = {
+    username: ID.value,
+    password: PW.value
   }
+  authStore.logIn(payload)
 }
+// const onSubmit = () => {
+//   if(ID.value && PW.value){
+//     authStore.toggleLogin()
+//     IDerror.value.isError = false
+//     PWerror.value.isError = false
+//     props.loginState.open()
+//   } else {
+//     if(!ID.value){
+//       IDerror.value.isError = true
+//     } else {
+//       IDerror.value.isError = false
+//     }
+//     if(!PW.value){
+//       PWerror.value.isError = true
+//     } else {
+//       PWerror.value.isError = false
+//     }
+//   }
+// }
 </script>
 
 <template>
 <div class="background" v-on:click.self="loginState.open()">
   <section class="LoginFormBox">
     <h2>Login</h2>
-    <form v-on:submit.prevent="onSubmit" method="post">
+    <form v-on:submit.prevent="logIn">
       <label for="ID">아이디 입력
         <span class="errorMsg">{{ IDerror.isError ? IDerror.errorMsg : '' }}</span>
       </label>
