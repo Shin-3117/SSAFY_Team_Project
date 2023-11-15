@@ -21,7 +21,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useAuthStore } from '@/stores/auth'
-import type { SignUpInfo } from '@/interface/Auth'
+import type { SignUpInfo } from '@/interface/AuthType.js'
 const store = useAuthStore()
 const props = defineProps(['signupState'])
 
@@ -82,4 +82,4 @@ form{
 .btn-blue:hover {
   @apply bg-blue-700;
 }
-</style>
+</style>@/interface/AuthType

@@ -2,7 +2,7 @@ import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
 import { useRouter } from 'vue-router'
 import axios from 'axios'
-import type { LogInInfo, SignUpInfo } from '@/interface/Auth'
+import type { LogInInfo, SignUpInfo } from '@/interface/AuthType'
 
 export const useAuthStore = defineStore('auth', () => {
   const API_URL = 'http://127.0.0.1:8000'

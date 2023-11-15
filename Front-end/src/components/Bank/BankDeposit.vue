@@ -106,7 +106,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import getBankList from '../../api/bankDeposit';
-import type SavingType from '@/interface/BankData'
+import type SavingType from '@/interface/BankDataType'
 const radioValue = ref({
   Saving: 'deposit',
   term:'0',
@@ -154,4 +154,4 @@ const changeData = async ()=>{
 .modalBackground{
   background-color: rgb(0, 0, 0,0.5);
 }
-</style>
+</style>@/interface/BankDataType
