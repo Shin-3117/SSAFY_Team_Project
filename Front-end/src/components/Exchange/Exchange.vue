@@ -62,7 +62,7 @@ const findCountry = (CUR:string) => {
 }
 
 const foreignCurrency = ref(1)
-const nationalCurrency = ref(1000)
+const nationalCurrency = ref(1)
 </script>
 
 <style scoped>
