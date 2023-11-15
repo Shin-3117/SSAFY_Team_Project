@@ -47,6 +47,7 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     'finlife',
     'exchangerate',
+    'accounts',
     'rest_framework',
     'drf_spectacular',
     'corsheaders',
