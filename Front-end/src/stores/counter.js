@@ -2,9 +2,10 @@ import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
 import { useRouter } from 'vue-router'
 import axios from 'axios'
-import type { LogInInfo, SignUpInfo } from '@/interface/AuthType'
 
-export const useAuthStore = defineStore('auth', () => {
+export const useCounterStore = defineStore('counter', () => {
+  const router = useRouter()
+  const articles = ref([])
   const API_URL = 'http://127.0.0.1:8000'
   const token = ref(null)
   const isLogin = computed(() => {
@@ -14,18 +15,33 @@ export const useAuthStore = defineStore('auth', () => {
       return true
     }
   })
-  
 
-  const signUp = function (payload: SignUpInfo) {
+  // DRF에 article 조회 요청을 보내는 action
+  const getArticles = function () {
+    axios({
+      method: 'get',
+      url: `${API_URL}/api/v1/articles/`,
+      headers: {
+        Authorization: `Token ${token.value}`
+      }
+    })
+      .then((res) =>{
+        // console.log(res)
+        articles.value = res.data
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  }
+
+  const signUp = function (payload) {
     const { username, password1, password2 } = payload
 
     axios({
       method: 'post',
       url: `${API_URL}/accounts/signup/`,
       data: {
-        username: username, 
-        password1: password1, 
-        password2: password2
+        username, password1, password2
       }
     })
       .then((res) => {
@@ -38,8 +54,9 @@ export const useAuthStore = defineStore('auth', () => {
       })
   }
 
-  const logIn = function (payload: LogInInfo) {
+  const logIn = function (payload) {
     const { username, password } = payload
+
     axios({
       method: 'post',
       url: `${API_URL}/accounts/login/`,
@@ -50,6 +67,7 @@ export const useAuthStore = defineStore('auth', () => {
       .then((res) => {
         console.log(res.data)
         token.value = res.data.key
+        router.push({ name: 'ArticleView' })
       })
       .catch((err) => {
         console.log(err)
@@ -63,11 +81,12 @@ export const useAuthStore = defineStore('auth', () => {
     })
       .then((res) => {
         token.value = null
+        router.push({ name: 'ArticleView' })
       })
       .catch((err) => {
         console.log(err)
       })
   }
 
-  return {signUp, logIn, token, isLogin, logOut }
-});
+  return { articles, API_URL, getArticles, signUp, logIn, token, isLogin, logOut }
+}, { persist: true })

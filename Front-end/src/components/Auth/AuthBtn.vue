@@ -5,11 +5,14 @@
       v-on:click="openLogin.open()"
       class="btn btn-blue">로그인</button>
     <Login v-if="openLogin.state" :login-state="openLogin"/>
+
     <button v-if="!authStore.isLogin"
+      v-on:click="openSignUp.open()"
       class="btn btn-blue">회원가입</button>
-    
+    <SignUp v-if="openSignUp.state" :signup-state="openSignUp"/>
+
     <button v-if="authStore.isLogin" 
-      v-on:click="authStore.toggleLogin"
+      v-on:click="authStore.logOut"
       class="btn btn-blue">로그아웃</button>
   </div>
 </template>
@@ -18,6 +21,7 @@
 import { ref } from 'vue';
 import { useAuthStore } from '../../stores/auth';
 import Login from './Login.vue';
+import SignUp from './SignUp.vue';
 const authStore = useAuthStore()
 const openLogin = ref({
   state:false,
@@ -25,7 +29,12 @@ const openLogin = ref({
     this.state = !this.state
   }
 })
-
+const openSignUp = ref({
+  state:false,
+  open(){
+    this.state = !this.state
+  }
+})
 </script>
 
 <style scoped lang="scss">
