@@ -49,6 +49,8 @@ INSTALLED_APPS = [
     'exchangerate',
     'accounts',
     'rest_framework',
+    'rest_framework.authtoken',
+    'dj_rest_auth',
     'drf_spectacular',
     'corsheaders',
     'django.contrib.admin',
@@ -150,4 +152,10 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 REST_FRAMEWORK = {
 	'DEFAULT_SCHEMA_CLASS' : 'drf_spectacular.openapi.AutoSchema',
+    # Authentication
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+    ],
 }
+
+AUTH_USER_MODEL = 'accounts.User'
