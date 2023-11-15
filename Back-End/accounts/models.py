@@ -14,7 +14,7 @@ class User(AbstractUser):
     ]
     gender = models.IntegerField(choices=GENDER_CHOICES, default=0)
     # 생년월일 필드
-    birthday = models.DateTimeField()
+    birthday = models.DateField()
     # 보유자산 필드
     money = models.IntegerField(default=0)
     # 예금 상품 가입 정보
