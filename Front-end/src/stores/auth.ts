@@ -2,7 +2,7 @@ import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
 import { useRouter } from 'vue-router'
 import axios from 'axios'
-import type UserInfo from '@/interface/Auth'
+import type { LogInInfo, SignUpInfo } from '@/interface/Auth'
 
 export const useAuthStore = defineStore('auth', () => {
   const API_URL = 'http://127.0.0.1:8000'
@@ -16,18 +16,21 @@ export const useAuthStore = defineStore('auth', () => {
   })
   
 
-  const signUp = function (payload: UserInfo) {
-    const { username, password, password2 } = payload
+  const signUp = function (payload: SignUpInfo) {
+    const { username, password1, password2 } = payload
 
     axios({
       method: 'post',
       url: `${API_URL}/accounts/signup/`,
       data: {
-        username, password, password2
+        username: username, 
+        password1: password1, 
+        password2: password2
       }
     })
       .then((res) => {
         console.log(res)
+        const password = password1
         logIn({ username, password })
       })
       .catch((err) => {
@@ -35,7 +38,7 @@ export const useAuthStore = defineStore('auth', () => {
       })
   }
 
-  const logIn = function (payload: UserInfo) {
+  const logIn = function (payload: LogInInfo) {
     const { username, password } = payload
     axios({
       method: 'post',

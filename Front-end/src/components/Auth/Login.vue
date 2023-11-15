@@ -3,48 +3,49 @@ import { useAuthStore } from '../../stores/auth';
 import { ref } from 'vue';
 
 const authStore = useAuthStore()
+const props = defineProps(['loginState'])
 
-const ID = ref('')
+const ID = ref(null)
 const IDerror = ref({
   'isError': false,
   'errorMsg': '아이디를 입력해 주세요!'
 })
-const PW = ref('')
+const PW = ref(null)
 const PWerror = ref({
   'isError': false,
   'errorMsg': '비밀번호를 입력해 주세요!'
 })
+
 const logIn = function () {
-  const payload = {
-    username: ID.value,
-    password: PW.value
+  if(ID.value && PW.value){
+    const payload = {
+      username: ID.value,
+      password: PW.value
+    }
+    authStore.logIn(payload)
+
+    IDerror.value.isError = false
+    PWerror.value.isError = false
+    props.loginState.open()
+  } else {
+    if(!ID.value){
+      IDerror.value.isError = true
+    } else {
+      IDerror.value.isError = false
+    }
+
+    if(!PW.value){
+      PWerror.value.isError = true
+    } else {
+      PWerror.value.isError = false
+    }
   }
-  authStore.logIn(payload)
 }
-// const onSubmit = () => {
-//   if(ID.value && PW.value){
-//     authStore.toggleLogin()
-//     IDerror.value.isError = false
-//     PWerror.value.isError = false
-//     props.loginState.open()
-//   } else {
-//     if(!ID.value){
-//       IDerror.value.isError = true
-//     } else {
-//       IDerror.value.isError = false
-//     }
-//     if(!PW.value){
-//       PWerror.value.isError = true
-//     } else {
-//       PWerror.value.isError = false
-//     }
-//   }
-// }
 </script>
 
 <template>
 <div class="background" v-on:click.self="loginState.open()">
-  <section class="LoginFormBox">
+  <section class="LoginFormBox bg-slate-200 dark:bg-slate-800">
     <h2>Login</h2>
     <form v-on:submit.prevent="logIn">
       <label for="ID">아이디 입력
@@ -57,7 +58,7 @@ const logIn = function () {
       </label>
       <input type="password" id="PW" v-model="PW">
       <br>
-      <input type="submit" value="로그인">
+      <input type="submit" value="로그인" class="btn btn-blue">
     </form>
   </section>
 </div>
@@ -77,9 +78,7 @@ const logIn = function () {
 }
 .LoginFormBox{
   width: 340px;
-  height: 200px;
   padding: 8px;
-  background-color: aquamarine;
   h2{
     text-align: center;
     font-size: larger;
@@ -92,5 +91,14 @@ form{
 }
 .errorMsg{
   color: rgb(192, 2, 2);
+}
+.btn {
+  @apply font-bold py-2 px-4 rounded-full;
+}
+.btn-blue {
+  @apply bg-blue-500 text-white;
+}
+.btn-blue:hover {
+  @apply bg-blue-700;
 }
 </style>
