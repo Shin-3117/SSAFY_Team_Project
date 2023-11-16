@@ -21,7 +21,8 @@ def api_test(request):
     url = URL
     params = {
         'authkey': API_KEY,
-        'data': 'AP01'
+        'data': 'AP01',
+        'searchdate': "20231115",
     }
     response = requests.get(url, params=params).json()
     return Response(response)
@@ -36,12 +37,13 @@ def parse_float(value):
 
 
 # 환율 API 요청 -> DB 저장
+@api_view(['GET'])
 def save_rate(request):
     try:
         url = URL
         params = {
             'authkey': API_KEY,
-            'data': 'AP01'
+            'data': 'AP01',
         }
         response = requests.get(url, params=params).json()
 
@@ -56,9 +58,9 @@ def save_rate(request):
             # 100 단위 기준 통화 처리(일본, 인도네시아)
             if "(100)" in rate_data['cur_unit']:
                 rate_data['cur_unit'] = rate_data['cur_unit'].replace("(100)", "").strip()
-                deal_bas_r /= 100
-                ttb /= 100
-                tts /= 100
+                deal_bas_r = round(deal_bas_r / 100, 4)
+                ttb = round(ttb / 100, 4)
+                tts = round(tts / 100, 4)
             rate_data['deal_bas_r'] = deal_bas_r
             rate_data['ttb'] = ttb
             rate_data['tts'] = tts

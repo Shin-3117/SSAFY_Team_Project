@@ -7,4 +7,5 @@ urlpatterns = [
     path('save_saving/', views.save_saving),
     path('deposit/<int:term>/<str:sort_field>/', views.deposit_products),
     path('saving/<int:term>/<str:sort_field>/', views.saving_products),
+    # path('save_deposit2/', views.save_deposit2),
 ]

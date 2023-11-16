@@ -1,4 +1,6 @@
 from django.db import models
+from django.conf import settings
+
 
 # Create your models here.
 # 예금 상품 목록
@@ -75,3 +77,19 @@ class SavingOptions(models.Model):
     rsrv_type = models.TextField()
     # 적립 유형명
     rsrv_type_nm = models.CharField(max_length=100)
+
+
+# 예금 상품 가입 중간 모델
+class DepositSubscription(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    deposit_product = models.ForeignKey(DepositProducts, on_delete=models.CASCADE)
+    deposit_option = models.ForeignKey(DepositOptions, on_delete=models.CASCADE)
+    subscribe_date = models.DateTimeField(auto_now_add=True)
+
+
+# 적금 상품 가입 중간 모델
+class SavingsSubscription(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    saving_product = models.ForeignKey(SavingProducts, on_delete=models.CASCADE)
+    saving_option = models.ForeignKey(SavingOptions, on_delete=models.CASCADE)
+    subscribe_date = models.DateTimeField(auto_now_add=True)
