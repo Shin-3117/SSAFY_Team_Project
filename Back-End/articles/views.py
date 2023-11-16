@@ -2,21 +2,26 @@ from django.shortcuts import render
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework import status
-
+from django.shortcuts import get_object_or_404, get_list_or_404
+from .serializers import ArticleSerializer, ArticleListSerializer, CommentSerializer
+from .models import Article, Comment
 # permission Decorators
 from rest_framework.decorators import permission_classes
 from rest_framework.permissions import IsAuthenticated
 
-from django.shortcuts import get_object_or_404, get_list_or_404
-
-from .serializers import ArticleSerializer, ArticleListSerializer, CommentSerializer
-from .models import Article, Comment
-
 
 # Create your views here.
 @api_view(['GET', 'POST', 'PUT', 'PATCH', 'DELETE'])
-@permission_classes([IsAuthenticated])
+# @permission_classes([IsAuthenticated])
 def article_view(request, article_id=None):
+    if request.method == 'GET':
+        # GET 요청은 인증 요구 X
+        pass
+    else:
+        # POST, PUT, PATCH, DELETE 요청은 인증 요구
+        if not request.user.is_authenticated:
+            return Response({"message": "Unauthorized"}, status=401)
+
     if request.method == 'GET':
         if article_id:
             article = get_object_or_404(Article, pk=article_id)
