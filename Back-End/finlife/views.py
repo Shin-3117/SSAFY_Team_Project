@@ -205,7 +205,7 @@ def saving_products(request, term, sort_field):
                 # select_related를 사용(Improve Query)
                 products = SavingOptions.objects.filter(save_trm=term).select_related('fin_prdt_cd').order_by('-' + sort_field)
             result_page = paginator.paginate_queryset(products, request)
-            serializer = DepositSerializer(result_page, many=True)
+            serializer = SavingSerializer(result_page, many=True)
             return paginator.get_paginated_response(serializer.data)
         else:
             # 유효하지 않은 정렬 필드인 경우 오류 메시지 반환
