@@ -37,6 +37,7 @@ def parse_float(value):
 
 
 # 환율 API 요청 -> DB 저장
+@api_view(['GET'])
 def save_rate(request):
     try:
         url = URL

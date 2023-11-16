@@ -1,4 +1,5 @@
 from dj_rest_auth.registration.serializers import RegisterSerializer
+from dj_rest_auth.serializers import LoginSerializer
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
 
@@ -28,3 +29,10 @@ class CustomRegisterSerializer(RegisterSerializer):
         user.money = self.validated_data.get('money', 0)
         user.save()
         return user
+    
+
+# class CustomLoginSerializer(LoginSerializer):
+#     class Meta:
+#         model = get_user_model()
+#         fields = ('username', 'password')
+#         extra_kwargs = {'password': {'write_only': True}}
