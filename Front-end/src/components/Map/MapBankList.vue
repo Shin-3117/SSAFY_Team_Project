@@ -12,11 +12,11 @@ let map = null;
 let infowindow = null;
 let ps = null;
 
-const initMap = () => {
+const initMap = (lat=35.16665, long=129.16792, level=6) => {
   const container = document.getElementById('map');
   const options = {
-    center: new kakao.maps.LatLng(37.566826, 126.9786567),
-    level: 5,
+    center: new kakao.maps.LatLng(lat, long),
+    level: level,
   };
   // 지도 객체를 등록합니다.
   // 지도 객체는 반응형 관리 대상이 아니므로 initMap에서 선언합니다.
@@ -55,7 +55,7 @@ const displayMarker = (place) => {
 onMounted(async () => {
   if (window.kakao && window.kakao.maps) {
     initMap();
-    console.log('if b',infowindow)
+    // console.log('if b',infowindow)
   } else {
     const script = document.createElement('script');
     /* global kakao */
@@ -73,7 +73,7 @@ onMounted(async () => {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 #map {
-  width: 600px;
-  height: 600px;
+  width: 500px;
+  height: 500px;
 }
 </style>
