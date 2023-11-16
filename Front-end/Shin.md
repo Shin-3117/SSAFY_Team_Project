@@ -1,6 +1,6 @@
 # 이슈발생
 
-## 2023.11.13
+## 2023.11.13 월
 <details>
 <summary>2023.11.13 카카오 맵 API, Vue3 연동</summary>
 <div markdown="1">
@@ -38,7 +38,7 @@
 </div>
 </details>
 
-## 2023.11.14
+## 2023.11.14 화
 <details>
 <summary>2023.11.14 은행 예적금 Data를 서버에 저장후, 프론트 통신</summary>
 <div markdown="1">
@@ -96,7 +96,7 @@ table tag에서 article, div tag로 변경
 </div>
 </details>
 
-## 2023.11.15
+## 2023.11.15 수
 <details>
 <summary>2023.11.15 로그인 토큰 처리, 환율 기능 세팅</summary>
 <div markdown="1">
@@ -171,6 +171,104 @@ export default interface ExchangeType{
 string을 parseFloat를 통해 number 타입으로 변환하여 사용합니다.
 
 현제 TS error 가 발생하는 관계로 수정 필요
+
+</div>
+</details>
+
+## 2023.11.16 목
+<details>
+<summary>2023.11.16 회원가입 입력정보 수정, 카카오맵 api으로 은행 검색 기능 구현 </summary>
+<div markdown="1">
+
+### 회원가입 입력정보 수정
+- 기존에는 회원가입 시, {아이디, 비밀번호, 비밀번호확인}을 서버로 전송했지만,
+
+  서버 구조 변경으로 {아이디, 비밀번호, 비밀번호확인, 성별, 생년월일, 보유자산}으로 변경
+
+  src/interface/AuthType
+  ```TS
+  export interface SignUpInfo{
+    username:string,
+    password1:string,
+    password2:string,
+    gender:number,
+    birthday:string,
+    money:number
+  }
+  ```
+
+- 회원가입 시, 양식에 만족하지 못하는 data로 서버요청이 안 가도록 방어코드, 에러문구 작성
+
+### 카카오맵 api으로 은행 검색 기능 구현
+/src/components/Map/MapBankList
+#### 1. 위치 선택 후, 해당 위치로 이동 기능
+placeInfo.json에 시군구의 위도, 경도 값을 저장하고 이를 컴포넌트에서 사용
+
+초기에는 해당 위치를 map의 center하는 지도 생성하여 구현
+
+#### 1-1. (오류) 지도가 겹쳐지는 
+카카오 맵 api에서는 맵을 하나만 생성하고 HTML tag에 mount하는 방식
+
+하지만, 맵을 하나만 생성하는 것이 아닌 맵을 계속 새로 만드는 방식으로 코드를 구현하여 오류발생
+
+수정을 위해 초기에 컴포넌트가 생성될 때, 1회만 맵을 생성하고, 맵을 조작하는 방식으로 변경시킴
+
+#### 1-2. 맵 조작
+  ```JS
+  const moveMap = (lat,long)=>{
+    lat = parseFloat(lat)
+    long = parseFloat(long)
+    let moveLatLon = new kakao.maps.LatLng(lat,long);
+    
+    // 지도 중심을 부드럽게 이동시킵니다
+    // 만약 이동할 거리가 지도 화면보다 크면 부드러운 효과 없이 이동합니다
+    map.panTo(moveLatLon);
+
+    // 기존의 마커 삭제
+    deleteMarkers()
+    // 은행 검색 및 결과 처리
+    infowindow = new kakao.maps.InfoWindow({zIndex:1})
+    ps = new kakao.maps.services.Places(map);
+    ps.categorySearch('BK9', placesSearchCB, {useMapBounds:true});
+  }
+  ```
+
+#### 2. 지도에서 보고있는 화면에서 은행 검색
+1번의 방식으로는 보고있는 지도를 사용자가 이동시켰을 때, 추가적인 마커를 생성하지 않음
+
+또한, 해당 지도에서 은행 검색이 불가능
+
+이를 해결하기 위해, 지도에서 보고있는 화면에서 은행 검색 기능 구현
+
+사용자가 보고있는 화면의 경도 위도 정보를 받고,
+이 정보를 바탕으로 재검색할 수 있는 버튼 추가
+
+#### 2-1. (오류) 마커가 겹쳐져서 계속 생성됨
+재검색시 기존에 생성한 마커가 사라지지 않고, 계속 생성이됨
+
+  이를 위해 마커를 배열에 모으고, 마커들을 제거하는 함수생성
+  ```JS
+  let markers = []
+
+  //... 마커 생성 후, markers.push(marker)
+
+  const deleteMarkers = () => {
+    for (var i = 0; i < markers.length; i++) {
+      markers[i].setMap(null); 
+    }
+    markers = []
+  }
+  ```
+
+</div>
+</details>
+
+## 2023.11.17 금
+<details>
+<summary>2023.11.17 </summary>
+<div markdown="1">
+
+### 금요일
 
 </div>
 </details>
