@@ -17,15 +17,18 @@ export const useAuthStore = defineStore('auth', () => {
   
 
   const signUp = function (payload: SignUpInfo) {
-    const { username, password1, password2 } = payload
+    const { username, password1, password2, gender, birthday, money } = payload
 
     axios({
       method: 'post',
       url: `${API_URL}/accounts/signup/`,
       data: {
-        username: username, 
-        password1: password1, 
-        password2: password2
+        username, 
+        password1, 
+        password2,
+        gender,
+        birthday,
+        money
       }
     })
       .then((res) => {
