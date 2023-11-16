@@ -1,16 +1,57 @@
 <template>
-<div class="background" v-on:click.self="signupState.open()">
+<div class="background">
   <div class="formBox bg-slate-200 dark:bg-slate-800">
-    <h2>Signup</h2>
+    <div class="relative">
+      <h2>Signup</h2>
+      <button v-on:click="signupState.open()"
+      class="absolute top-0 right-0">X 모달창 닫기</button>
+    </div>
+
     <form @submit.prevent="signUp">
-      <label for="ID">ID : </label>
+      <label for="ID">ID : 
+        <span v-if="errors.username.state"
+        class="text-red-500">
+        {{ errors.username.message }}</span>
+      </label>
       <input type="text" id="ID" v-model.trim="username">
 
-      <label for="PW">비밀번호 : </label>
+      <label for="PW">비밀번호 : 
+        <span v-if="errors.password1.state"
+        class="text-red-500">
+        {{ errors.password1.message }}</span>
+      </label>
       <input type="password" id="PW" v-model.trim="password1">
 
-      <label for="PW2">비밀번호 확인 : </label>
+      <label for="PW2">비밀번호 확인 : 
+        <span v-if="errors.password2.state"
+        class="text-red-500">
+        {{ errors.password2.message }}</span>
+      </label>
       <input type="password" id="PW2" v-model.trim="password2">
+
+      <p>성별</p>
+      <div class="flex">
+        <label for="male">
+          <input type="radio" name="gender" id="male" checked
+          value="0" v-model="gender">남성
+        </label>
+        <label for="female">
+          <input type="radio" name="gender" id="female"
+          value="1" v-model="gender">여성
+        </label>
+      </div>
+
+      <label for="birthday">생년월일
+        <span v-if="errors.birthday.state"
+        class="text-red-500">
+        {{ errors.birthday.message }}</span>
+      </label>
+      <input type="date" id="birthday"
+        min="1900-01-01" :max="today" v-model="birthday">
+
+      <label for="money">보유자산</label>
+      <input type="number" id="money" v-model="money">
+
       <br>
       <input type="submit" value="회원가입" class="btn btn-blue">
     </form>
@@ -28,20 +69,66 @@ const props = defineProps(['signupState'])
 const username = ref(null)
 const password1 = ref(null)
 const password2 = ref(null)
+const gender = ref(0)
+const birthday = ref(null)
+const money = ref(0)
+
+const todayTmp = new Date()
+const year = todayTmp.getFullYear(); // 년도
+const month = todayTmp.getMonth() + 1;  // 월
+const date = todayTmp.getDate();  // 날짜
+
+const today = ref(`${year}-${month}-${date}`)
+
+const errors = ref({
+  username: {
+    state:false,
+    message:'아이디를 입력해 주세요'
+  },
+  password1: {
+    state:false,
+    message:'비밀번호를 입력해 주세요'
+  },
+  password2: {
+    state:false,
+    message:'입력한 비밀번호와 달라요'
+  },
+  birthday: {
+    state:false,
+    message:'생년월일을 입력해 주세요'
+  }
+})
 
 const signUp = function () {
   if ( username.value!==null && 
       password1.value!==null && 
-      password2.value!==null){
+      password2.value!==null &&
+      birthday.value!==null){
 
     const payload: SignUpInfo = {
       username: username.value,
       password1: password1.value,
-      password2: password2.value
+      password2: password2.value,
+      gender: gender.value,
+      birthday: birthday.value,
+      money: money.value
     }
     store.signUp(payload)
-  } else {
-    window.alert('양식오류')
+    errors.value.birthday.state = false
+  } else if(username.value===null ){
+    errors.value.username.state = true
+  } else if(password1.value===null){
+    errors.value.username.state = false
+    errors.value.password1.state = true
+  } else if(password2.value!==password1.value){
+    errors.value.username.state = false
+    errors.value.password1.state = false
+    errors.value.password2.state = true
+  } else if(birthday.value===null){
+    errors.value.username.state = false
+    errors.value.password1.state = false
+    errors.value.password2.state = false
+    errors.value.birthday.state = true
   }
 }
 </script>
