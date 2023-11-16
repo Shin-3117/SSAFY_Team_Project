@@ -169,4 +169,4 @@ form{
 .btn-blue:hover {
   @apply bg-blue-700;
 }
-</style>@/interface/AuthType
+</style>
