@@ -8,6 +8,9 @@ from datetime import date
 from .serializers import ExchangeRatesSerializer
 from .models import ExchangeRates
 from django.views.decorators.cache import cache_page
+# permission Decorators
+from rest_framework.decorators import permission_classes
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
 
 # Url
 URL = 'https://www.koreaexim.go.kr/site/program/financial/exchangeJSON'
@@ -17,6 +20,7 @@ API_KEY = settings.API_KEY2
 # Create your views here.
 # API 응답 테스트
 @api_view(['GET'])
+@permission_classes([IsAdminUser])
 def api_test(request):
     url = URL
     params = {

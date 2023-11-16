@@ -6,7 +6,7 @@ from finlife.models import DepositProducts, SavingProducts, DepositSubscription,
 # Create your models here.
 class User(AbstractUser):
     # 유저 간 팔로우 - 팔로잉 필드
-    followings = models.ManyToManyField('self', symmetrical=False, related_name='followers')
+    followings = models.ManyToManyField('self', symmetrical=False, related_name='followers', blank=True)
     # 성별 선택 필드
     GENDER_CHOICES = [
         (0,'male'),
