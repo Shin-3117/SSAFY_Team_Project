@@ -88,7 +88,7 @@ class DepositSubscription(models.Model):
 
 
 # 적금 상품 가입 중간 모델
-class SavingsSubscription(models.Model):
+class SavingSubscription(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     saving_product = models.ForeignKey(SavingProducts, on_delete=models.CASCADE)
     saving_option = models.ForeignKey(SavingOptions, on_delete=models.CASCADE)
