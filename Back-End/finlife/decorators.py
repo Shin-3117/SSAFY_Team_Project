@@ -6,9 +6,10 @@ def per_user_cache(timeout):
     def decorator(view_func):
         @wraps(view_func)
         def _wrapped_view(request, *args, **kwargs):
-            # 사용자 식별자 생성 (예: 사용자 ID)
+            # 사용자 식별자와 페이지 번호 생성
             user_id = request.user.id if request.user.is_authenticated else 'anonymous'
-            cache_key = f"{view_func.__name__}_{user_id}"
+            page = request.query_params.get('page', '1')  # 기본값은 '1'
+            cache_key = f"{view_func.__name__}_{user_id}_page_{page}"
 
             # 캐시에서 데이터 가져오기
             cached_data = cache.get(cache_key)

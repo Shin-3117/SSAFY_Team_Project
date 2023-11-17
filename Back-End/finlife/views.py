@@ -7,6 +7,7 @@ import requests
 from .serializers import DepositProductsSerializer, DepositOptionsSerializer, SavingProductsSerializer, SavingOptionsSerializer, DepositSerializer, SavingSerializer, DepositSubscriptionSerializer, SavingSubscriptionSerializer
 from .models import DepositProducts, DepositOptions, SavingProducts, SavingOptions
 from django.views.decorators.cache import cache_page
+from django.core.cache import cache
 from rest_framework.pagination import PageNumberPagination
 # permission Decorators
 from rest_framework.decorators import permission_classes
@@ -191,6 +192,7 @@ def deposit_products(request, term, sort_field):
 # 적금 데이터 - 저축기간 + 금리(일반, 우대) 필터에 맞게 응답
 @api_view(['GET'])
 # 캐싱 적용
+@per_user_cache(60 * 15)
 # @cache_page(60 * 15)
 def saving_products(request, term, sort_field):
     paginator = PageNumberPagination()
@@ -225,6 +227,13 @@ def subscribe_deposit(request):
     serializer = DepositSubscriptionSerializer(data=request.data)
     if serializer.is_valid(raise_exception=True):
         serializer.save(user=request.user)
+        # 캐시 키 생성 (예: 'deposit_products_user_{user_id}_page_{page}')
+        user_id = request.user.id
+        page = request.data.get('page', '1')
+        cache_key = f"deposit_products_{user_id}_page_{page}"
+        
+        # 캐시 삭제
+        cache.delete(cache_key)
         return Response(serializer.data, status=201)
 
 
@@ -234,6 +243,13 @@ def subscribe_saving(request):
     serializer = SavingSubscriptionSerializer(data=request.data)
     if serializer.is_valid(raise_exception=True):
         serializer.save(user=request.user)
+        # 캐시 키 생성 (예: 'saving_products_user_{user_id}_page_{page}')
+        user_id = request.user.id
+        page = request.data.get('page', '1')
+        cache_key = f"saving_products_{user_id}_page_{page}"
+        
+        # 캐시 삭제
+        cache.delete(cache_key)
         return Response(serializer.data, status=201)
 
 
