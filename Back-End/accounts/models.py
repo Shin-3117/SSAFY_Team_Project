@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-from finlife.models import DepositProducts, SavingProducts, DepositSubscription, SavingsSubscription
+from finlife.models import DepositProducts, SavingProducts, DepositSubscription, SavingSubscription
 
 
 # Create your models here.
@@ -24,8 +24,8 @@ class User(AbstractUser):
         related_name='subscribed_users'
     )
     # 적금 상품 가입 정보
-    savings_subscriptions = models.ManyToManyField(
+    saving_subscriptions = models.ManyToManyField(
         SavingProducts,
-        through=SavingsSubscription,
+        through=SavingSubscription,
         related_name='subscribed_users'
     )

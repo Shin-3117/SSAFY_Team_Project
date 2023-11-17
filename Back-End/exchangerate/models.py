@@ -15,4 +15,4 @@ class ExchangeRates(models.Model):
     # 한화 1000원당 해당국가 통화가격
     krw_to_cur = models.DecimalField(max_digits=10, decimal_places=2)
     # 요청날짜
-    req_dt = models.DateField(auto_now=True)
+    req_dt = models.DateField()

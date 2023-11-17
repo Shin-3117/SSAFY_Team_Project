@@ -26,7 +26,7 @@ def api_test(request):
     params = {
         'authkey': API_KEY,
         'data': 'AP01',
-        'searchdate': "20231115",
+        # 'searchdate': "20231115",
     }
     response = requests.get(url, params=params).json()
     return Response(response)
@@ -83,12 +83,12 @@ def save_rate(request):
                 if rate_instance.req_dt != today:
                     rate_serializer = ExchangeRatesSerializer(instance=rate_instance, data=rate_data)
                     if rate_serializer.is_valid(raise_exception=True):
-                        rate_serializer.save()
+                        rate_serializer.save(req_dt=today)
             # 존재하지 않으면 추가
             else:
                 rate_serializer = ExchangeRatesSerializer(data=rate_data)
                 if rate_serializer.is_valid(raise_exception=True):
-                    rate_serializer.save()
+                    rate_serializer.save(req_dt=today)
         return JsonResponse({'message': 'okay'})
 
     # API 요청 실패 시 처리

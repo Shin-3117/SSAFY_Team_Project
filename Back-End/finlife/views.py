@@ -4,13 +4,15 @@ from rest_framework.response import Response
 from django.conf import settings
 from django.http import JsonResponse
 import requests
-from .serializers import DepositProductsSerializer, DepositOptionsSerializer, SavingProductsSerializer, SavingOptionsSerializer, DepositSerializer, SavingSerializer
+from .serializers import DepositProductsSerializer, DepositOptionsSerializer, SavingProductsSerializer, SavingOptionsSerializer, DepositSerializer, SavingSerializer, DepositSubscriptionSerializer, SavingSubscriptionSerializer
 from .models import DepositProducts, DepositOptions, SavingProducts, SavingOptions
 from django.views.decorators.cache import cache_page
 from rest_framework.pagination import PageNumberPagination
 # permission Decorators
 from rest_framework.decorators import permission_classes
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
+# custom Decorators
+from .decorators import per_user_cache
 
 
 
@@ -157,7 +159,8 @@ def save_saving(request):
 # 예금 데이터 - 저축기간 + 금리(일반, 우대) 필터에 맞게 응답
 @api_view(['GET'])
 # 캐싱 적용
-@cache_page(60 * 15)
+# @per_user_cache(60 * 15)
+# @cache_page(60 * 15)
 def deposit_products(request, term, sort_field):
     paginator = PageNumberPagination()
     try:
@@ -174,7 +177,7 @@ def deposit_products(request, term, sort_field):
                 # select_related를 사용(Improve Query)
                 products = DepositOptions.objects.filter(save_trm=term).select_related('fin_prdt_cd').order_by('-' + sort_field)
             result_page = paginator.paginate_queryset(products, request)
-            serializer = DepositSerializer(result_page, many=True)
+            serializer = DepositSerializer(result_page, many=True, context={'request': request})
             return paginator.get_paginated_response(serializer.data)
         else:
             # 유효하지 않은 정렬 필드인 경우 오류 메시지 반환
@@ -188,7 +191,7 @@ def deposit_products(request, term, sort_field):
 # 적금 데이터 - 저축기간 + 금리(일반, 우대) 필터에 맞게 응답
 @api_view(['GET'])
 # 캐싱 적용
-@cache_page(60 * 15)
+# @cache_page(60 * 15)
 def saving_products(request, term, sort_field):
     paginator = PageNumberPagination()
     try:
@@ -205,7 +208,7 @@ def saving_products(request, term, sort_field):
                 # select_related를 사용(Improve Query)
                 products = SavingOptions.objects.filter(save_trm=term).select_related('fin_prdt_cd').order_by('-' + sort_field)
             result_page = paginator.paginate_queryset(products, request)
-            serializer = SavingSerializer(result_page, many=True)
+            serializer = SavingSerializer(result_page, many=True, context={'request': request})
             return paginator.get_paginated_response(serializer.data)
         else:
             # 유효하지 않은 정렬 필드인 경우 오류 메시지 반환
@@ -216,14 +219,23 @@ def saving_products(request, term, sort_field):
         return Response({'error': str(e)}, status=500)
 
 
-@api_view(['GET'])
-def deposit_options(request):
-    pass
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def subscribe_deposit(request):
+    serializer = DepositSubscriptionSerializer(data=request.data)
+    if serializer.is_valid(raise_exception=True):
+        serializer.save(user=request.user)
+        return Response(serializer.data, status=201)
 
 
-@api_view(['GET'])
-def saving_options(request):
-    pass
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def subscribe_saving(request):
+    serializer = SavingSubscriptionSerializer(data=request.data)
+    if serializer.is_valid(raise_exception=True):
+        serializer.save(user=request.user)
+        return Response(serializer.data, status=201)
+
 
 '''
 # 2금융권 예금 API 요청 -> DB 저장
