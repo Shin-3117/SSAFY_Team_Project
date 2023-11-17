@@ -4,8 +4,10 @@
       <h2>{{ Article.title }}</h2>
       <RouterLink to="/article">게시판으로</RouterLink>
       <br>
-      <RouterLink :to="`/article/${Article.id}/put`">수정하기</RouterLink>
-      <button @click="deleteArticleR(Article.id)">삭제</button>
+      <div v-if="isWriter">
+        <RouterLink :to="`/article/${Article.id}/put`">수정하기</RouterLink>
+        <button @click="deleteArticleR(Article.id)">삭제</button>
+      </div>
       <br>
       <span>작성자: {{ Article.user.username }} |</span>
       <span>{{ Article.updated_at }}</span>
@@ -63,9 +65,9 @@
 
 <script setup lang="ts">
 import {getArticle, postComment, apiComment, deleteArticle} from '@/api/articleAPI'
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router';
-import { useAuthStore } from '../stores/auth';
+import { useAuthStore } from '../../stores/auth';
 
 const route = useRoute()
 const router = useRouter()
@@ -78,6 +80,17 @@ const putId = ref(null)
 const putContent = ref('')
 const replieContent = ref('')
 const putReplieId = ref(null)
+
+
+const isWriter = computed(()=>{
+  if(Article.value!==null){
+    if(authStore.userID===Article.value.user.username) {
+      return true
+    }
+  }
+  return false
+})
+
 
 const Refresh = async (id:number) => {
     const response2 = await getArticle(id);
