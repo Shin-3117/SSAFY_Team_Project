@@ -2,18 +2,26 @@
   <main>
     <h1>Atricle</h1>
     <RouterLink to="/article/post">게시판 작성</RouterLink>
-    <div v-if="isLoading">Loading...</div>
-    <section v-else>
-      <ul v-for="article in Articles" :key="article.id">
-        <RouterLink :to="`/article/${article.id}`">
-          <li>
-            <span>{{ article.title }} | </span>
-            <span>작성자: {{ article.user.username }}</span>
-          </li>
-        </RouterLink>
-      </ul>
+    <section class="grid">
+      <div class="grid grid-cols-8">
+        <p class="col-span-4">제목</p>
+        <p class="col-span-1">작성자</p>
+        <p class="col-span-3">작성일</p>
+      </div>
+      <hr>
+      <div v-if="isLoading">Loading...</div>
+      <div v-else>
+        <ul v-for="article in Articles" :key="article.id">
+          <RouterLink :to="`/article/${article.id}`">
+            <li class="grid grid-cols-8">
+              <p class="col-span-4">{{ article.title }} | </p>
+              <p class="col-span-1">{{ article.user.username }}</p>
+              <p class="col-span-3">{{ article.created_at }}</p>
+            </li>
+          </RouterLink>
+        </ul>
+      </div>
     </section>
-    <br>
   </main>
 </template>
 
