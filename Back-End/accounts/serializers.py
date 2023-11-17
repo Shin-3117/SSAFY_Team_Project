@@ -2,6 +2,8 @@ from dj_rest_auth.registration.serializers import RegisterSerializer
 # from dj_rest_auth.serializers import LoginSerializer
 from rest_framework import serializers
 from articles.serializers import ArticleListSerializer, ProfileCommentSerializer
+from finlife.serializers import DepositProductsSerializer, DepositOptionsSerializer, SavingProductsSerializer, SavingOptionsSerializer
+from finlife.models import DepositSubscription, SavingSubscription
 from django.contrib.auth import get_user_model
 
 User = get_user_model()
@@ -38,17 +40,41 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ('id', 'username')
 
 
+class DepositSubscriptionSerializer(serializers.ModelSerializer):
+        deposit_product_detail = DepositProductsSerializer(source='deposit_product', read_only=True)
+        deposit_option_detail = DepositOptionsSerializer(source='deposit_option', read_only=True)
+
+        class Meta:
+            model = DepositSubscription
+            fields = ('deposit_product_detail', 'deposit_option_detail', 'subscribe_date',)
+
+
+class SavingSubscriptionSerializer(serializers.ModelSerializer):
+        saving_product_detail = SavingProductsSerializer(source='saving_product', read_only=True)
+        saving_option_detail = SavingOptionsSerializer(source='saving_option', read_only=True)
+
+        class Meta:
+            model = SavingSubscription
+            fields = ('saving_product_detail', 'saving_option_detail', 'subscribe_date',)
+
+
 class UserDetailSerializer(serializers.ModelSerializer):
     written_articles = ArticleListSerializer(source='article_set', many=True, read_only=True)
     written_comments = ProfileCommentSerializer(source='comment_set', many=True, read_only=True)
     liked_articles = ArticleListSerializer(source='like_articles', many=True, read_only=True)
     followings_list = UserSerializer(source='followings', many=True, read_only=True)
     followers_list = UserSerializer(source='followers', many=True, read_only=True)
+    deposit_subscriptions = DepositSubscriptionSerializer(source='depositsubscription_set', many=True, read_only=True)
+    saving_subscriptions = SavingSubscriptionSerializer(source='savingsubscription_set', many=True, read_only=True)
 
     class Meta:
         model = User
-        fields = ('id', 'username', 'email', 'gender', 'birthday', 'money', 'written_articles', 'written_comments', 'liked_articles', 'followings_list', 'followers_list',)
+        fields = ('id', 'username', 'email', 'gender', 'birthday', 'money', 'written_articles', 'written_comments', 'liked_articles', 'followings_list', 'followers_list', 'deposit_subscriptions', 'saving_subscriptions',)
 
+
+class DeleteUserSerializer(serializers.Serializer):
+    username = serializers.CharField(write_only=True)
+    password = serializers.CharField(write_only=True)
 
 
 # class CustomLoginSerializer(LoginSerializer):
