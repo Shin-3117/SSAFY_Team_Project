@@ -115,6 +115,7 @@ const signUp = function () {
     }
     store.signUp(payload)
     errors.value.birthday.state = false
+    props.signupState.open()
   } else if(username.value===null ){
     errors.value.username.state = true
   } else if(password1.value===null){

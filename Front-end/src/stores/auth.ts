@@ -1,13 +1,14 @@
 import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
-import { useRouter } from 'vue-router'
 import axios from 'axios'
 import type { LogInInfo, SignUpInfo } from '@/interface/AuthType'
+import config from '@/config'
 
 export const useAuthStore = defineStore('auth', () => {
-  const API_URL = 'http://127.0.0.1:8000'
+  const API_URL = config.baseURL
   const token = ref(null)
   const userID = ref('')
+
   const isLogin = computed(() => {
     if (token.value === null) {
       return false
@@ -16,8 +17,7 @@ export const useAuthStore = defineStore('auth', () => {
     }
   })
   
-
-  const signUp = function (payload: SignUpInfo) {
+  const signUp = (payload: SignUpInfo) => {
     const { username, password1, password2, gender, birthday, money } = payload
 
     axios({
@@ -42,7 +42,7 @@ export const useAuthStore = defineStore('auth', () => {
       })
   }
 
-  const logIn = function (payload: LogInInfo) {
+  const logIn = (payload: LogInInfo) => {
     const { username, password } = payload
     axios({
       method: 'post',
@@ -61,7 +61,7 @@ export const useAuthStore = defineStore('auth', () => {
       })
   }
 
-  const logOut = function () {
+  const logOut = () => {
     axios({
       method: 'post',
       url: `${API_URL}/accounts/logout/`,

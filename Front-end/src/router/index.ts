@@ -35,14 +35,19 @@ const router = createRouter({
       component: () => import('../views/Article/ArticleDetailView.vue')
     },
     {
+      path: '/article/post',
+      name: 'article/post',
+      component: () => import('../views/Article/MakeArticleView.vue')
+    },
+    {
       path: '/article/:id/put',
       name: 'article/Put',
       component: () => import('../views/Article/PutArticleView.vue')
     },
     {
-      path: '/article/post',
-      name: 'article/post',
-      component: () => import('../views/Article/MakeArticleView.vue')
+      path: '/userInfo/:username',
+      name: 'userInfo',
+      component: () => import('../views/UserInfoView.vue')
     }
   ]
 })

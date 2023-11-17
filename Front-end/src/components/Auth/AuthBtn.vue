@@ -11,6 +11,11 @@
       class="btn btn-blue">회원가입</button>
     <SignUp v-if="openSignUp.state" :signup-state="openSignUp"/>
 
+    <div v-if="authStore.isLogin">
+      <RouterLink :to="`/userInfo/${authStore.userID}`" class="btn btn-blue"
+      >회원정보</RouterLink>
+    </div>
+    
     <button v-if="authStore.isLogin" 
       v-on:click="authStore.logOut"
       class="btn btn-blue">로그아웃</button>
@@ -22,6 +27,7 @@ import { ref } from 'vue';
 import { useAuthStore } from '../../stores/auth';
 import Login from './Login.vue';
 import SignUp from './SignUp.vue';
+
 const authStore = useAuthStore()
 const openLogin = ref({
   state:false,
