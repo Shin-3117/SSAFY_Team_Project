@@ -17,7 +17,7 @@ const getBankList = async (Saving='deposit', term=0, sort_field='intr_rate') => 
     const response = await axios.get(
       `${baseURL}/${Saving}/${term}/${sort_field}/`, {
     })
-    console.log(response)
+    // console.log(response)
     // console.log(response.data.result.baseList)
     // console.log(response.data.result.optionList)
     return response.data

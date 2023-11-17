@@ -54,7 +54,7 @@ interface Fin_prdt_cd{
   "join_way": string,
   "spcl_cnd": string
 }
-export default interface SavingType {
+export interface SavingType {
   "id": number,
   "fin_prdt_cd": Fin_prdt_cd
   "intr_rate_type": string,
@@ -64,4 +64,11 @@ export default interface SavingType {
   "save_trm": number,
   "rsrv_type"?: string,
   "rsrv_type_nm"?: string
+}
+
+export interface BankDataType {
+  "count": number,
+  "next": string|null,
+  "previous": null|string,
+  "results": SavingType[]
 }
