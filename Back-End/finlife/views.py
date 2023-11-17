@@ -7,9 +7,11 @@ import requests
 from .serializers import DepositProductsSerializer, DepositOptionsSerializer, SavingProductsSerializer, SavingOptionsSerializer, DepositSerializer, SavingSerializer
 from .models import DepositProducts, DepositOptions, SavingProducts, SavingOptions
 from django.views.decorators.cache import cache_page
+from rest_framework.pagination import PageNumberPagination
 # permission Decorators
 from rest_framework.decorators import permission_classes
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
+
 
 
 # 기본 url
@@ -25,6 +27,7 @@ API_KEY = settings.API_KEY
 # Create your views here.
 # API 응답 테스트(1: 예금, 2: 적금)
 @api_view(['GET'])
+@permission_classes([IsAdminUser])
 def api_test(request, pk):
     if pk == 1:
         url = BASE_URL + DEPOSIT_URL
@@ -156,6 +159,7 @@ def save_saving(request):
 # 캐싱 적용
 @cache_page(60 * 15)
 def deposit_products(request, term, sort_field):
+    paginator = PageNumberPagination()
     try:
         # 정렬 필드 목록(일반, 우대)
         valid_sort_fields = ['intr_rate', 'intr_rate2']
@@ -169,8 +173,9 @@ def deposit_products(request, term, sort_field):
             else:
                 # select_related를 사용(Improve Query)
                 products = DepositOptions.objects.filter(save_trm=term).select_related('fin_prdt_cd').order_by('-' + sort_field)
-            serializer = DepositSerializer(products, many=True)
-            return Response(serializer.data)
+            result_page = paginator.paginate_queryset(products, request)
+            serializer = DepositSerializer(result_page, many=True)
+            return paginator.get_paginated_response(serializer.data)
         else:
             # 유효하지 않은 정렬 필드인 경우 오류 메시지 반환
             return Response({'error': 'Invalid sort field'}, status=400)
@@ -185,6 +190,7 @@ def deposit_products(request, term, sort_field):
 # 캐싱 적용
 @cache_page(60 * 15)
 def saving_products(request, term, sort_field):
+    paginator = PageNumberPagination()
     try:
         # 정렬 필드 목록(일반, 우대)
         valid_sort_fields = ['intr_rate', 'intr_rate2']
@@ -198,8 +204,9 @@ def saving_products(request, term, sort_field):
             else:
                 # select_related를 사용(Improve Query)
                 products = SavingOptions.objects.filter(save_trm=term).select_related('fin_prdt_cd').order_by('-' + sort_field)
-            serializer = SavingSerializer(products, many=True)
-            return Response(serializer.data)
+            result_page = paginator.paginate_queryset(products, request)
+            serializer = SavingSerializer(result_page, many=True)
+            return paginator.get_paginated_response(serializer.data)
         else:
             # 유효하지 않은 정렬 필드인 경우 오류 메시지 반환
             return Response({'error': 'Invalid sort field'}, status=400)
