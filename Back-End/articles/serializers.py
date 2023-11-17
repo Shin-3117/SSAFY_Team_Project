@@ -8,7 +8,7 @@ User = get_user_model()
 class Userserializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('username',)
+        fields = ('id', 'username',)
 
 
 class ArticleListSerializer(serializers.ModelSerializer):
@@ -16,7 +16,7 @@ class ArticleListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Article
-        fields = ('title', 'user',)
+        fields = ('id', 'title', 'user',)
 
 
 class CommentSerializer(serializers.ModelSerializer):
@@ -49,3 +49,10 @@ class ArticleSerializer(serializers.ModelSerializer):
         # 상위 댓글만 필터링
         top_level_comments = obj.comments.filter(parent__isnull=True)
         return CommentSerializer(top_level_comments, many=True).data
+
+
+# 프로필 페이지용 댓글 시리얼라이저
+class ProfileCommentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Comment
+        fields = ('id', 'article', 'user', 'content', 'created_at', 'updated_at',)

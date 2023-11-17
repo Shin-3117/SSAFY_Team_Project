@@ -7,6 +7,7 @@ import type { LogInInfo, SignUpInfo } from '@/interface/AuthType'
 export const useAuthStore = defineStore('auth', () => {
   const API_URL = 'http://127.0.0.1:8000'
   const token = ref(null)
+  const userID = ref('')
   const isLogin = computed(() => {
     if (token.value === null) {
       return false
@@ -53,6 +54,7 @@ export const useAuthStore = defineStore('auth', () => {
       .then((res) => {
         console.log(res.data)
         token.value = res.data.key
+        userID.value = username
       })
       .catch((err) => {
         console.log(err)
@@ -72,5 +74,5 @@ export const useAuthStore = defineStore('auth', () => {
       })
   }
 
-  return {signUp, logIn, token, isLogin, logOut }
+  return {signUp, logIn, token, isLogin, userID, logOut }
 });

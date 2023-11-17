@@ -18,9 +18,11 @@
         <RouterLink to="/ExchangeRate" class="navLink"
         >환율</RouterLink>
         <RouterLink to="/map" class="navLink"
-        >내 주위 은행 찾기</RouterLink>
+        >은행 Map</RouterLink>
         <RouterLink to="/recommend" class="navLink"
         >추천</RouterLink>
+        <RouterLink to="/article" class="navLink"
+        >게시판</RouterLink>
       </PopoverGroup>
       <div class="hidden lg:flex lg:flex-1 lg:justify-end">
         <AuthBtn/>
@@ -53,6 +55,8 @@
               >내 주위 은행 찾기</RouterLink>
               <RouterLink to="/recommend" class="dialogLink"
               >추천</RouterLink>
+              <RouterLink to="/article" class="dialogLink"
+              >게시판</RouterLink>
             </div>
             <div class="py-6">
               <AuthBtn/>

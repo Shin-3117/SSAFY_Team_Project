@@ -3,5 +3,5 @@ from .views import profile_view, follow
 
 urlpatterns = [
     path('profile/<str:username>/', profile_view, name='profile'),
-    path('<int:user_pk>/follow/', follow, name='follow'),
+    path('follow/<int:user_pk>/', follow, name='follow'),
 ]

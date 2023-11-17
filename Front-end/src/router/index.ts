@@ -23,6 +23,26 @@ const router = createRouter({
       path: '/recommend',
       name: 'recommend',
       component: () => import('../views/RecommendView.vue')
+    },
+    {
+      path: '/article',
+      name: 'article',
+      component: () => import('../views/ArticleView.vue')
+    },
+    {
+      path: '/article/:id',
+      name: 'articleDetail',
+      component: () => import('../views/ArticleDetailView.vue')
+    },
+    {
+      path: '/article/:id/put',
+      name: 'article/Put',
+      component: () => import('../views/PutArticleView.vue')
+    },
+    {
+      path: '/article/post',
+      name: 'article/post',
+      component: () => import('../views/MakeArticleView.vue')
     }
   ]
 })

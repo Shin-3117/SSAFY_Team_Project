@@ -62,8 +62,8 @@
         <p class="p-2 col-span-2">은행</p>
       </div>
       <div v-if="isLoading"> Loading...</div>
-      <div v-else >
-        <ul v-for="deposit in depositList" class="bg-green-100 dark:bg-green-900">
+      <div v-else v-if="depositList">
+        <ul v-for="deposit in depositList.results" class="bg-green-100 dark:bg-green-900">
           <li class="grid grid-cols-8" 
           @click="setModalOpen(deposit)">
             <span class="p-2 col-span-3">{{deposit.fin_prdt_cd.fin_prdt_nm}}</span>
@@ -72,7 +72,6 @@
             <span class="p-2 col-span-1">{{deposit.save_trm}}</span>
             <span class="p-2 col-span-2">{{deposit.fin_prdt_cd.kor_co_nm}}</span>
           </li>
-          
         </ul>
       </div>
     </div>
@@ -106,13 +105,13 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import getBankList from '../../api/bankDeposit';
-import type SavingType from '@/interface/BankDataType'
+import type {BankDataType, SavingType} from '@/interface/BankDataType'
 const radioValue = ref({
   Saving: 'deposit',
   term:'0',
   sort_field: 'intr_rate'
 })
-const depositList = ref<SavingType[] | null>(null);
+const depositList = ref<BankDataType | null>(null);
 const isLoading = ref(true);
 const isModalOpen = ref({
   state: false,
@@ -154,4 +153,4 @@ const changeData = async ()=>{
 .modalBackground{
   background-color: rgb(0, 0, 0,0.5);
 }
-</style>@/interface/BankDataType
+</style>
