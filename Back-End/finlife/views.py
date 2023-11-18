@@ -1,11 +1,12 @@
 from django.shortcuts import render
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from rest_framework import status
 from django.conf import settings
 from django.http import JsonResponse
 import requests
-from .serializers import DepositProductsSerializer, DepositOptionsSerializer, SavingProductsSerializer, SavingOptionsSerializer, DepositSerializer, SavingSerializer, DepositSubscriptionSerializer, SavingSubscriptionSerializer
-from .models import DepositProducts, DepositOptions, SavingProducts, SavingOptions
+from .serializers import DepositProductsSerializer, DepositOptionsSerializer, SavingProductsSerializer, SavingOptionsSerializer, DepositSerializer, SavingSerializer
+from .models import DepositProducts, DepositOptions, SavingProducts, SavingOptions, DepositSubscription, SavingSubscription
 from django.views.decorators.cache import cache_page
 from django.core.cache import cache
 from rest_framework.pagination import PageNumberPagination
@@ -159,10 +160,11 @@ def save_saving(request):
 
 # 예금 데이터 - 저축기간 + 금리(일반, 우대) 필터에 맞게 응답
 @api_view(['GET'])
-# 캐싱 적용
-# @per_user_cache(60 * 15)
+# 캐싱 적용(사용자 별 캐싱 적용 완료)
+@per_user_cache(60 * 15)
 # @cache_page(60 * 15)
 def deposit_products(request, term, sort_field):
+    # 페이지네이션 적용(페이지 당 20개 데이터)
     paginator = PageNumberPagination()
     try:
         # 정렬 필드 목록(일반, 우대)
@@ -191,10 +193,11 @@ def deposit_products(request, term, sort_field):
 
 # 적금 데이터 - 저축기간 + 금리(일반, 우대) 필터에 맞게 응답
 @api_view(['GET'])
-# 캐싱 적용
+# 캐싱 적용(사용자 별 캐싱 적용 완료)
 @per_user_cache(60 * 15)
 # @cache_page(60 * 15)
 def saving_products(request, term, sort_field):
+    # 페이지네이션 적용(페이지 당 20개 데이터)
     paginator = PageNumberPagination()
     try:
         # 정렬 필드 목록(일반, 우대)
@@ -221,100 +224,64 @@ def saving_products(request, term, sort_field):
         return Response({'error': str(e)}, status=500)
 
 
+# 예금 상품 구독 / 해지하기
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def subscribe_deposit(request):
-    serializer = DepositSubscriptionSerializer(data=request.data)
-    if serializer.is_valid(raise_exception=True):
-        serializer.save(user=request.user)
-        # 캐시 키 생성 (예: 'deposit_products_user_{user_id}_page_{page}')
-        user_id = request.user.id
-        page = request.data.get('page', '1')
-        cache_key = f"deposit_products_{user_id}_page_{page}"
-        
-        # 캐시 삭제
-        cache.delete(cache_key)
-        return Response(serializer.data, status=201)
+    if 'deposit_product' not in request.data or 'deposit_option' not in request.data:
+        return Response({'error': 'Required data missing'}, status=status.HTTP_400_BAD_REQUEST)
+    
+    deposit_product_id = request.data.get('deposit_product')
+    deposit_option_id = request.data.get('deposit_option')
+
+    subscription, created = DepositSubscription.objects.get_or_create(
+        user=request.user, 
+        deposit_product_id=deposit_product_id,
+        deposit_option_id=deposit_option_id
+    )
+
+    if not created:  # 이미 구독 중이면 해지
+        subscription.delete()
+        action = 'unsubscribed'
+    else:  # 구독하지 않았던 상품이면 구독
+        action = 'subscribed'
+
+    # 캐시 삭제 로직
+    user_id = request.user.id
+    page = request.data.get('page', '1')
+    cache_key = f"deposit_products_{user_id}_page_{page}"
+    cache.delete(cache_key)
+
+    return Response({'action': action, 'message': f'Successfully {action}'}, status=200)
 
 
+# 적금 상품 구독 / 해지하기
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def subscribe_saving(request):
-    serializer = SavingSubscriptionSerializer(data=request.data)
-    if serializer.is_valid(raise_exception=True):
-        serializer.save(user=request.user)
-        # 캐시 키 생성 (예: 'saving_products_user_{user_id}_page_{page}')
-        user_id = request.user.id
-        page = request.data.get('page', '1')
-        cache_key = f"saving_products_{user_id}_page_{page}"
-        
-        # 캐시 삭제
-        cache.delete(cache_key)
-        return Response(serializer.data, status=201)
-
-
-'''
-# 2금융권 예금 API 요청 -> DB 저장
-# 다중 페이지 로드 및 저장 구현 확인
-@api_view(['GET'])
-def save_deposit2(request):
-    try:
-        N = 1
-        F = 2
-        while N <= F:
-            url = BASE_URL + DEPOSIT_URL
-            params = {
-                'auth': API_KEY,
-                'topFinGrpNo': '030300',
-                'pageNo': N
-            }
-            print(N)
-            response = requests.get(url, params=params).json()
-            F = response.get('result').get('max_page_no')
-            baseList = response.get('result').get('baseList')
-            optionList = response.get('result').get('optionList')
-
-            # 상품 데이터 저장
-            for product_data in baseList:
-                if product_data['join_way'] is None:
-                    continue
-                # 중복 저장 방지
-                if DepositProducts.objects.filter(fin_prdt_cd=product_data['fin_prdt_cd']).exists():
-                    continue
-                # 중복이 아닌 경우에만 유효성 검사 실시 및 데이터 저장
-                product_serializer = DepositProductsSerializer(data=product_data)
-                if product_serializer.is_valid(raise_exception=True):
-                    product_serializer.save()
-            
-            # 옵션 데이터 저장
-            for option_data in optionList:
-                # 왜래키로 지정한 필드 찾기
-                f_key = DepositProducts.objects.filter(fin_prdt_cd=option_data['fin_prdt_cd']).first()
-                # 연관된 DepositProducts 레코드가 없는 경우 건너뜀
-                if f_key is None:
-                    continue
-                # 저축 금리 null인 경우 저장하지 않음(해당 옵션 존재하지 않는 상품)
-                if option_data['intr_rate'] is None:
-                    continue
-                # 중복 저장 방지
-                if DepositOptions.objects.filter(
-                    intr_rate=option_data['intr_rate'],
-                    intr_rate2=option_data['intr_rate2'],
-                    save_trm=option_data['save_trm'],
-                    fin_prdt_cd_id=f_key.pk
-                ).exists():
-                    continue
-                # 중복이 아닌 경우에만 유효성 검사 실시 및 데이터 저장
-                option_serializer = DepositOptionsSerializer(data=option_data)
-                if option_serializer.is_valid(raise_exception=True):
-                    option_serializer.save(fin_prdt_cd=f_key)
-            N += 1
-        return JsonResponse({ 'message': 'okay' })
+    if 'saving_product' not in request.data or 'saving_option' not in request.data:
+        return Response({'error': 'Required data missing'}, status=status.HTTP_400_BAD_REQUEST)
     
-    # API 요청 실패 시 처리
-    except requests.RequestException as e:
-        return JsonResponse({"error": str(e)}, status=500)
-    # 기타 예외 처리
-    except Exception as e:
-        return JsonResponse({"error": str(e)}, status=500)
-'''
+    saving_product_id = request.data.get('saving_product')
+    saving_option_id = request.data.get('saving_option')
+
+    subscription, created = SavingSubscription.objects.get_or_create(
+        user=request.user,
+        saving_product_id=saving_product_id,
+        saving_option_id=saving_option_id
+    )
+
+    if not created:  # 이미 구독 중이면 해지
+        subscription.delete()
+        action = 'unsubscribed'
+    else:  # 구독하지 않았던 상품이면 구독
+        action = 'subscribed'
+
+    # 캐시 삭제 로직
+    user_id = request.user.id
+    page = request.data.get('page', '1')
+    cache_key = f"saving_products_{user_id}_page_{page}"
+    cache.delete(cache_key)
+
+    return Response({'action': action, 'message': f'Successfully {action}'}, status=200)
+

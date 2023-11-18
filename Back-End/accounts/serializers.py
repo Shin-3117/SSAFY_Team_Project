@@ -41,21 +41,21 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class DepositSubscriptionSerializer(serializers.ModelSerializer):
-        deposit_product_detail = DepositProductsSerializer(source='deposit_product', read_only=True)
-        deposit_option_detail = DepositOptionsSerializer(source='deposit_option', read_only=True)
+    deposit_product_detail = DepositProductsSerializer(source='deposit_product', read_only=True)
+    deposit_option_detail = DepositOptionsSerializer(source='deposit_option', read_only=True)
 
-        class Meta:
-            model = DepositSubscription
-            fields = ('deposit_product_detail', 'deposit_option_detail', 'subscribe_date',)
+    class Meta:
+        model = DepositSubscription
+        fields = ('deposit_product_detail', 'deposit_option_detail', 'subscribe_date',)
 
 
 class SavingSubscriptionSerializer(serializers.ModelSerializer):
-        saving_product_detail = SavingProductsSerializer(source='saving_product', read_only=True)
-        saving_option_detail = SavingOptionsSerializer(source='saving_option', read_only=True)
+    saving_product_detail = SavingProductsSerializer(source='saving_product', read_only=True)
+    saving_option_detail = SavingOptionsSerializer(source='saving_option', read_only=True)
 
-        class Meta:
-            model = SavingSubscription
-            fields = ('saving_product_detail', 'saving_option_detail', 'subscribe_date',)
+    class Meta:
+        model = SavingSubscription
+        fields = ('saving_product_detail', 'saving_option_detail', 'subscribe_date',)
 
 
 class UserDetailSerializer(serializers.ModelSerializer):

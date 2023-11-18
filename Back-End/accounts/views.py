@@ -13,6 +13,7 @@ User = get_user_model()
 
 # Create your views here.
 @api_view(['GET'])
+# @permission_classes([IsAuthenticated])
 def profile_view(request, username):
     user = User.objects.filter(username=username).first()
     if user:
@@ -22,6 +23,7 @@ def profile_view(request, username):
 
 
 @api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def follow(request, user_pk):
     if request.user.pk == user_pk:
         return Response({'error': 'You cannot follow yourself.'}, status=400)
