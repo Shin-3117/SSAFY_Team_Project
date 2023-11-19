@@ -1,4 +1,4 @@
-import { ref, computed } from 'vue'
+ import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
 import axios from 'axios'
 import type { LogInInfo, SignUpInfo } from '@/interface/AuthType'
@@ -8,6 +8,17 @@ export const useAuthStore = defineStore('auth', () => {
   const API_URL = config.baseURL
   const token = ref(null)
   const userID = ref('')
+
+  if (token.value===null){
+    const LoginHistory = localStorage.getItem('login')
+    if (typeof(LoginHistory)==='string') {
+      const objData = JSON.parse(LoginHistory)
+      userID.value = objData.username
+      token.value = objData.token
+    }
+    // console.log(LoginHistory)
+  }
+
 
   const isLogin = computed(() => {
     if (token.value === null) {
@@ -55,6 +66,11 @@ export const useAuthStore = defineStore('auth', () => {
         console.log(res.data)
         token.value = res.data.key
         userID.value = username
+        const localValue = {
+          username: username,
+          token: res.data.key
+        }
+        localStorage.setItem('login', JSON.stringify(localValue))
       })
       .catch((err) => {
         console.log(err)
@@ -68,6 +84,7 @@ export const useAuthStore = defineStore('auth', () => {
     })
       .then((res) => {
         token.value = null
+        localStorage.removeItem('login')
       })
       .catch((err) => {
         console.log(err)

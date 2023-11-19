@@ -18,11 +18,15 @@ export const userInfo = async (username:string) => {
   }
 }
 
-export const deleteUser = async () => {
+export const deleteUser = async (username:string,password:string) => {
   try{
     const response = await axios({
       method: 'post',
       url: `${API_URL}/users/delete_user/`,
+      data: {
+        username: username,
+        password: password
+      },
       headers: {
         Authorization: `Token ${authStore.token}`,
       },
@@ -35,18 +39,17 @@ export const deleteUser = async () => {
   }
 }
 
-export const followUser = async () => {
+export const followUser = async (username:string) => {
   try{
     const response = await axios({
       method: 'post',
-      url: `${API_URL}/users/follow/`,
+      url: `${API_URL}/users/follow/${username}/`,
       headers: {
         Authorization: `Token ${authStore.token}`,
       },
     })
     console.log(response)
-    await authStore.logOut()
-    // return response.data
+    alert('follow')
   } catch(error){
     console.error(error);
   }

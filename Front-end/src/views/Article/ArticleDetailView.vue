@@ -9,8 +9,10 @@
         <button @click="deleteArticleR(Article.id)">삭제</button>
       </div>
       <br>
-      <span>작성자: {{ Article.user.username }} |</span>
-      <span>{{ Article.updated_at }}</span>
+      <span>작성자: {{ Article.user.username }} | </span>
+      <span>{{ Article.updated_at }} | </span>
+      <RouterLink :to="`/userInfo/${Article.user.username}`" class="btn btn-blue"
+      >작성자정보</RouterLink>
       <div v-html="Article.content"></div>
       <br><hr>
       <form v-on:submit.prevent="postCommentR(Article.id, commentContent)">
@@ -28,9 +30,9 @@
           <li>
             <p>{{ comment.user.username }}</p>
             <p>{{ comment.content }}</p>
-            <button @click="putId=comment.id">수정</button>
+            <button @click="()=>{putId=comment.id; putContent=comment.content}">수정</button>
             <div v-if="putId===comment.id">
-              <input type="text" :placeholder="comment.content" v-model="putContent">
+              <input type="text" v-model="putContent">
               <button @click="putComment(Article.id, comment.id, putContent,comment.user.username)">수정하기</button>
             </div>
             <button @click="deleteComment(Article.id, comment.id)"> 삭제</button>
@@ -44,9 +46,9 @@
                   <li>
                     <span>ㄴ{{ replie.user.username }}: </span>
                     <span>{{ replie.content }}</span>
-  <button @click="putReplieId=replie.id">수정</button>
+  <button @click="putReplieId=replie.id; putContent=replie.content">수정</button>
   <div v-if="putReplieId===replie.id">
-    <input type="text" :placeholder="replie.content" v-model="putContent">
+    <input type="text" v-model="putContent">
     <button @click="putComment(Article.id, replie.id, putContent,replie.user.username)">수정하기</button>
   </div>
   <button @click="deleteComment(Article.id, replie.id)"> 삭제</button>
@@ -93,8 +95,9 @@ const isWriter = computed(()=>{
 
 
 const Refresh = async (id:number) => {
-    const response2 = await getArticle(id);
-    Article.value = response2;
+  router.go(0)
+  // const response2 = await getArticle(id);
+  // Article.value = response2;
 }
 
 const deleteArticleR = async (id:number) => {
@@ -111,13 +114,14 @@ const deleteArticleR = async (id:number) => {
 const postCommentR = async (id:number, content:string, parent=null) =>{
   if(content!==''){
     await postComment(id,content, parent)
+    commentContent.value=''
     Refresh(id)
   }
 }
 
 const deleteComment =async (article_id:number,comment_id:number) => {
-  apiComment('delete', comment_id, '')
-  Refresh(article_id)
+  await apiComment('delete', comment_id, '')
+  await Refresh(article_id)
 }
 
 const putComment =async (article_id:number,comment_id:number, content:string, username:string) => {
@@ -147,5 +151,13 @@ onMounted(async () => {
 </script>
 
 <style scoped>
-
+.btn {
+  @apply font-bold py-2 px-4 rounded-full;
+}
+.btn-blue {
+  @apply bg-blue-500 text-white;
+}
+.btn-blue:hover {
+  @apply bg-blue-700;
+}
 </style>

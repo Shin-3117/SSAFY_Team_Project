@@ -30,7 +30,7 @@ export const getArticles = async () => {
 export const getArticle = async (article_id:number) => {
   try{
     const response = await axios.get(
-      `${baseURL}/articles/${article_id}`, {
+      `${baseURL}/articles/${article_id}/`, {
     })
     // console.log(response)
     return response.data
