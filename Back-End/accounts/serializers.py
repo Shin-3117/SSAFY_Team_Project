@@ -1,10 +1,10 @@
 from dj_rest_auth.registration.serializers import RegisterSerializer
-# from dj_rest_auth.serializers import LoginSerializer
 from rest_framework import serializers
 from articles.serializers import ArticleListSerializer, ProfileCommentSerializer
 from finlife.serializers import DepositProductsSerializer, DepositOptionsSerializer, SavingProductsSerializer, SavingOptionsSerializer
 from finlife.models import DepositSubscription, SavingSubscription
 from django.contrib.auth import get_user_model
+from django.contrib.auth.password_validation import validate_password
 
 User = get_user_model()
 
@@ -77,8 +77,16 @@ class DeleteUserSerializer(serializers.Serializer):
     password = serializers.CharField(write_only=True)
 
 
-# class CustomLoginSerializer(LoginSerializer):
-#     class Meta:
-#         model = get_user_model()
-#         fields = ('username', 'password')
-#         extra_kwargs = {'password': {'write_only': True}}
+class UpdateUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('email', 'gender', 'birthday', 'money',)
+
+
+class PasswordChangeSerializer(serializers.Serializer):
+    current_password = serializers.CharField(required=True)
+    new_password = serializers.CharField(required=True)
+
+    def validate_new_password(self, value):
+        validate_password(value)
+        return value

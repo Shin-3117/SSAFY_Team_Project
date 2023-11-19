@@ -245,7 +245,7 @@ def subscribe_deposit(request):
         action = 'unsubscribed'
     else:  # 구독하지 않았던 상품이면 구독
         action = 'subscribed'
-
+    
     # 캐시 삭제 로직
     user_id = request.user.id
     page = request.data.get('page', '1')
