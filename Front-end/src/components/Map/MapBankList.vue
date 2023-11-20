@@ -1,32 +1,43 @@
 <template>
-<div >
-  <div class="relative w-48 bg-slate-300">
-    <ul v-for="(city, key) in placeInfo" :key="key"
-    class="">
-    <li class="flex">
-      <p class="p-1" @click="setSelect(key)">{{ key }}</p>
-      <div v-if="select.city===key" class="absolute top-0 right-0 z-10">
-        <ul v-for="(place, gu) in city" :key="gu">
-          <li class="p-1 bg-orange-500"
-          @click="()=>{
-            select.gu=gu; 
-            select.lat=place.lat;
-            select.long=place.long}"
-            >{{ gu }}</li>
-          </ul>
-        </div>
-      </li>
-    </ul>
+  <div class="container p-4">
+    <div class="relative w-48 bg-slate-300">
+      <ul v-for="(city, key) in placeInfo" :key="key" class="">
+        <li class="flex">
+          <p class="p-2 cursor-pointer" @click="setSelect(key)">{{ key }}</p>
+          <div v-if="select.city===key" class="absolute top-0 right-0 z-10">
+            <ul v-for="(place, gu) in city" :key="gu">
+              <li
+                class="p-2 bg-orange-500 cursor-pointer"
+                @click="() => {
+                  select.gu=gu; 
+                  select.lat=place.lat;
+                  select.long=place.long
+                }"
+              >{{ gu }}</li>
+            </ul>
+          </div>
+        </li>
+      </ul>
+    </div>
+    <div class="mt-4">
+      <p class="text-lg font-bold">Selected: {{ select.city }} - {{ select.gu }}</p>
+      <button
+        class="bg-blue-400 text-white px-4 py-2 mt-2 rounded"
+        @click="moveMap(select.lat, select.long)"
+      >
+        View Map
+      </button>
+      <button
+        class="text-blue-400 hover:underline ml-2"
+        @click="reSearch()"
+      >
+        Search Again from Current Location
+      </button>
+    </div>
+    <div id="map" class="mt-4 h-64"></div>
   </div>
-  <p>{{ select }}</p>
-  <button class="bg-blue-400" 
-  @click="moveMap(select.lat, select.long)"
-  >지도보기</button>
-  <button
-  @click="reSearch()">지금위치에서 다시 검색하기</button>
-    <div id="map"></div>
-</div>
 </template>
+
 
 <script setup>
 import { ref, onMounted } from 'vue';
