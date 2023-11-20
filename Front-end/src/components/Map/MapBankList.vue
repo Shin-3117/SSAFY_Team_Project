@@ -1,23 +1,21 @@
 <template>
   <div class="container p-4">
-    <div class="relative w-48 bg-slate-300">
-      <ul v-for="(city, key) in placeInfo" :key="key" class="">
-        <li class="flex">
-          <p class="p-2 cursor-pointer" @click="setSelect(key)">{{ key }}</p>
-          <div v-if="select.city===key" class="absolute top-0 right-0 z-10">
-            <ul v-for="(place, gu) in city" :key="gu">
-              <li
-                class="p-2 bg-orange-500 cursor-pointer"
-                @click="() => {
-                  select.gu=gu; 
-                  select.lat=place.lat;
-                  select.long=place.long
-                }"
-              >{{ gu }}</li>
-            </ul>
-          </div>
-        </li>
-      </ul>
+    <div class="flex ">
+      <select v-model="select.city" 
+      class="p-2 cursor-pointer border border-gray-300 rounded 
+      bg-white dark:bg-gray-800">
+        <option value="" disabled>Select City</option>
+        <option v-for="(city, key) in placeInfo" :key="key" :value="key">{{ key }}</option>
+      </select>
+      <div>
+        <select v-model="select.gu" 
+        class="p-2  cursor-pointer border border-gray-300 rounded
+        bg-white dark:bg-gray-800" >
+          <option value="" disabled>Select District</option>
+          <option v-for="(place, gu) in placeInfo[select.city]" :key="gu" :value="gu"
+          >{{ gu }}</option>
+        </select>
+      </div>
     </div>
     <div class="mt-4">
       <p class="text-lg font-bold">Selected: {{ select.city }} - {{ select.gu }}</p>
@@ -58,7 +56,10 @@ const setSelect = (key) => {
   }
 }
 
-
+const updateSelectedGu = () => {
+  select.value.lat = placeInfo[select.value.city][select.value.gu].lat;
+  select.value.long = placeInfo[select.value.city][select.value.gu].long;
+};
 
 let map = null;
 let infowindow = null;
@@ -80,12 +81,11 @@ const initMap = (lat=37.4951, long=127.06278) => {
   ps.categorySearch('BK9', placesSearchCB, {useMapBounds:true});
 };
 
-const moveMap = (lat,long)=>{
-  lat = parseFloat(lat)
-  long = parseFloat(long)
-  // console.log(lat,long)
-  // console.log(map.getCenter());
-  // initMap(lat,long)
+const moveMap = ()=>{
+  updateSelectedGu()
+  let lat = parseFloat(select.value.lat)
+  let long = parseFloat(select.value.long)
+
   let moveLatLon = new kakao.maps.LatLng(lat,long);
   
   // 지도 중심을 부드럽게 이동시킵니다
