@@ -1,20 +1,20 @@
 <template>
-  <main>
-    <h1>Atricle</h1>
-    <RouterLink to="/article/post">게시판 작성</RouterLink>
-    <section class="grid">
-      <div class="grid grid-cols-8">
+  <main class="max-w-7xl mx-auto p-4">
+    <h1 class="text-3xl font-bold mb-4">Article</h1>
+    <RouterLink to="/article/post" class="text-blue-500 hover:underline mb-4">게시판 작성</RouterLink>
+    <section class="grid gap-4">
+      <div class="grid grid-cols-8 bg-gray-200 p-2">
         <p class="col-span-4">제목</p>
         <p class="col-span-1">작성자</p>
         <p class="col-span-3">작성일</p>
       </div>
-      <hr>
-      <div v-if="isLoading">Loading...</div>
+      <hr class="my-2">
+      <div v-if="isLoading" class="text-center">Loading...</div>
       <div v-else>
-        <ul v-for="article in Articles" :key="article.id">
-          <RouterLink :to="`/article/${article.id}`">
-            <li class="grid grid-cols-8">
-              <p class="col-span-4">{{ article.title }} | </p>
+        <ul>
+          <RouterLink v-for="article in Articles" :key="article.id" :to="`/article/${article.id}`">
+            <li class="grid grid-cols-8 p-2 hover:bg-gray-100">
+              <p class="col-span-4 text-blue-500">{{ article.title }} | </p>
               <p class="col-span-1">{{ article.user.username }}</p>
               <p class="col-span-3">{{ article.created_at }}</p>
             </li>

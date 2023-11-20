@@ -1,67 +1,76 @@
 <template>
-  <main>
-    <div class="border border-slate-600" v-if="Article">
-      <h2>{{ Article.title }}</h2>
-      <RouterLink to="/article">게시판으로</RouterLink>
+  <main class="max-w-2xl mx-auto p-4">
+    <div class="border border-slate-600 bg-white dark:bg-gray-800 p-4" v-if="Article">
+      <h2 class="text-2xl font-bold mb-2">{{ Article.title }}</h2>
+      <RouterLink to="/article" class="text-blue-500 hover:underline mb-2">게시판으로</RouterLink>
       <br>
-      <div v-if="isWriter">
-        <RouterLink :to="`/article/${Article.id}/put`">수정하기</RouterLink>
-        <button @click="deleteArticleR(Article.id)">삭제</button>
+
+      <div v-if="isWriter" class="mb-2">
+        <RouterLink :to="`/article/${Article.id}/put`" class="btn btn-blue">수정하기</RouterLink>
+        <button @click="deleteArticleR(Article.id)" class="btn btn-red">삭제</button>
       </div>
-      <button @click="likeArticleR(Article.id)">좋아요</button>
+
+      <button @click="likeArticleR(Article.id)" class="btn btn-blue">좋아요</button>
       <br>
       <span>작성자: {{ Article.user.username }} | </span>
       <span>{{ Article.updated_at }} | </span>
-      <RouterLink :to="`/userInfo/${Article.user.username}`" class="btn btn-blue"
-      >작성자정보</RouterLink>
-      <div v-html="Article.content"></div>
-      <br><hr>
-      <form v-on:submit.prevent="postCommentR(Article.id, commentContent)">
-        <label for="content">댓글작성 :
-          <input type="text" id="content" v-model="commentContent"
-           class="border border-stone-600">
-        </label>
-        <input type="submit" value="제출하기">
+      <RouterLink :to="`/userInfo/${Article.user.username}`" class="btn btn-blue">작성자정보</RouterLink>
+
+      <div v-html="Article.content" class="mt-4"></div>
+      <br><hr class="my-4">
+
+      <form v-on:submit.prevent="postCommentR(Article.id, commentContent)" class="mb-4">
+        <label for="content" class="block">댓글작성 :</label>
+        <input type="text" id="content" v-model="commentContent" class="border border-slate-600 p-1">
+        <input type="submit" value="제출하기" class="btn btn-blue mt-2">
       </form>
-      
-      <div v-if="Article.comments">
-        <p>댓글 {{ Article.comments.length }}</p>
-        <hr>
-        <ul v-for="comment in Article.comments" :key="comment.id">
-          <li>
-            <p>{{ comment.user.username }}</p>
-            <p>{{ comment.content }}</p>
-            <button @click="()=>{putId=comment.id; putContent=comment.content}">수정</button>
-            <div v-if="putId===comment.id">
-              <input type="text" v-model="putContent">
-              <button @click="putComment(Article.id, comment.id, putContent,comment.user.username)">수정하기</button>
-            </div>
-            <button @click="deleteComment(Article.id, comment.id)"> 삭제</button>
-            <details v-if="comment.replies">
-              <summary> 
-                <span>대댓글 {{ comment.replies.length }} | </span>
-              </summary>
-              <input type="text" class="border border-lime-300" v-model="replieContent">
-              <button @click="postCommentR(Article.id, replieContent, comment.id)">대댓글 작성</button>
-                <ul v-for="replie in comment.replies">
-                  <li>
-                    <span>ㄴ{{ replie.user.username }}: </span>
-                    <span>{{ replie.content }}</span>
-  <button @click="putReplieId=replie.id; putContent=replie.content">수정</button>
-  <div v-if="putReplieId===replie.id">
-    <input type="text" v-model="putContent">
-    <button @click="putComment(Article.id, replie.id, putContent,replie.user.username)">수정하기</button>
-  </div>
-  <button @click="deleteComment(Article.id, replie.id)"> 삭제</button>
+
+      <div v-if="Article.comments" class="space-y-4">
+        <p class="font-bold">댓글 {{ Article.comments.length }}</p>
+        <hr class="my-2">
+        <ul v-for="comment in Article.comments" :key="comment.id" class="space-y-2">
+          <li class="flex items-start">
+            <p class="font-bold mr-2">{{ comment.user.username }}</p>
+            <div class="flex-grow">
+              <p>{{ comment.content }}</p>
+              <div class="flex space-x-2" v-if="authStore.userID===comment.user.username ? true : false">
+                <button @click="()=>{putId=comment.id; putContent=comment.content}" class="btn btn-gray">수정</button>
+                <button @click="deleteComment(Article.id, comment.id)" class="btn btn-red">삭제</button>
+              </div>
+
+              <div v-if="putId===comment.id" class="mt-2">
+                <input type="text" v-model="putContent" class="border border-slate-600 p-1">
+                <button @click="putComment(Article.id, comment.id, putContent,comment.user.username)" class="btn btn-blue">수정하기</button>
+              </div>
+
+              <details v-if="comment.replies" class="mt-2 inline-block">
+                <summary class="font-bold cursor-pointer">대댓글 {{ comment.replies.length }} | </summary>
+                <input type="text" class="border border-slate-600 p-1" v-model="replieContent">
+                <button @click="postCommentR(Article.id, replieContent, comment.id)" class="btn btn-blue">대댓글 작성</button>
+
+                <ul v-for="replie in comment.replies" :key="replie.id" class="ml-4 space-y-2">
+                  <li >
+                    <div class="flex items-start">
+                      <span class="font-bold mr-2">{{ replie.user.username }}:</span>
+                      <span>{{ replie.content }}</span>
+                      <div class="flex space-x-2" v-if="authStore.userID===replie.user.username ? true : false">
+                        <button @click="putReplieId=replie.id; putContent=replie.content" class="btn btn-gray">수정</button>
+                        <button @click="deleteComment(Article.id, replie.id)" class="btn btn-red">삭제</button>
+                      </div>
+                    </div>
+
+                    <div v-if="putReplieId===replie.id" class="mt-2">
+                      <input type="text" v-model="putContent" class="border border-slate-600 p-2">
+                      <button @click="putComment(Article.id, replie.id, putContent,replie.user.username)" class="btn btn-blue">수정하기</button>
+                    </div>
                   </li>
                 </ul>
-            </details>
+              </details>
+            </div>
           </li>
-          <hr>
+          <hr class="my-2">
         </ul>
-        
       </div>
-
     </div>
   </main>
 </template>
@@ -128,6 +137,7 @@ const postCommentR = async (id:number, content:string, parent=null) =>{
   if(content!==''){
     const result = await postComment(id,content, parent)
     commentContent.value=''
+    replieContent.value=''
     await Refresh(id)
   }
 }
@@ -172,5 +182,17 @@ onMounted(async () => {
 }
 .btn-blue:hover {
   @apply bg-blue-700;
+}
+.btn-red {
+  @apply bg-red-500 text-white;
+}
+.btn-red:hover {
+  @apply bg-red-700;
+}
+.btn-gray {
+  @apply bg-gray-300 text-black;
+}
+.btn-gray:hover {
+  @apply bg-gray-400;
 }
 </style>
