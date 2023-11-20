@@ -249,7 +249,8 @@ def subscribe_deposit(request):
     # 캐시 삭제 로직
     user_id = request.user.id
     page = request.data.get('page', '1')
-    cache_key = f"deposit_products_{user_id}_page_{page}"
+    path = request.data.get('path')
+    cache_key = f"deposit_products_{user_id}_page_{page}_path_{path}"
     cache.delete(cache_key)
 
     return Response({'action': action, 'message': f'Successfully {action}'}, status=200)
@@ -280,7 +281,8 @@ def subscribe_saving(request):
     # 캐시 삭제 로직
     user_id = request.user.id
     page = request.data.get('page', '1')
-    cache_key = f"saving_products_{user_id}_page_{page}"
+    path = request.data.get('path')
+    cache_key = f"deposit_products_{user_id}_page_{page}_path_{path}"
     cache.delete(cache_key)
 
     return Response({'action': action, 'message': f'Successfully {action}'}, status=200)

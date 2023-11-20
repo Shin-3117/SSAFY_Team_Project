@@ -29,6 +29,8 @@ environ.Env.read_env(
 # 환경변수 읽어오기
 API_KEY = env('API_KEY')
 API_KEY2 = env('API_KEY2')
+API_ID = env('API_ID')
+API_SECRET = env('API_SECRET')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
@@ -49,6 +51,7 @@ INSTALLED_APPS = [
     'articles',
     'exchangerate',
     'finlife',
+    'news',
     'rest_framework',
     'rest_framework.authtoken',
     'dj_rest_auth',
