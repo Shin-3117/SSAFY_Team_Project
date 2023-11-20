@@ -12,14 +12,14 @@ const baseURL = config.bankUrl
  * @param {string} sort_field
  * @returns 은행 예금, 적금 리스트
  */
-const getBankList = async (Saving='deposit', term=0, sort_field='intr_rate') => {
+const getBankList = async (Saving='deposit', term='0', sort_field='intr_rate',page=1) => {
   try{
     const response = await axios.get(
       `${baseURL}/${Saving}/${term}/${sort_field}/`, {
-    })
-    // console.log(response)
-    // console.log(response.data.result.baseList)
-    // console.log(response.data.result.optionList)
+        params:{page:page}
+      }
+    )
+    console.log(response)
     return response.data
   } catch(error){
     console.error(error)

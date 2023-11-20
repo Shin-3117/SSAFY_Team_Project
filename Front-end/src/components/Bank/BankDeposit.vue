@@ -4,11 +4,11 @@
       <div>
         <label for="deposit">
           <input type="radio" name="Saving" id="deposit" checked
-          v-model="radioValue.Saving" value="deposit">적금
+          v-model="radioValue.Saving" value="deposit">예금
         </label>
         <label for="saving">
           <input type="radio" name="Saving" id="saving"
-          v-model="radioValue.Saving" value="saving">예금
+          v-model="radioValue.Saving" value="saving">적금
         </label>
       </div>
 
@@ -47,7 +47,7 @@
         <!-- <p>{{ radioValue }}</p> -->
       </div>
 
-      <button @click="changeData" 
+      <button @click="changeData()" 
       class="bg-blue-500 hover:bg-blue-700 
       text-white font-bold py-2 px-4 rounded"
       >조회</button>
@@ -98,7 +98,9 @@
         <p>{{ isModalOpen.data?.rsrv_type_nm }}</p>
       </div>
     </div>
-
+    <div v-if="depositList">
+      1234 {{ depositList.count }}
+    </div>
   </article>
 </template>
 
@@ -125,7 +127,7 @@ const setModalOpen = (deposit:SavingType|null) =>{
 }
 
 onMounted(async () => {
-  try {
+  try { 
     const response = await getBankList();
     depositList.value = response;
   } catch (error) {
@@ -135,14 +137,16 @@ onMounted(async () => {
   }
 });
 
-const changeData = async ()=>{
+const changeData = async (page=1)=>{
   try {
     const response = await getBankList(
                       radioValue.value.Saving
-                      ,Number(radioValue.value.term)
+                      ,radioValue.value.term
                       ,radioValue.value.sort_field
+                      ,page
                       );
     depositList.value = response;
+    console.log(radioValue.value.term)
   } catch (error) {
     console.error(error);
   }

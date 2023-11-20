@@ -113,7 +113,30 @@ export const deleteArticle = async (article_id:number) => {
     return false
   }
 }
-
+/**
+ * 
+ * @param article_id 
+ * @returns 게시글 좋아요
+ */
+export const likeArticle = async (article_id:number) => {
+  try{
+    const response = await axios({
+      method: 'post',
+      url: `${baseURL}/articles/${article_id}/like/`,
+      headers: {
+        Authorization: `Token ${authStore.token}`,
+      },
+    })
+    window.alert('좋아요')
+    // console.log(response)
+    return true
+    // return response.data
+  } catch(error){
+    console.error(error)
+    alert('fail')
+    return false
+  }
+}
 
 
 /**

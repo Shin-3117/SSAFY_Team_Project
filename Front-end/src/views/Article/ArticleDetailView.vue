@@ -8,6 +8,7 @@
         <RouterLink :to="`/article/${Article.id}/put`">수정하기</RouterLink>
         <button @click="deleteArticleR(Article.id)">삭제</button>
       </div>
+      <button @click="likeArticleR(Article.id)">좋아요</button>
       <br>
       <span>작성자: {{ Article.user.username }} | </span>
       <span>{{ Article.updated_at }} | </span>
@@ -66,7 +67,7 @@
 </template>
 
 <script setup lang="ts">
-import {getArticle, postComment, apiComment, deleteArticle} from '@/api/articleAPI'
+import {getArticle, postComment, apiComment, deleteArticle, likeArticle} from '@/api/articleAPI'
 import { ref, onMounted, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router';
 import { useAuthStore } from '../../stores/auth';
@@ -99,7 +100,14 @@ const Refresh = async (id:number) => {
   // const response2 = await getArticle(id);
   // Article.value = response2;
 }
-
+const likeArticleR =async (id:number) => {
+  try{
+    const result = await likeArticle(id)
+    console.log(result)
+  } catch {
+    
+  }
+}
 const deleteArticleR = async (id:number) => {
   try{
     const result = await deleteArticle(id)
