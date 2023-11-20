@@ -31,6 +31,7 @@ API_KEY = env('API_KEY')
 API_KEY2 = env('API_KEY2')
 API_ID = env('API_ID')
 API_SECRET = env('API_SECRET')
+API_KEY3 = env('API_KEY3')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
@@ -52,6 +53,7 @@ INSTALLED_APPS = [
     'exchangerate',
     'finlife',
     'news',
+    'market',
     'rest_framework',
     'rest_framework.authtoken',
     'dj_rest_auth',
