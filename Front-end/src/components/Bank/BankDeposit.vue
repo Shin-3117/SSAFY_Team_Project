@@ -99,7 +99,9 @@
       </div>
     </div>
     <div v-if="depositList">
-      1234 {{ depositList.count }}
+      <ul class="flex flex-row">
+        <li v-for="page in pageNation" >{{ page }}</li>
+      </ul>
     </div>
   </article>
 </template>
@@ -115,6 +117,8 @@ const radioValue = ref({
 })
 const depositList = ref<BankDataType | null>(null);
 const isLoading = ref(true);
+const pageNation = ref([])
+
 const isModalOpen = ref({
   state: false,
   data: null as SavingType | null,
@@ -130,6 +134,10 @@ onMounted(async () => {
   try { 
     const response = await getBankList();
     depositList.value = response;
+    const totalPage = response.count
+    for (let i=1; i<totalPage/20; i++){
+      pageNation.value.push(i)
+    }
   } catch (error) {
     console.error(error);
   } finally {
