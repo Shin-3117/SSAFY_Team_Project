@@ -21,8 +21,8 @@ export const userInfo = async (username:string) => {
 export const deleteUser = async (username:string,password:string) => {
   try{
     const response = await axios({
-      method: 'post',
-      url: `${API_URL}/users/delete_user/`,
+      method: 'delete',
+      url: `${API_URL}/users/user/`,
       data: {
         username: username,
         password: password

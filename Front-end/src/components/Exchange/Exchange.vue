@@ -17,7 +17,7 @@
       <span>{{ exchangeData[22].deal_bas_r }}\ | </span>
       <span>1000\ -> {{ exchangeData[22].krw_to_cur }}</span>
     </div> -->
-    <!-- {{exchangeData}} -->
+    {{exchangeData}}
     <button @click="findCountry(countryCode)">USD</button>
     <div v-if="eachExchangeData">
       <p>{{ eachExchangeData }}</p>

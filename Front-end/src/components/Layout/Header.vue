@@ -13,7 +13,7 @@
         </button>
       </div>
       <PopoverGroup class="hidden lg:flex lg:gap-x-12">
-        <RouterLink to="/" class="navLink"
+        <RouterLink to="/bank" class="navLink"
         >예금 적금</RouterLink>
         <RouterLink to="/ExchangeRate" class="navLink"
         >환율</RouterLink>
@@ -47,7 +47,7 @@
         <div class="mt-6 flow-root">
           <div class="-my-6 divide-y divide-gray-500/10">
             <div class="space-y-2 py-6">
-              <RouterLink to="/" class="dialogLink"
+              <RouterLink to="/bank" class="dialogLink"
               >예금 적금</RouterLink>
               <RouterLink to="/ExchangeRate" class="dialogLink"
               >환율</RouterLink>

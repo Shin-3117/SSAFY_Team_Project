@@ -83,6 +83,24 @@
     flex justify-center items-center">
       <div class="bg-white dark:bg-slate-600 absolute" @click.stop>
         <p>{{ isModalOpen.data?.fin_prdt_cd.fin_prdt_nm }}</p>
+        <button v-if="isModalOpen.data?.rsrv_type" 
+          @click="postSaving(
+            isModalOpen.data?.fin_prdt_cd.id
+            ,isModalOpen.data?.id
+            ,currentPage
+            ,currentPath
+            ,authStore.token
+            )"
+        >적금즐겨찾기</button>
+        <button v-if="!isModalOpen.data?.rsrv_type"
+          @click="postDeposit(
+            isModalOpen.data?.fin_prdt_cd.id
+            ,isModalOpen.data?.id
+            ,currentPage
+            ,currentPath
+            ,authStore.token
+            )"
+        >예금즐겨찾기</button>
         <p>{{ isModalOpen.data?.fin_prdt_cd.kor_co_nm }}</p>
         <p>{{ isModalOpen.data?.fin_prdt_cd.etc_note }}</p>
         <p>{{ isModalOpen.data?.fin_prdt_cd.join_deny }}</p>
@@ -96,20 +114,28 @@
         <p>{{ isModalOpen.data?.save_trm }}</p>
         <p>{{ isModalOpen.data?.rsrv_type }}</p>
         <p>{{ isModalOpen.data?.rsrv_type_nm }}</p>
+        <hr>
+        <span>{{ isModalOpen.data?.fin_prdt_cd.id }} | </span>
+        <span>{{ isModalOpen.data?.id }}</span>
+        <p>{{ isModalOpen.data?.is_subscribed }}</p>
       </div>
     </div>
     <div v-if="depositList">
       <ul class="flex flex-row">
-        <li v-for="page in pageNation" >{{ page }}</li>
+        <li v-for="page in pageNation"
+        @click="changeData(page)" class="m-1">{{ page }}</li>
       </ul>
+      <p>{{ depositList.page }}</p>
     </div>
   </article>
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
-import getBankList from '../../api/bankDeposit';
 import type {BankDataType, SavingType} from '@/interface/BankDataType'
+import {getBankList, postDeposit, postSaving} from '../../api/bankDeposit';
+import { useAuthStore } from '@/stores/auth';
+const authStore = useAuthStore()
 const radioValue = ref({
   Saving: 'deposit',
   term:'0',
@@ -117,6 +143,8 @@ const radioValue = ref({
 })
 const depositList = ref<BankDataType | null>(null);
 const isLoading = ref(true);
+const currentPage = ref(1)
+const currentPath = ref('')
 const pageNation = ref([])
 
 const isModalOpen = ref({
@@ -134,10 +162,14 @@ onMounted(async () => {
   try { 
     const response = await getBankList();
     depositList.value = response;
-    const totalPage = response.count
-    for (let i=1; i<totalPage/20; i++){
-      pageNation.value.push(i)
+    if(depositList.value!==null){
+      const totalPage = depositList.value.count
+      for (let i=1; i-1<totalPage/20; i++){
+        pageNation.value.push(i)
+      }
     }
+    currentPath.value = response.path
+    // console.log(depositList.value)
   } catch (error) {
     console.error(error);
   } finally {
@@ -154,7 +186,16 @@ const changeData = async (page=1)=>{
                       ,page
                       );
     depositList.value = response;
-    console.log(radioValue.value.term)
+    pageNation.value = []
+    if(depositList.value!==null){
+      const totalPage = depositList.value.count
+      for (let i=1; i-1<totalPage/20; i++){
+        pageNation.value.push(i)
+      }
+    }
+    currentPage.value = response.page
+    currentPath.value = response.path
+    // console.log(radioValue.value.term)
   } catch (error) {
     console.error(error);
   }

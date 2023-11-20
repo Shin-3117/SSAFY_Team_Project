@@ -62,12 +62,14 @@ export interface SavingType {
   "intr_rate": number,
   "intr_rate2": number,
   "save_trm": number,
+  "is_subscribed":null|boolean
   "rsrv_type"?: string,
   "rsrv_type_nm"?: string
 }
 
 export interface BankDataType {
   "count": number,
+  "page": number,
   "next": string|null,
   "previous": null|string,
   "results": SavingType[]

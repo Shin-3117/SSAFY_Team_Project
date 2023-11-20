@@ -158,6 +158,7 @@ export const postComment = async (article_id:number, content:string, parent=null
         "parent": parent
       }
     })
+    return true
   } catch(error) {
     console.error(error)
   }

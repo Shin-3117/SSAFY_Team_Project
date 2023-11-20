@@ -10,6 +10,11 @@ const router = createRouter({
       component: HomeView
     },
     {
+      path: '/bank',
+      name: 'bank',
+      component: () => import('../views/BankView.vue')
+    },
+    {
       path: '/ExchangeRate',
       name: 'ExchangeRate',
       component: () => import('../views/ExchangeRateView.vue')

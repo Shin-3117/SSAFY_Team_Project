@@ -1,15 +1,86 @@
 <template>
   <div>
+    <div v-if="isLoading">Loading...</div>
     <div v-if="info">
-      <h2>유저이름 : {{ info.username }}</h2>
       <p @click="followUser(info.id)">팔로우 하기</p>
+      <h2>유저이름 : {{ info.username }}</h2>
       <p>이메일 : {{ info.email }}</p>
       <p>성별 : {{ info.gender===0 ? "남성" : "여성" }}</p>
       <p>생년월일 : {{ info.birthday }}</p>
-      <div v-if="isLoading">Loading...</div>
+      <p>보유금액 : {{ info.money }}</p>
+      <hr>
       <div>
-        {{ info }}
+        <p>작성한 게시글</p>
+        <ul>
+          <li v-for="written_article in info.written_articles">
+            <RouterLink :to="`/article/${written_article.id}`">
+              <p>{{ written_article.title }}</p>
+            </RouterLink>
+          </li>
+        </ul>
       </div>
+      <hr>
+      <div>
+        <p>작성한 댓글</p>
+        <ul>
+          <li v-for="written_comment in info.written_comments">
+            <RouterLink :to="`/article/${written_comment.article}`">
+              <p>{{ written_comment.content }}</p>
+            </RouterLink>
+          </li>
+        </ul>
+      </div>
+      <hr>
+      <div>
+        <p>좋아요한 게시글</p>
+        <ul>
+          <li v-for="liked_article in info.liked_articles">
+            <RouterLink :to="`/article/${liked_article.id}`">
+              <p>{{ liked_article.title }}</p>
+            </RouterLink>
+          </li>
+        </ul>
+      </div>
+      <hr>
+      <div>
+        <p>팔로잉</p>
+        <ul>
+          <li v-for="following in info.followings_list">
+            <p>{{ following }}</p>
+          </li>
+        </ul>
+      </div>
+      <hr>
+      <div>
+        <p>팔로워</p>
+        <ul>
+          <li v-for="follower in info.followers_list">
+            <p>{{ follower }}</p>
+          </li>
+        </ul>
+      </div>
+      <hr>
+      <div>
+        <p>즐겨찾기한 예금</p>
+        <ul>
+          <li v-for="deposit in info.deposit_subscriptions">
+            <p>{{ deposit.deposit_product_detail.fin_prdt_nm }}</p>
+          </li>
+        </ul>
+      </div>
+      <hr>
+      <div>
+        <p>즐겨찾기한 적금</p>
+        <ul>
+          <li v-for="deposit in info.saving_subscriptions">
+            <p>{{ deposit }}</p>
+          </li>
+        </ul>
+      </div>
+      <hr>
+      <!-- <div>
+        {{ info }}
+      </div> -->
       <br>
       <button v-if="userID===info.username"
       @click="()=>{deleteUserModal = !deleteUserModal}">회원탈퇴</button>

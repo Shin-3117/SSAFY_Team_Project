@@ -87,7 +87,7 @@ const errors = ref({
   },
   password1: {
     state:false,
-    message:'비밀번호를 입력해 주세요'
+    message:'비밀번호는 8글자 이상이여야 합니다.'
   },
   password2: {
     state:false,
@@ -118,7 +118,7 @@ const signUp = function () {
     props.signupState.open()
   } else if(username.value===null ){
     errors.value.username.state = true
-  } else if(password1.value===null){
+  } else if(password1.value===null || password1.value.length<8){
     errors.value.username.state = false
     errors.value.password1.state = true
   } else if(password2.value!==password1.value){

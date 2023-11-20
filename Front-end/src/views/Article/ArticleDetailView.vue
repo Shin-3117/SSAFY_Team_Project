@@ -96,14 +96,19 @@ const isWriter = computed(()=>{
 
 
 const Refresh = async (id:number) => {
-  router.go(0)
+  // router.go(0)
   // const response2 = await getArticle(id);
   // Article.value = response2;
+  // 0.1초 후에 getArticle 함수를 실행
+  setTimeout(async () => {
+    const response2 = await getArticle(id);
+    Article.value = response2;
+  }, 100);
 }
 const likeArticleR =async (id:number) => {
   try{
     const result = await likeArticle(id)
-    console.log(result)
+    // console.log(result)
   } catch {
     
   }
@@ -114,16 +119,16 @@ const deleteArticleR = async (id:number) => {
     if (result){
       await router.push({path: "/article"})
     }
-  } catch {
-    
+  } catch(error) {
+    console.error(error);
   }
 }
 
 const postCommentR = async (id:number, content:string, parent=null) =>{
   if(content!==''){
-    await postComment(id,content, parent)
+    const result = await postComment(id,content, parent)
     commentContent.value=''
-    Refresh(id)
+    await Refresh(id)
   }
 }
 
@@ -134,11 +139,11 @@ const deleteComment =async (article_id:number,comment_id:number) => {
 
 const putComment =async (article_id:number,comment_id:number, content:string, username:string) => {
   if (username===authStore.userID){
-    apiComment('put', comment_id, content)
+    await apiComment('put', comment_id, content)
     putContent.value = ''
     putId.value = null
     putReplieId.value = null
-    Refresh(article_id)
+    await Refresh(article_id)
   } else {
     alert('권한이 없습니다.')
     // console.log('이름다름')
