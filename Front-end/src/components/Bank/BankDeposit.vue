@@ -4,11 +4,11 @@
       <div>
         <label for="deposit">
           <input type="radio" name="Saving" id="deposit" checked
-          v-model="radioValue.Saving" value="deposit">적금
+          v-model="radioValue.Saving" value="deposit">예금
         </label>
         <label for="saving">
           <input type="radio" name="Saving" id="saving"
-          v-model="radioValue.Saving" value="saving">예금
+          v-model="radioValue.Saving" value="saving">적금
         </label>
       </div>
 
@@ -47,7 +47,7 @@
         <!-- <p>{{ radioValue }}</p> -->
       </div>
 
-      <button @click="changeData" 
+      <button @click="changeData()" 
       class="bg-blue-500 hover:bg-blue-700 
       text-white font-bold py-2 px-4 rounded"
       >조회</button>
@@ -83,6 +83,24 @@
     flex justify-center items-center">
       <div class="bg-white dark:bg-slate-600 absolute" @click.stop>
         <p>{{ isModalOpen.data?.fin_prdt_cd.fin_prdt_nm }}</p>
+        <button v-if="isModalOpen.data?.rsrv_type" 
+          @click="postSaving(
+            isModalOpen.data?.fin_prdt_cd.id
+            ,isModalOpen.data?.id
+            ,currentPage
+            ,currentPath
+            ,authStore.token
+            )"
+        >적금즐겨찾기</button>
+        <button v-if="!isModalOpen.data?.rsrv_type"
+          @click="postDeposit(
+            isModalOpen.data?.fin_prdt_cd.id
+            ,isModalOpen.data?.id
+            ,currentPage
+            ,currentPath
+            ,authStore.token
+            )"
+        >예금즐겨찾기</button>
         <p>{{ isModalOpen.data?.fin_prdt_cd.kor_co_nm }}</p>
         <p>{{ isModalOpen.data?.fin_prdt_cd.etc_note }}</p>
         <p>{{ isModalOpen.data?.fin_prdt_cd.join_deny }}</p>
@@ -96,16 +114,28 @@
         <p>{{ isModalOpen.data?.save_trm }}</p>
         <p>{{ isModalOpen.data?.rsrv_type }}</p>
         <p>{{ isModalOpen.data?.rsrv_type_nm }}</p>
+        <hr>
+        <span>{{ isModalOpen.data?.fin_prdt_cd.id }} | </span>
+        <span>{{ isModalOpen.data?.id }}</span>
+        <p>{{ isModalOpen.data?.is_subscribed }}</p>
       </div>
     </div>
-
+    <div v-if="depositList">
+      <ul class="flex flex-row">
+        <li v-for="page in pageNation"
+        @click="changeData(page)" class="m-1">{{ page }}</li>
+      </ul>
+      <p>{{ depositList.page }}</p>
+    </div>
   </article>
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
-import getBankList from '../../api/bankDeposit';
 import type {BankDataType, SavingType} from '@/interface/BankDataType'
+import {getBankList, postDeposit, postSaving} from '../../api/bankDeposit';
+import { useAuthStore } from '@/stores/auth';
+const authStore = useAuthStore()
 const radioValue = ref({
   Saving: 'deposit',
   term:'0',
@@ -113,6 +143,10 @@ const radioValue = ref({
 })
 const depositList = ref<BankDataType | null>(null);
 const isLoading = ref(true);
+const currentPage = ref(1)
+const currentPath = ref('')
+const pageNation = ref([])
+
 const isModalOpen = ref({
   state: false,
   data: null as SavingType | null,
@@ -125,9 +159,17 @@ const setModalOpen = (deposit:SavingType|null) =>{
 }
 
 onMounted(async () => {
-  try {
+  try { 
     const response = await getBankList();
     depositList.value = response;
+    if(depositList.value!==null){
+      const totalPage = depositList.value.count
+      for (let i=1; i-1<totalPage/20; i++){
+        pageNation.value.push(i)
+      }
+    }
+    currentPath.value = response.path
+    // console.log(depositList.value)
   } catch (error) {
     console.error(error);
   } finally {
@@ -135,14 +177,25 @@ onMounted(async () => {
   }
 });
 
-const changeData = async ()=>{
+const changeData = async (page=1)=>{
   try {
     const response = await getBankList(
                       radioValue.value.Saving
-                      ,Number(radioValue.value.term)
+                      ,radioValue.value.term
                       ,radioValue.value.sort_field
+                      ,page
                       );
     depositList.value = response;
+    pageNation.value = []
+    if(depositList.value!==null){
+      const totalPage = depositList.value.count
+      for (let i=1; i-1<totalPage/20; i++){
+        pageNation.value.push(i)
+      }
+    }
+    currentPage.value = response.page
+    currentPath.value = response.path
+    // console.log(radioValue.value.term)
   } catch (error) {
     console.error(error);
   }

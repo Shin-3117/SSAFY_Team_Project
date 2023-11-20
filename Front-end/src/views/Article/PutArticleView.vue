@@ -18,7 +18,6 @@
 <script setup lang="ts">
 import {getArticle, putArticle} from '@/api/articleAPI'
 import { ref, onMounted } from 'vue';
-import {postArticle} from '@/api/articleAPI'
 import { useRoute, useRouter } from "vue-router";
 
 const Article:any = ref(null)

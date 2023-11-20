@@ -70,18 +70,18 @@ class SavingSerializer(serializers.ModelSerializer):
                 return False
 
 
-class DepositSubscriptionSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = DepositSubscription
-        fields = '__all__'
-        read_only_fields = ('user',)
+# class DepositSubscriptionSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = DepositSubscription
+#         fields = '__all__'
+#         read_only_fields = ('user',)
 
 
-class SavingSubscriptionSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = SavingSubscription
-        fields = '__all__'
-        read_only_fields = ('user',)
+# class SavingSubscriptionSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = SavingSubscription
+#         fields = '__all__'
+#         read_only_fields = ('user',)
 
 
 

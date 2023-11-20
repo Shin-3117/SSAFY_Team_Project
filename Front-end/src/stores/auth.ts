@@ -1,13 +1,25 @@
 import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
-import { useRouter } from 'vue-router'
 import axios from 'axios'
 import type { LogInInfo, SignUpInfo } from '@/interface/AuthType'
+import config from '@/config'
 
 export const useAuthStore = defineStore('auth', () => {
-  const API_URL = 'http://127.0.0.1:8000'
+  const API_URL = config.baseURL
   const token = ref(null)
   const userID = ref('')
+
+  if (token.value===null){
+    const LoginHistory = localStorage.getItem('login')
+    if (typeof(LoginHistory)==='string') {
+      const objData = JSON.parse(LoginHistory)
+      userID.value = objData.username
+      token.value = objData.token
+    }
+    // console.log(LoginHistory)
+  }
+
+
   const isLogin = computed(() => {
     if (token.value === null) {
       return false
@@ -16,8 +28,7 @@ export const useAuthStore = defineStore('auth', () => {
     }
   })
   
-
-  const signUp = function (payload: SignUpInfo) {
+  const signUp = (payload: SignUpInfo) => {
     const { username, password1, password2, gender, birthday, money } = payload
 
     axios({
@@ -42,7 +53,7 @@ export const useAuthStore = defineStore('auth', () => {
       })
   }
 
-  const logIn = function (payload: LogInInfo) {
+  const logIn = (payload: LogInInfo) => {
     const { username, password } = payload
     axios({
       method: 'post',
@@ -55,24 +66,31 @@ export const useAuthStore = defineStore('auth', () => {
         console.log(res.data)
         token.value = res.data.key
         userID.value = username
+        const localValue = {
+          username: username,
+          token: res.data.key
+        }
+        localStorage.setItem('login', JSON.stringify(localValue))
       })
       .catch((err) => {
         console.log(err)
       })
   }
 
-  const logOut = function () {
+  const logOut = () => {
     axios({
       method: 'post',
       url: `${API_URL}/accounts/logout/`,
     })
       .then((res) => {
         token.value = null
+        localStorage.removeItem('login')
       })
       .catch((err) => {
         console.log(err)
       })
   }
+  window.addEventListener('beforeunload', logOut);
 
   return {signUp, logIn, token, isLogin, userID, logOut }
 });

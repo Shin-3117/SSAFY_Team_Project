@@ -265,10 +265,47 @@ placeInfo.json에 시군구의 위도, 경도 값을 저장하고 이를 컴포�
 
 ## 2023.11.17 금
 <details>
-<summary>2023.11.17 </summary>
+<summary>2023.11.17 게시판, 댓글 기능 구현</summary>
 <div markdown="1">
 
-### 금요일
+### 게시판 기능
+전체 게시판을 조회하는 ArticleView
+-게시글을 생성하는 MakeArticleView
+-상세 게시글을 조회하는 ArticleDetailView
+--게시글 수정하는 PutArticleView
+
+1. 게시글 생성, 게시글 수정의 경우 View를 만들어 라우터를 연결하는 것이 아닌
+컴포넌트로 구현하는 방법도 생각했으나,
+
+컴포넌트의 경우, 사용자들이 뒤로가기 버튼을 사용시 문제가 발생하므로 View로 제작
+
+2. 게시글 수정의 경우, 게시글 생성과 유사하여 하나의 View로 구현하는 방법도 고려했지만,
+
+기능별로 분류해주는 것이 나중에 유지관리에 좋을 것으로 생각되어 분리하여 제작
+
+3. 게시글 수정에서 ArticleDetailView에서 조회한 데이터를 PutArticleView로 넘기게 수정할 필요가 있음
+   현재는 PutArticleView에서 다시 서버에 요청하여 데이터를 받음
+
+### 댓글 기능 구현
+- 댓글 생성 
+- 댓글 수정 
+- 댓글 삭제 
+- 대댓글 생성 
+- 대댓글 수정 
+- 대댓글 삭제
+  완료
+  수정의 경우, 수정 버튼을 누르면 수정 할수 있는 input 출력
+  placeholder가 아닌 값으로 수정하기 편하게 수정할 필요가 있음
+  -> v-model이 아닌 :value @input 로 바인딩 필요할 것으로 보임
+</div>
+</details>
+
+## 2023.11.18 토
+<details>
+<summary>2023.11.18 </summary>
+<div markdown="1">
+
+
 
 </div>
 </details>
