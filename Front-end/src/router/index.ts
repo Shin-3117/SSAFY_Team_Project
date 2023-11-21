@@ -53,6 +53,21 @@ const router = createRouter({
       path: '/userInfo/:username',
       name: 'userInfo',
       component: () => import('../views/UserInfoView.vue')
+    },
+    {
+      path: '/market/gold',
+      name: 'goldPrice',
+      component: () => import('../views/Market/GoldPriceView.vue')
+    },
+    {
+      path: '/market/oil',
+      name: 'oilPrice',
+      component: () => import('../views/Market/OilPriceView.vue')
+    },
+    {
+      path: '/market',
+      name: 'market',
+      component: () => import('../views/MarketView.vue')
     }
   ]
 })

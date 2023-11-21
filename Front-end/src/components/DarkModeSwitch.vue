@@ -1,7 +1,9 @@
 <template>
   <button @click="toggleDark()"
   class="btn">
-    {{ isDark ? "Dark" : "Light" }} Mode
+    <!-- {{ isDark ? "Dark" : "Light" }} Mode -->
+    <img src="@/assets/sun-solid.svg" alt="Light Mode" v-if="!isDark" class="modeImg">
+    <img src="@/assets/moon-solid.svg" alt="Dark Mode" v-if="isDark" class="modeImg">
   </button>
 </template>
 
@@ -14,7 +16,7 @@ const toggleDark = useToggle(isDark)
 
 <style scoped>
 .btn {
-  @apply font-bold py-2 px-4 rounded-full
+  @apply font-bold p-2 rounded-full
   bg-slate-500 text-white 
   dark:text-black;
 }
@@ -23,5 +25,9 @@ const toggleDark = useToggle(isDark)
 }
 .btn-blue:hover {
   @apply bg-blue-700;
+}
+.modeImg{
+  width: 24px;
+  height: 24px;
 }
 </style>

@@ -14,14 +14,26 @@ const baseURL = config.bankUrl
  * @param {string} sort_field
  * @returns 은행 예금, 적금 리스트
  */
-export const getBankList = async (Saving='deposit', term='0', sort_field='intr_rate',page=1) => {
+export const getBankList = async (Saving='deposit', term='0', sort_field='intr_rate',page=1, token=null) => {
   try{
-    const response = await axios.get(
-      `${baseURL}/${Saving}/${term}/${sort_field}/`, {
-        params:{page:page}
-      }
-    )
-    // console.log(response)
+    let response
+    if(token===null){
+      response = await axios.get(
+        `${baseURL}/${Saving}/${term}/${sort_field}/`, {
+          params:{page:page},
+        }
+      )
+    } else {
+      response = await axios.get(
+        `${baseURL}/${Saving}/${term}/${sort_field}/`, {
+          params:{page:page},
+          headers:{
+            Authorization: `Token ${token}`
+          }
+        }
+      )
+    }
+        // console.log(response)
     response.data.page = page
     response.data.path = `/finlife/${Saving}/${term}/${sort_field}/`
     return response.data
@@ -49,6 +61,7 @@ export const postDeposit = async (
         },
       }
     )
+    console.log(product_id,option_id,page,path,token)
     console.log(response)
     // return response.data
   } catch(error){

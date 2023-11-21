@@ -67,7 +67,9 @@
         class="bg-slate-50 dark:bg-slate-950 hover:bg-gray-200 dark:hover:bg-gray-800">
           <li class="grid grid-cols-8" 
           @click="setModalOpen(deposit)">
-            <span class="p-2 col-span-3">{{deposit.fin_prdt_cd.fin_prdt_nm}}</span>
+            <span class="p-2 col-span-3">{{deposit.fin_prdt_cd.fin_prdt_nm}}
+              <span v-if="deposit.is_subscribed">*</span>
+            </span>
             <span class="p-2 col-span-1">{{deposit.intr_rate}}</span>
             <span class="p-2 col-span-1">{{deposit.intr_rate2}}</span>
             <span class="p-2 col-span-1">{{deposit.save_trm}}</span>
@@ -82,43 +84,51 @@
     class="modalBackground fixed top-0 left-0 z-10
     w-screen h-screen
     flex justify-center items-center">
-      <div class="bg-white dark:bg-slate-600 absolute" @click.stop>
-        <p>{{ isModalOpen.data?.fin_prdt_cd.fin_prdt_nm }}</p>
-        <button v-if="isModalOpen.data?.rsrv_type" 
-          @click="postSaving(
-            isModalOpen.data?.fin_prdt_cd.id
-            ,isModalOpen.data?.id
-            ,currentPage
-            ,currentPath
-            ,authStore.token
-            )"
-        >적금즐겨찾기</button>
-        <button v-if="!isModalOpen.data?.rsrv_type"
-          @click="postDeposit(
-            isModalOpen.data?.fin_prdt_cd.id
-            ,isModalOpen.data?.id
-            ,currentPage
-            ,currentPath
-            ,authStore.token
-            )"
-        >예금즐겨찾기</button>
-        <p>{{ isModalOpen.data?.fin_prdt_cd.kor_co_nm }}</p>
-        <p>{{ isModalOpen.data?.fin_prdt_cd.etc_note }}</p>
-        <p>{{ isModalOpen.data?.fin_prdt_cd.join_deny }}</p>
-        <p>{{ isModalOpen.data?.fin_prdt_cd.join_member }}</p>
-        <p>{{ isModalOpen.data?.fin_prdt_cd.join_way }}</p>
-        <p>{{ isModalOpen.data?.fin_prdt_cd.spcl_cnd }}</p>
-        <hr>
-        <p>{{ isModalOpen.data?.intr_rate_type_nm }}</p>
-        <p>{{ isModalOpen.data?.intr_rate }}</p>
-        <p>{{ isModalOpen.data?.intr_rate2 }}</p>
-        <p>{{ isModalOpen.data?.save_trm }}</p>
-        <p>{{ isModalOpen.data?.rsrv_type }}</p>
-        <p>{{ isModalOpen.data?.rsrv_type_nm }}</p>
-        <hr>
-        <span>{{ isModalOpen.data?.fin_prdt_cd.id }} | </span>
-        <span>{{ isModalOpen.data?.id }}</span>
-        <p>{{ isModalOpen.data?.is_subscribed }}</p>
+      <div class="bg-white dark:bg-slate-600 w-4/5 p-3" @click.stop>
+        <div class="flex  items-center justify-between mb-4">
+          <p>{{ isModalOpen.data?.fin_prdt_cd.kor_co_nm }}</p>
+          <p class="font-bold text-lg">{{ isModalOpen.data.fin_prdt_cd.fin_prdt_nm }}</p>
+          <div v-if="authStore.token!==null">
+            <button v-if="isModalOpen.data?.rsrv_type" 
+            @click="postSaving(
+              isModalOpen.data.fin_prdt_cd.id
+              ,isModalOpen.data.id
+              ,currentPage
+              ,currentPath
+              ,token
+              ).then(()=>{changeData()})"
+            ><img src="@/assets/star-solid.svg" alt="star" class="w-6 h-6"></button>
+            <button v-if="!isModalOpen.data?.rsrv_type"
+            @click="postDeposit(
+              isModalOpen.data.fin_prdt_cd.id
+              ,isModalOpen.data.id
+              ,currentPage
+              ,currentPath
+              ,token
+              ).then(()=>{changeData()})"
+            ><img src="@/assets/star-solid.svg" alt="star" class="iconImg"></button>
+          </div>
+        </div>
+        <hr class="my-4">
+        <div class="mb-4 flex">
+          <p class="font-bold">가입 제한: {{ isModalOpen.data?.fin_prdt_cd.join_deny }}</p>
+          <p class="ml-2 text-gray-500">1: 제한없음, 2: 서민전용, 3: 일부제한</p>
+        </div>
+        <p class="mb-4">가입 대상: {{ isModalOpen.data?.fin_prdt_cd.join_member }}</p>
+        <p class="mb-4">가입 방법: {{ isModalOpen.data?.fin_prdt_cd.join_way }}</p>
+        <p class="mb-4">우대조건: {{ isModalOpen.data?.fin_prdt_cd.spcl_cnd }}</p>
+        <p class="mb-4 font-bold">기타 유의사항:</p>
+        <p class="mb-4">{{ isModalOpen.data?.fin_prdt_cd.etc_note }}</p>
+        <hr class="my-4">
+        <p class="mb-4 font-bold">금리 적용 방식: {{ isModalOpen.data?.intr_rate_type_nm }}</p>
+        <p class="mb-4">기본금리: {{ isModalOpen.data?.intr_rate }}</p>
+        <p class="mb-4">우대금리: {{ isModalOpen.data?.intr_rate2 }}</p>
+        <p class="mb-4">저축기간: {{ isModalOpen.data?.save_trm }}</p>
+        <p class="mb-4">{{ isModalOpen.data?.rsrv_type }}</p>
+        <p class="mb-4">{{ isModalOpen.data?.rsrv_type_nm }}</p>
+        <hr class="my-4">
+        <!-- <p>{{ isModalOpen.data?.is_subscribed }}</p> -->
+        <!-- <p>{{ isModalOpen.data }}</p> -->
       </div>
     </div>
     
@@ -127,8 +137,8 @@
       <li
         v-for="page in pageNation"
         :key="page"
-        @click="changeData(page)"
-        :class="{ 'bg-gray-500 text-white': page === depositList.page }"
+        @click="setPage(page)"
+        :class="{ 'bg-gray-500 text-white': page === currentPage }"
         class="px-3 py-2 cursor-pointer border border-gray-300 rounded-md
         hover:bg-gray-200 dark:hover:bg-gray-800 "
       >
@@ -155,7 +165,8 @@ const depositList = ref<BankDataType | null>(null);
 const isLoading = ref(true);
 const currentPage = ref(1)
 const currentPath = ref('')
-const pageNation = ref([])
+const pageNation = ref<number[]>([])
+const token = authStore.token
 
 const isModalOpen = ref({
   state: false,
@@ -167,33 +178,19 @@ const setModalOpen = (deposit:SavingType|null) =>{
     isModalOpen.value.data = deposit
   }
 }
-
-onMounted(async () => {
-  try { 
-    const response = await getBankList();
-    depositList.value = response;
-    if(depositList.value!==null){
-      const totalPage = depositList.value.count
-      for (let i=1; i-1<totalPage/20; i++){
-        pageNation.value.push(i)
-      }
-    }
-    currentPath.value = response.path
-    // console.log(depositList.value)
-  } catch (error) {
-    console.error(error);
-  } finally {
-    isLoading.value = false
-  }
-});
-
-const changeData = async (page=1)=>{
+const setPage = (page:number) => {
+  currentPage.value = page
+  changeData()
+}
+const changeData = async ()=>{
+  isLoading.value = true
   try {
     const response = await getBankList(
                       radioValue.value.Saving
                       ,radioValue.value.term
                       ,radioValue.value.sort_field
-                      ,page
+                      ,currentPage.value
+                      ,token
                       );
     depositList.value = response;
     pageNation.value = []
@@ -205,11 +202,15 @@ const changeData = async (page=1)=>{
     }
     currentPage.value = response.page
     currentPath.value = response.path
-    // console.log(radioValue.value.term)
   } catch (error) {
     console.error(error);
+  } finally {
+    isLoading.value = false
   }
 }
+onMounted(async () => {
+  changeData()
+});
 </script>
 
 <style scoped>
@@ -222,5 +223,9 @@ const changeData = async (page=1)=>{
 .Radio.active {
   @apply bg-blue-600 hover:bg-blue-700
 }
-
+.iconImg{
+  width: 24px;
+  height: 24px;
+  fill: #FFEA00;
+}
 </style>

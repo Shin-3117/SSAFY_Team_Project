@@ -11,10 +11,10 @@
       class="btn btn-blue">회원가입</button>
     <SignUp v-if="openSignUp.state" :signup-state="openSignUp"/>
 
-    <div v-if="authStore.isLogin">
-      <RouterLink :to="`/userInfo/${authStore.userID}`" class="btn btn-blue"
-      >회원정보</RouterLink>
-    </div>
+    <button v-if="authStore.isLogin" class="btn btn-blue">
+      <RouterLink :to="`/userInfo/${authStore.userID}`" 
+        >회원정보</RouterLink>
+    </button>
     
     <button v-if="authStore.isLogin" 
       v-on:click="authStore.logOut"

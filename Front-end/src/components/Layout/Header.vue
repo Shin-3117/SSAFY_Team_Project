@@ -1,7 +1,7 @@
 <template>
   <header class="bg-slate-100 dark:bg-slate-900 dark:text-white">
     <nav class="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8" aria-label="Global">
-      <div class="flex lg:flex-1">
+      <div class="flex mr-6">
         <RouterLink to="/" class="">
           <span>Your Company</span>
         </RouterLink>
@@ -14,11 +14,13 @@
       </div>
       <PopoverGroup class="hidden lg:flex lg:gap-x-12">
         <RouterLink to="/bank" class="navLink"
-        >예금 적금</RouterLink>
+          >예금 적금</RouterLink>
         <RouterLink to="/ExchangeRate" class="navLink"
-        >환율</RouterLink>
+          >환율</RouterLink>
         <RouterLink to="/map" class="navLink"
-        >은행 Map</RouterLink>
+          >은행 Map</RouterLink>
+        <RouterLink to="/market" class="navLink "
+          >상품 시세</RouterLink>
         <RouterLink to="/recommend" class="navLink"
         >추천</RouterLink>
         <RouterLink to="/article" class="navLink"
