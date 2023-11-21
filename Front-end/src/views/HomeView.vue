@@ -1,6 +1,6 @@
 <template>
   <div>
-gha
+    Home
   </div>
 </template>
 
