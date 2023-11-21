@@ -5,8 +5,8 @@ from django.conf import settings
 from django.http import JsonResponse
 import requests
 from datetime import datetime
-from .serializers import OilSerializer, GoldSerializer
-from .models import Oil, Gold
+from .serializers import OilSerializer, GoldSerializer, KospiSeriesSerializer, KosdaqSeriesSerializer, KrxSeriesSerializer, ThemeIndexSerializer
+from .models import Oil, Gold, KospiSeries, KosdaqSeries, KrxSeries, ThemeIndex
 # permission Decorators
 from rest_framework.decorators import permission_classes
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
@@ -18,6 +18,8 @@ from django.views.decorators.cache import cache_page
 BASE_URL = "https://apis.data.go.kr/1160100/service/GetGeneralProductInfoService"
 OIL_URL = "/getOilPriceInfo"
 GOLD_URL = "/getGoldPriceInfo"
+# 주가지수시세
+STOCK_URL = 'https://apis.data.go.kr/1160100/service/GetMarketIndexInfoService/getStockMarketIndex'
 # api_key
 API_KEY3 = settings.API_KEY3
 
@@ -46,7 +48,7 @@ def api_test(request, code):
 
 # DB에 저장(석유)
 @api_view(['GET'])
-@permission_classes([IsAdminUser])
+# @permission_classes([IsAdminUser])
 def save_oil(request):
     try:
         url = BASE_URL + OIL_URL
@@ -58,6 +60,8 @@ def save_oil(request):
         response = requests.get(url, params=params).json()
         items = response.get('response').get('body').get('items').get('item')
         for item in items:
+            if item['wtAvgPrcDisc'] == '0':
+                continue
             item['basDt'] = datetime.strptime(item['basDt'], '%Y%m%d').date()
             serializer = OilSerializer(data=item)
             if serializer.is_valid(raise_exception=True):
@@ -74,7 +78,7 @@ def save_oil(request):
 
 # DB에 저장(금)
 @api_view(['GET'])
-@permission_classes([IsAdminUser])
+# @permission_classes([IsAdminUser])
 def save_gold(request):
     try:
         url = BASE_URL + GOLD_URL
@@ -101,6 +105,50 @@ def save_gold(request):
         return JsonResponse({"error": str(e)}, status=500)
 
 
+# DB에 저장(주가지수시세)
+@api_view(['GET'])
+@permission_classes([IsAdminUser])
+def save_stock(request):
+    try:
+        url = STOCK_URL
+        params = {
+            'serviceKey': API_KEY3,
+            'resultType': 'json',
+            'numOfRows': 10000,
+            'beginBasDt': '20220101',
+            'pageNo': 8,
+        }
+        response = requests.get(url, params=params).json()
+        items = response.get('response').get('body').get('items').get('item')
+        for item in items:
+            item['basDt'] = datetime.strptime(item['basDt'], '%Y%m%d').date()
+            if item['idxCsf'] == "KOSPI시리즈":
+                serializer = KospiSeriesSerializer(data=item)
+                if serializer.is_valid(raise_exception=True):
+                    serializer.save()
+            elif item['idxCsf'] == "KOSDAQ시리즈":
+                serializer = KosdaqSeriesSerializer(data=item)
+                if serializer.is_valid(raise_exception=True):
+                    serializer.save()
+            elif item['idxCsf'] == "KRX시리즈":
+                serializer = KrxSeriesSerializer(data=item)
+                if serializer.is_valid(raise_exception=True):
+                    serializer.save()
+            elif item['idxCsf'] == "테마지수":
+                serializer = ThemeIndexSerializer(data=item)
+                if serializer.is_valid(raise_exception=True):
+                    serializer.save()
+        return JsonResponse({'message': 'okay'})
+
+    # API 요청 실패 시 처리
+    except requests.RequestException as e:
+        return JsonResponse({"error": str(e)}, status=500)
+    # 기타 예외 처리
+    except Exception as e:
+        return JsonResponse({"error": str(e)}, status=500)
+
+
+
 @api_view(['GET'])
 @cache_page(60 * 15)
 def send_data(request, code):
@@ -114,6 +162,26 @@ def send_data(request, code):
             gold_instances = Gold.objects.all()
             gold_serializer = GoldSerializer(gold_instances, many=True)
             return Response(gold_serializer.data)
+        
+        elif code == 'kospi':
+            kospi_instances = KospiSeries.objects.all()
+            kospi_serializer = KospiSeriesSerializer(kospi_instances, many=True)
+            return Response(kospi_serializer.data)
+        
+        elif code == 'kosdaq':
+            kosdaq_instances = KosdaqSeries.objects.all()
+            kosdaq_serializer = KosdaqSeriesSerializer(kosdaq_instances, many=True)
+            return Response(kosdaq_serializer.data)
+        
+        elif code == 'krx':
+            krx_instances = KrxSeries.objects.all()
+            krx_serializer = KrxSeriesSerializer(krx_instances, many=True)
+            return Response(krx_serializer.data)
+        
+        elif code == 'theme':
+            theme_instances = ThemeIndex.objects.all()
+            theme_serializer = ThemeIndexSerializer(theme_instances, many=True)
+            return Response(theme_serializer.data)
 
     except Exception as e:
         return Response({'error': str(e)}, status=500)
