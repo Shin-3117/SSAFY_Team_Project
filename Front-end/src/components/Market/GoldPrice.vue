@@ -1,5 +1,5 @@
 <template>
-  <div class="w-[75%] mx-auto my-8">
+  <div class="">
     <div class="text-2xl">국내 금 시세</div>
     <div class="flex justify-start space-x-4 mt-4">
       <button v-for="period in periods" :key="period.value" @click="applyZoom(period.value)"
@@ -82,7 +82,8 @@ onMounted(async () => {
         datasets: [{
           label: '국내 금 시세(매매기준율 ￦/g)',
           data: goldData.value.map(data => data.clpr),
-          fill: false,
+          fill: true,
+          backgroundColor: 'rgba(255,215,0, 0.2)',
           borderColor: 'gold',
           tension: 0.1
         }]

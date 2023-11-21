@@ -67,8 +67,8 @@
         class="bg-slate-50 dark:bg-slate-950 hover:bg-gray-200 dark:hover:bg-gray-800">
           <li class="grid grid-cols-8" 
           @click="setModalOpen(deposit)">
-            <span class="p-2 col-span-3">{{deposit.fin_prdt_cd.fin_prdt_nm}}
-              <span v-if="deposit.is_subscribed">*</span>
+            <span class="p-2 col-span-3 flex">{{deposit.fin_prdt_cd.fin_prdt_nm}}
+              <img v-if="deposit.is_subscribed" src="@/assets/star-fill.png" alt="star" class="iconImg">
             </span>
             <span class="p-2 col-span-1">{{deposit.intr_rate}}</span>
             <span class="p-2 col-span-1">{{deposit.intr_rate2}}</span>
@@ -96,8 +96,13 @@
               ,currentPage
               ,currentPath
               ,token
-              ).then(()=>{changeData()})"
-            ><img src="@/assets/star-solid.svg" alt="star" class="w-6 h-6"></button>
+              ).then(()=>{
+                isModalOpen.subscribe = !isModalOpen.subscribe
+                changeData()})">
+              <img v-if="isModalOpen.subscribe" src="@/assets/star-fill.png" alt="star" class="iconImg">
+              <img v-if="!isModalOpen.subscribe" src="@/assets/star-null.png" alt="star" class="iconImg">
+            </button>
+            
             <button v-if="!isModalOpen.data?.rsrv_type"
             @click="postDeposit(
               isModalOpen.data.fin_prdt_cd.id
@@ -105,8 +110,12 @@
               ,currentPage
               ,currentPath
               ,token
-              ).then(()=>{changeData()})"
-            ><img src="@/assets/star-solid.svg" alt="star" class="iconImg"></button>
+              ).then(()=>{
+                isModalOpen.subscribe = !isModalOpen.subscribe
+                changeData()})">
+              <img v-if="isModalOpen.subscribe" src="@/assets/star-fill.png" alt="star" class="iconImg">
+              <img v-if="!isModalOpen.subscribe" src="@/assets/star-null.png" alt="star" class="iconImg">
+            </button>
           </div>
         </div>
         <hr class="my-4">
@@ -127,7 +136,7 @@
         <p class="mb-4">{{ isModalOpen.data?.rsrv_type }}</p>
         <p class="mb-4">{{ isModalOpen.data?.rsrv_type_nm }}</p>
         <hr class="my-4">
-        <!-- <p>{{ isModalOpen.data?.is_subscribed }}</p> -->
+        <p>{{ isModalOpen.data?.is_subscribed }}</p>
         <!-- <p>{{ isModalOpen.data }}</p> -->
       </div>
     </div>
@@ -171,11 +180,18 @@ const token = authStore.token
 const isModalOpen = ref({
   state: false,
   data: null as SavingType | null,
+  subscribe: false
 })
+
 const setModalOpen = (deposit:SavingType|null) =>{
   isModalOpen.value.state = !isModalOpen.value.state
   if(isModalOpen.value.state){
     isModalOpen.value.data = deposit
+  }
+  if(deposit?.is_subscribed===true){
+    isModalOpen.value.subscribe = deposit?.is_subscribed
+  }else{
+    isModalOpen.value.subscribe = false
   }
 }
 const setPage = (page:number) => {

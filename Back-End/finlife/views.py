@@ -282,7 +282,7 @@ def subscribe_saving(request):
     user_id = request.user.id
     page = request.data.get('page', '1')
     path = request.data.get('path')
-    cache_key = f"deposit_products_{user_id}_page_{page}_path_{path}"
+    cache_key = f"saving_products_{user_id}_page_{page}_path_{path}"
     cache.delete(cache_key)
 
     return Response({'action': action, 'message': f'Successfully {action}'}, status=200)

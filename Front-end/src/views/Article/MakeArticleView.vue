@@ -1,12 +1,12 @@
 <template>
   <div>
-    <div class="flex flex-col">
+    <div class="flex flex-col p-4">
       <label for="title">제목
       </label>
-      <input type="text" id="title" v-model="title"
-      class="border border-teal-100">
+        <input type="text" id="title" v-model="title"
+        class=" mb-4">
       <textarea v-model="content" rows="7" 
-      class="border border-teal-100"></textarea>
+      class="border border-slate-500 dark:bg-slate-900"></textarea>
       <!-- <p>{{ content }}</p> -->
       <button @click="moveArticles()">뒤로가기</button>
       <button @click="MakeArticle(title, content)">게시글 생성하기</button>

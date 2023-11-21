@@ -1,27 +1,27 @@
 <template>
-  <mian>
-    <div class="text-center mt-3">
-      <label for="gold" class="Radio" :class="{ 'active': market === 'gold' }">
+  <mian class="">
+    <div class="text-center p-4 dark:bg-slate-800">
+      <label for="gold" class="Radio box-border" :class="{ 'active': market === 'gold' }">
         <input type="radio" name="markets" id="gold" checked
         v-model="market" value="gold" class="hidden">금 시세
       </label>
-      <label for="oil" class="Radio" :class="{ 'active': market === 'oil' }">
+      <label for="oil" class="Radio box-border" :class="{ 'active': market === 'oil' }">
         <input type="radio" name="markets" id="oil"
         v-model="market" value="oil" class="hidden">석유 시세
       </label>
     </div>
-    <div v-if="market==='gold'">
+    <div v-if="market==='gold'" class="dark:bg-slate-800">
       <GoldPriceView/>
     </div>
-    <div v-if="market==='oil'">
+    <div v-if="market==='oil'" class="dark:bg-slate-800">
       <OilPriceView/>
     </div>
   </mian>
 </template>
 
 <script setup lang="ts">
-import GoldPriceView from './Market/GoldPriceView.vue';
-import OilPriceView from './Market/OilPriceView.vue';
+import GoldPriceView from '@/components/Market/GoldPrice.vue';
+import OilPriceView from '@/components/Market/OilPrice.vue';
 import { ref } from 'vue';
 
 const market = ref('gold')

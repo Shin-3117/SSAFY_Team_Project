@@ -33,7 +33,7 @@ export const getBankList = async (Saving='deposit', term='0', sort_field='intr_r
         }
       )
     }
-        // console.log(response)
+    // console.log(response)
     response.data.page = page
     response.data.path = `/finlife/${Saving}/${term}/${sort_field}/`
     return response.data
@@ -43,8 +43,8 @@ export const getBankList = async (Saving='deposit', term='0', sort_field='intr_r
 }
 
 /**
- * @param {string} Saving (예금, 적금)['deposit', 'saving']
- * @returns 예금,적금 즐겨찾기
+ * 
+ * @returns 예금 즐겨찾기
  */
 export const postDeposit = async (
   product_id:number, option_id:number, page=1, path:string, token:string) => {
@@ -61,8 +61,8 @@ export const postDeposit = async (
         },
       }
     )
-    console.log(product_id,option_id,page,path,token)
-    console.log(response)
+    // console.log(product_id,option_id,page,path,token)
+    // console.log(response)
     // return response.data
   } catch(error){
     console.error(error)
@@ -70,8 +70,8 @@ export const postDeposit = async (
 }
 
 /**
- * @param {string} Saving (예금, 적금)['deposit', 'saving']
- * @returns 예금,적금 즐겨찾기
+
+ * @returns 적금 즐겨찾기
  */
 export const postSaving = async (
   product_id:number, option_id:number, page=1, path:string,token:string) => {
@@ -88,7 +88,8 @@ export const postSaving = async (
         },
       }
     )
-    console.log(response)
+    // console.log(product_id,option_id,page,path,token)
+    // console.log(response.data)
     // return response.data
   } catch(error){
     console.error(error)

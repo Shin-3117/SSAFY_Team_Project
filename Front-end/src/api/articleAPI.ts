@@ -127,7 +127,7 @@ export const likeArticle = async (article_id:number) => {
         Authorization: `Token ${authStore.token}`,
       },
     })
-    window.alert('좋아요')
+    // window.alert('좋아요')
     // console.log(response)
     return true
     // return response.data

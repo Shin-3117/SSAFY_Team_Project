@@ -4,13 +4,16 @@
       <h2 class="text-2xl font-bold mb-2">{{ Article.title }}</h2>
       <RouterLink to="/article" class="text-blue-500 hover:underline mb-2">게시판으로</RouterLink>
       <br>
-
+      <!-- <p>{{ Article }}</p> -->
       <div v-if="isWriter" class="mb-2">
         <RouterLink :to="`/article/${Article.id}/put`" class="btn btn-blue">수정하기</RouterLink>
         <button @click="deleteArticleR(Article.id)" class="btn btn-red">삭제</button>
       </div>
 
-      <button @click="likeArticleR(Article.id)" class="btn btn-blue">좋아요</button>
+      <button @click="likeArticleR(Article.id)" class="btn btn-blue">
+        <img v-if="!isLike" src="../../assets/like-null.png" alt="LikeButton" class="w-6 h-6">
+        <img v-if="isLike" src="../../assets/like-fill.png" alt="LikeButton" class="w-6 h-6">
+      </button>
       <br>
       <RouterLink :to="`/userInfo/${Article.user.username}`" class="text-blue-500 hover:underline mb-2">
         <span>작성자: {{ Article.user.username }}</span>
@@ -97,7 +100,7 @@ const putId = ref(null)
 const putContent = ref('')
 const replieContent = ref('')
 const putReplieId = ref(null)
-
+const isLike = ref(false)
 
 const isWriter = computed(()=>{
   if(Article.value!==null){
@@ -122,7 +125,8 @@ const Refresh = async (id:number) => {
 const likeArticleR =async (id:number) => {
   try{
     const result = await likeArticle(id)
-    // console.log(result)
+    isLike.value = !isLike.value
+    // Refresh(id)
   } catch {
     
   }
@@ -170,6 +174,14 @@ onMounted(async () => {
     const article_id = Number(id.value)
     const response = await getArticle(article_id);
     Article.value = response;
+    for(const like_user of Article.value.like_users){
+      if(authStore.userID === like_user.username){
+        isLike.value = true
+      } else {
+        isLike.value = false
+      }
+    }
+    
   } catch (error) {
     console.error(error);
   } finally {

@@ -12,6 +12,8 @@ import Footer from './components/Layout/Footer.vue';
   <Footer/>
 </template>
 
-<style scoped>
-
+<style>
+input{
+  @apply border border-slate-500 dark:bg-slate-900 mb-4
+}
 </style>

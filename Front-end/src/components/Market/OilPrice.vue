@@ -1,6 +1,6 @@
 <template>
-  <div class="w-[75%] mx-auto my-8">
-    <div class="flex justify-start space-x-4 mt-4">
+  <div class="">
+    <div class="flex justify-start space-x-4">
       <div class="text-2xl">유가 시세</div>
       <button v-for="category in categories" :key="category"    @click="applyCategory(category)"
         :class="{'bg-green-500 font-extrabold': selectedCategory === category, 'bg-blue-500': selectedCategory !== category}"
@@ -108,7 +108,8 @@ onMounted(async () => {
         datasets: [{
           label: '유가 시세(￦/L)',
           data: oilData.value.map(data => data.wtAvgPrcDisc),
-          fill: false,
+          fill: true,
+          backgroundColor: 'rgba(75, 192, 192, 0.2)',
           borderColor: 'green',
           tension: 0.1
         }]
