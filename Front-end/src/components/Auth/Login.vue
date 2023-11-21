@@ -71,14 +71,15 @@ const logIn = function () {
   background-color: rgba(0, 0, 0, 0.5);
   position: fixed;
   top: 0; left: 0;
-  z-index: 1;
+  z-index: 20;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 .LoginFormBox{
-  width: 340px;
-  padding: 8px;
+  width: 80%;
+  max-width: 400px;
+  padding: 20px;
   h2{
     text-align: center;
     font-size: larger;
@@ -93,7 +94,7 @@ form{
   color: rgb(192, 2, 2);
 }
 .btn {
-  @apply font-bold py-2 px-4 rounded-full;
+  @apply font-bold py-2 px-4;
 }
 .btn-blue {
   @apply bg-blue-500 text-white;

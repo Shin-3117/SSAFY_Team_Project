@@ -55,7 +55,7 @@
         <p>팔로워</p>
         <ul>
           <li v-for="follower in info.followers_list">
-            <p>{{ follower }}</p>
+            <p>{{ follower.username }}</p>
           </li>
         </ul>
       </div>
@@ -73,7 +73,7 @@
         <p>즐겨찾기한 적금</p>
         <ul>
           <li v-for="deposit in info.saving_subscriptions">
-            <p>{{ deposit }}</p>
+            <p>{{ deposit.saving_product_detail.fin_prdt_nm }}</p>
           </li>
         </ul>
       </div>

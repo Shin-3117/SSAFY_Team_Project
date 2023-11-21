@@ -10,13 +10,12 @@ export const useAuthStore = defineStore('auth', () => {
   const userID = ref('')
 
   if (token.value===null){
-    const LoginHistory = localStorage.getItem('login')
+    const LoginHistory = sessionStorage.getItem('login')
     if (typeof(LoginHistory)==='string') {
       const objData = JSON.parse(LoginHistory)
       userID.value = objData.username
       token.value = objData.token
     }
-    // console.log(LoginHistory)
   }
 
 
@@ -70,7 +69,7 @@ export const useAuthStore = defineStore('auth', () => {
           username: username,
           token: res.data.key
         }
-        localStorage.setItem('login', JSON.stringify(localValue))
+        sessionStorage.setItem('login', JSON.stringify(localValue))
       })
       .catch((err) => {
         console.log(err)
@@ -84,13 +83,12 @@ export const useAuthStore = defineStore('auth', () => {
     })
       .then((res) => {
         token.value = null
-        localStorage.removeItem('login')
+        sessionStorage.removeItem('login')
       })
       .catch((err) => {
         console.log(err)
       })
   }
-  window.addEventListener('beforeunload', logOut);
 
   return {signUp, logIn, token, isLogin, userID, logOut }
 });

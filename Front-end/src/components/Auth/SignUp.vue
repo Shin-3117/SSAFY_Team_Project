@@ -141,15 +141,15 @@ const signUp = function () {
   background-color: rgba(0, 0, 0, 0.5);
   position: fixed;
   top: 0; left: 0;
-  z-index: 1;
+  z-index: 30;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 .formBox{
   width: 80%;
-  height: 80%;
-  padding: 8px;
+  max-width: 600px;
+  padding: 20px;
   h2{
     text-align: center;
     font-size: larger;
@@ -162,7 +162,7 @@ form{
 }
 
 .btn {
-  @apply font-bold py-2 px-4 rounded-full;
+  @apply font-bold py-2 px-4 ;
 }
 .btn-blue {
   @apply bg-blue-500 text-white;

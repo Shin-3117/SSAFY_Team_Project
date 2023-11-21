@@ -2,47 +2,47 @@
   <article>
     <div class="flex justify-between items-center">
       <div>
-        <label for="deposit">
+        <label for="deposit" class="Radio" :class="{ 'active': radioValue.Saving === 'deposit' }">
           <input type="radio" name="Saving" id="deposit" checked
-          v-model="radioValue.Saving" value="deposit">예금
+          v-model="radioValue.Saving" value="deposit" class="hidden">예금
         </label>
-        <label for="saving">
+        <label for="saving" class="Radio" :class="{ 'active': radioValue.Saving === 'saving' }">
           <input type="radio" name="Saving" id="saving"
-          v-model="radioValue.Saving" value="saving">적금
+          v-model="radioValue.Saving" value="saving" class="hidden">적금
         </label>
       </div>
 
       <div>
-        <label for="intr_rate">
+        <label for="intr_rate" class="Radio" :class="{ 'active': radioValue.sort_field === 'intr_rate' }">
           <input type="radio" name="intr_rate" id="intr_rate" checked
-          v-model="radioValue.sort_field" value="intr_rate">기본금리
+          v-model="radioValue.sort_field" value="intr_rate" class="hidden">기본금리
         </label>
-        <label for="intr_rate2">
+        <label for="intr_rate2" class="Radio" :class="{ 'active': radioValue.sort_field === 'intr_rate2' }">
           <input type="radio" name="intr_rate" id="intr_rate2"
-          v-model="radioValue.sort_field" value="intr_rate2">우대금리
+          v-model="radioValue.sort_field" value="intr_rate2" class="hidden">우대금리
         </label>
       </div>
 
       <div>
-        <label for="termAll">
+        <label for="termAll" class="Radio" :class="{ 'active': radioValue.term === '0' }">
           <input type="radio" name="term" id="termAll" checked
-          v-model="radioValue.term" value="0">전체기간
+          v-model="radioValue.term" value="0" class="hidden">전체기간
         </label>
-        <label for="term6">
+        <label for="term6" class="Radio" :class="{ 'active': radioValue.term === '6' }">
           <input type="radio" name="term" id="term6"
-          v-model="radioValue.term" value="6">6
+          v-model="radioValue.term" value="6" class="hidden">6
         </label>
-        <label for="term12">
+        <label for="term12" class="Radio" :class="{ 'active': radioValue.term === '12' }">
           <input type="radio" name="term" id="term12"
-          v-model="radioValue.term" value="12">12
+          v-model="radioValue.term" value="12" class="hidden">12
         </label>
-        <label for="term24">
+        <label for="term24" class="Radio" :class="{ 'active': radioValue.term === '24' }">
           <input type="radio" name="term" id="term24"
-          v-model="radioValue.term" value="24">24
+          v-model="radioValue.term" value="24" class="hidden">24
         </label>
-        <label for="term36">
+        <label for="term36" class="Radio" :class="{ 'active': radioValue.term === '36' }">
           <input type="radio" name="term" id="term36"
-          v-model="radioValue.term" value="36">36
+          v-model="radioValue.term" value="36" class="hidden">36
         </label>
         <!-- <p>{{ radioValue }}</p> -->
       </div>
@@ -54,7 +54,7 @@
     </div>
 
     <div class="grid">
-      <div class="grid grid-cols-8 bg-yellow-300 dark:bg-yellow-700 font-bold">
+      <div class="grid grid-cols-8 bg-slate-100 dark:bg-slate-900 font-bold">
         <p class="p-2 col-span-3">상품명</p>
         <p class="p-2 col-span-1">금리</p>
         <p class="p-2 col-span-1">우대금리</p>
@@ -63,7 +63,8 @@
       </div>
       <div v-if="isLoading"> Loading...</div>
       <div v-else v-if="depositList">
-        <ul v-for="deposit in depositList.results" class="bg-green-100 dark:bg-green-900">
+        <ul v-for="deposit in depositList.results" 
+        class="bg-slate-50 dark:bg-slate-950 hover:bg-gray-200 dark:hover:bg-gray-800">
           <li class="grid grid-cols-8" 
           @click="setModalOpen(deposit)">
             <span class="p-2 col-span-3">{{deposit.fin_prdt_cd.fin_prdt_nm}}</span>
@@ -120,13 +121,22 @@
         <p>{{ isModalOpen.data?.is_subscribed }}</p>
       </div>
     </div>
-    <div v-if="depositList">
-      <ul class="flex flex-row">
-        <li v-for="page in pageNation"
-        @click="changeData(page)" class="m-1">{{ page }}</li>
-      </ul>
-      <p>{{ depositList.page }}</p>
-    </div>
+    
+  <div v-if="depositList">
+    <ul class="flex justify-center items-center space-x-2 bg-slate-50 dark:bg-slate-950">
+      <li
+        v-for="page in pageNation"
+        :key="page"
+        @click="changeData(page)"
+        :class="{ 'bg-gray-500 text-white': page === depositList.page }"
+        class="px-3 py-2 cursor-pointer border border-gray-300 rounded-md
+        hover:bg-gray-200 dark:hover:bg-gray-800 "
+      >
+        {{ page }}
+      </li>
+    </ul>
+  </div>
+
   </article>
 </template>
 
@@ -206,4 +216,11 @@ const changeData = async (page=1)=>{
 .modalBackground{
   background-color: rgb(0, 0, 0,0.5);
 }
+.Radio{
+  @apply cursor-pointer bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded;
+}
+.Radio.active {
+  @apply bg-blue-600 hover:bg-blue-700
+}
+
 </style>

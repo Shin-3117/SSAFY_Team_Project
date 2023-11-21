@@ -1,16 +1,17 @@
 <template>
+<div class="md:flex">
   <div class="container p-4">
     <div class="flex ">
       <select v-model="select.city" 
-      class="p-2 cursor-pointer border border-gray-300 rounded 
-      bg-white dark:bg-gray-800">
+        class="p-2 cursor-pointer border border-gray-300 rounded 
+        bg-white dark:bg-gray-800">
         <option value="" disabled>Select City</option>
         <option v-for="(city, key) in placeInfo" :key="key" :value="key">{{ key }}</option>
       </select>
       <div>
         <select v-model="select.gu" 
-        class="p-2  cursor-pointer border border-gray-300 rounded
-        bg-white dark:bg-gray-800" >
+          class="p-2  cursor-pointer border border-gray-300 rounded
+          bg-white dark:bg-gray-800" >
           <option value="" disabled>Select District</option>
           <option v-for="(place, gu) in placeInfo[select.city]" :key="gu" :value="gu"
           >{{ gu }}</option>
@@ -19,21 +20,33 @@
     </div>
     <div class="mt-4">
       <p class="text-lg font-bold">Selected: {{ select.city }} - {{ select.gu }}</p>
-      <button
-        class="bg-blue-400 text-white px-4 py-2 mt-2 rounded"
-        @click="moveMap(select.lat, select.long)"
-      >
+        <button
+          class="bg-blue-400 text-white px-4 py-2 mt-2 rounded"
+          @click="moveMap(select.lat, select.long)"
+        >
         View Map
       </button>
       <button
         class="text-blue-400 hover:underline ml-2"
         @click="reSearch()"
-      >
+        >
         Search Again from Current Location
       </button>
     </div>
     <div id="map" class="mt-4 h-64"></div>
   </div>
+  <div class="p-4">
+    <h2 class="text-lg font-bold">검색결과</h2>
+    <br>
+    <ul v-if="searchList">
+      <li v-for="result in searchList">
+        {{ result }}
+      </li>
+    </ul>
+  </div>
+
+
+</div>
 </template>
 
 
@@ -65,6 +78,7 @@ let map = null;
 let infowindow = null;
 let ps = null;
 let markers = []
+const searchList = ref([])
 
 const initMap = (lat=37.4951, long=127.06278) => {
   const container = document.getElementById('map');
@@ -99,13 +113,8 @@ const moveMap = ()=>{
 }
 
 const reSearch = ()=>{
-  // console.log(map.getCenter());
-  // console.log(map.getLevel());
   const {La, Ma} = map.getCenter()
-  // console.log(La)
-  // console.log(Ma)
   let moveLatLon = new kakao.maps.LatLng(Ma,La);
-  
   deleteMarkers()
   infowindow = new kakao.maps.InfoWindow({zIndex:1})
   ps = new kakao.maps.services.Places(map);
@@ -114,11 +123,17 @@ const reSearch = ()=>{
 
 // 키워드 검색 완료 시 호출되는 콜백함수 입니다
 const placesSearchCB = (data, status, pagination) => {
-    if (status === kakao.maps.services.Status.OK) {
-      for (let i=0; i<data.length; i++) {
-          displayMarker(data[i]);
-      }
+  if (status === kakao.maps.services.Status.OK) {
+    for (let i=0; i<data.length; i++) {
+        displayMarker(data[i]);
     }
+  } else if (status === kakao.maps.services.Status.ZERO_RESULT) {
+    alert('검색 결과가 존재하지 않습니다.');
+    return;
+  } else if (status === kakao.maps.services.Status.ERROR) {
+    alert('검색 결과 중 오류가 발생했습니다.');
+    return;
+  }
 }
 // 지도에 마커를 표시하는 함수입니다
 const displayMarker = (place) => {
@@ -128,13 +143,25 @@ const displayMarker = (place) => {
         position: new kakao.maps.LatLng(place.y, place.x) 
     });
     markers.push(marker)
-
+    console.log(markers)
     // 마커에 클릭이벤트를 등록합니다
-    kakao.maps.event.addListener(marker, 'click', function() {
+    kakao.maps.event.addListener(marker, 'mouseover', function() {
         // 마커를 클릭하면 장소명이 인포윈도우에 표출됩니다
         infowindow.setContent('<div style="padding:5px;font-size:12px;">' + place.place_name + '</div>');
         infowindow.open(map, marker);
     });
+    kakao.maps.event.addListener(marker, 'mouseout', function() {
+      infowindow.close();
+    });
+    // itemEl.onmouseover =  function () {
+    //     infowindow.setContent('<div style="padding:5px;font-size:12px;">' + place.place_name + '</div>');
+    //     infowindow.open(map, marker);
+    // };
+    // itemEl.onmouseout =  function () {
+    //     infowindow.close();
+    // };
+
+    searchList.value.push(place.place_name)
 }
 
 const deleteMarkers = () => {
@@ -142,6 +169,7 @@ const deleteMarkers = () => {
     markers[i].setMap(null); 
   }
   markers = []
+  searchList.value = []
 }
 
 onMounted(async () => {
@@ -168,5 +196,8 @@ onMounted(async () => {
   width: 400px;
   height: 400px;
   margin: 20px;
+}
+.container{
+  width: 480px;
 }
 </style>

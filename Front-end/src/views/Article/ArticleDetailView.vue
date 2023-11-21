@@ -1,6 +1,6 @@
 <template>
-  <main class="max-w-2xl mx-auto p-4">
-    <div class="border border-slate-600 bg-white dark:bg-gray-800 p-4" v-if="Article">
+  <main class=" p-4">
+    <div class="border border-slate-600  p-4" v-if="Article">
       <h2 class="text-2xl font-bold mb-2">{{ Article.title }}</h2>
       <RouterLink to="/article" class="text-blue-500 hover:underline mb-2">게시판으로</RouterLink>
       <br>
@@ -12,25 +12,25 @@
 
       <button @click="likeArticleR(Article.id)" class="btn btn-blue">좋아요</button>
       <br>
-      <span>작성자: {{ Article.user.username }} | </span>
-      <span>{{ Article.updated_at }} | </span>
-      <RouterLink :to="`/userInfo/${Article.user.username}`" class="btn btn-blue">작성자정보</RouterLink>
+      <RouterLink :to="`/userInfo/${Article.user.username}`" class="text-blue-500 hover:underline mb-2">
+        <span>작성자: {{ Article.user.username }}</span>
+      </RouterLink>
+      <span> | {{ Article.updated_at }} | </span>
 
       <div v-html="Article.content" class="mt-4"></div>
       <br><hr class="my-4">
 
-      <form v-on:submit.prevent="postCommentR(Article.id, commentContent)" class="mb-4">
-        <label for="content" class="block">댓글작성 :</label>
-        <input type="text" id="content" v-model="commentContent" class="border border-slate-600 p-1">
-        <input type="submit" value="제출하기" class="btn btn-blue mt-2">
+      <form v-on:submit.prevent="postCommentR(Article.id, commentContent)" class="flex">
+        <input type="text" id="content" v-model="commentContent" class="input">
+        <input type="submit" value="댓글작성" class="btn btn-blue w-24">
       </form>
 
-      <div v-if="Article.comments" class="space-y-4">
+      <div v-if="Article.comments" class="space-y-4 ">
         <p class="font-bold">댓글 {{ Article.comments.length }}</p>
         <hr class="my-2">
         <ul v-for="comment in Article.comments" :key="comment.id" class="space-y-2">
-          <li class="flex items-start">
-            <p class="font-bold mr-2">{{ comment.user.username }}</p>
+          <li class="items-start">
+            <p class="font-bold">{{ comment.user.username }}</p>
             <div class="flex-grow">
               <p>{{ comment.content }}</p>
               <div class="flex space-x-2" v-if="authStore.userID===comment.user.username ? true : false">
@@ -38,15 +38,19 @@
                 <button @click="deleteComment(Article.id, comment.id)" class="btn btn-red">삭제</button>
               </div>
 
-              <div v-if="putId===comment.id" class="mt-2">
-                <input type="text" v-model="putContent" class="border border-slate-600 p-1">
-                <button @click="putComment(Article.id, comment.id, putContent,comment.user.username)" class="btn btn-blue">수정하기</button>
-              </div>
+              <form v-on:submit.prevent="putComment(Article.id, comment.id, putContent,comment.user.username)" 
+              v-if="putId===comment.id" class="flex">
+                <input type="text" v-model="putContent" class="input">
+                <input type="submit" value="수정하기" class="btn btn-blue w-24">
+              </form>
 
-              <details v-if="comment.replies" class="mt-2 inline-block">
+              <details v-if="comment.replies" class="">
                 <summary class="font-bold cursor-pointer">대댓글 {{ comment.replies.length }} | </summary>
-                <input type="text" class="border border-slate-600 p-1" v-model="replieContent">
-                <button @click="postCommentR(Article.id, replieContent, comment.id)" class="btn btn-blue">대댓글 작성</button>
+                <form v-on:submit.prevent="postCommentR(Article.id, replieContent, comment.id)" class="flex">
+                  <input type="text" v-model="replieContent" class="input">
+                  <input type="submit" value="대댓글작성" class="btn btn-blue w-28">
+                </form>
+
 
                 <ul v-for="replie in comment.replies" :key="replie.id" class="ml-4 space-y-2">
                   <li >
@@ -59,10 +63,11 @@
                       </div>
                     </div>
 
-                    <div v-if="putReplieId===replie.id" class="mt-2">
-                      <input type="text" v-model="putContent" class="border border-slate-600 p-2">
-                      <button @click="putComment(Article.id, replie.id, putContent,replie.user.username)" class="btn btn-blue">수정하기</button>
-                    </div>
+                    <form v-on:submit.prevent="putComment(Article.id, replie.id, putContent,replie.user.username)"
+                     v-if="putReplieId===replie.id" class="flex">
+                      <input type="text" v-model="putContent" class="input">
+                      <input type="submit" value="수정하기" class="btn btn-blue w-24">
+                    </form>
                   </li>
                 </ul>
               </details>
@@ -194,5 +199,8 @@ onMounted(async () => {
 }
 .btn-gray:hover {
   @apply bg-gray-400;
+}
+.input{
+  @apply border border-slate-600 p-1 w-full max-w-md;
 }
 </style>
