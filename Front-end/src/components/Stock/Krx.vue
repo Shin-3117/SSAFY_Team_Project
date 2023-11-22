@@ -44,7 +44,7 @@ import { Chart, registerables } from 'chart.js';
 import zoomPlugin from "chartjs-plugin-zoom";
 import 'chartjs-adapter-date-fns';
 import { subDays, subMonths, subYears, format } from 'date-fns';
-import { KrxData } from '@/api/Stock/krx';
+import type { KrxData } from '@/api/Stock/krx';
 
 Chart.register(...registerables);
 Chart.register(zoomPlugin);

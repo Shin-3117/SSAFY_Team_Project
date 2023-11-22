@@ -45,7 +45,7 @@ import { Chart, registerables } from 'chart.js';
 import zoomPlugin from "chartjs-plugin-zoom";
 import 'chartjs-adapter-date-fns';
 import { subDays, subMonths, subYears, format } from 'date-fns';
-import { KospiData } from '@/api/Stock/kospi';
+import type { KospiData } from '@/api/Stock/kospi';
 
 Chart.register(...registerables);
 Chart.register(zoomPlugin);

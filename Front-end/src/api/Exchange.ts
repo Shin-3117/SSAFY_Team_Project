@@ -1,7 +1,7 @@
 import axios from 'axios';
 import config from '@/config';
 
-const baseURL = config.exchangeUrl
+const baseURL = config.baseURL+'/exchangerate'
 /**
  * country (국가코드)
  *

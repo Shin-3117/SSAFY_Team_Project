@@ -44,7 +44,7 @@ import { Chart, registerables } from 'chart.js';
 import zoomPlugin from "chartjs-plugin-zoom";
 import 'chartjs-adapter-date-fns';
 import { subDays, subMonths, subYears, format } from 'date-fns';
-import { ThemeData } from '@/api/Stock/theme';
+import type { ThemeData } from '@/api/Stock/theme';
 
 Chart.register(...registerables);
 Chart.register(zoomPlugin);

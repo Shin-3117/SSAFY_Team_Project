@@ -2,7 +2,7 @@ import axios from 'axios';
 import config from '@/config';
 // import { useAuthStore } from '@/stores/auth';
 
-const baseURL = config.bankUrl
+const baseURL = config.baseURL+'/finlife'
 // const authStore = useAuthStore()
 /**
  * term (저축기간): [0, 6, 12, 24, 36]
