@@ -1,14 +1,14 @@
 <template>
-  <div class="w-80 mx-auto my-8 border-4 rounded-xl p-2 border-sky-200">
+  <div class="w-80 mx-auto my-8 border-4 rounded-xl p-2 border-indigo-200">
     <div class="flex justify-between items-center mb-4 ml-1">
       <span class="text-xl font-semibold animate-rotate-x animate-twice animate-duration-[1200ms]">
-        KOSDAQ 지수 <span class="text-2xl text-sky-400 font-semibold">{{ kosdaq_cur }}</span>
+        KOSDAQ 지수 <span class="text-2xl text-indigo-400 font-semibold">{{ kosdaq_cur }}</span>
       </span>
       <!-- SVG 아이콘 -->
       <div class="relative group">
         <router-link to="/stock/Kosdaq">
             <div
-              class="border-solid border-2 rounded-lg border-sky-300 text-black mr-1 animate-rotate-y animate-twice animate-duration-[1200ms] bg-sky-100">
+              class="border-solid border-2 rounded-lg border-indigo-300 text-black mr-1 animate-rotate-y animate-twice animate-duration-[1200ms] bg-sky-100">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                 stroke="currentColor" class="w-6 h-6">
                 <path stroke-linecap="round" stroke-linejoin="round"
@@ -17,7 +17,7 @@
             </div>
         </router-link>
         <div
-          class="opacity-0 invisible group-hover:opacity-100 group-hover:visible absolute w-28 mt-2  text-gray-800 shadow-lg transition duration-300 ease-in-out transform group-hover:animate-fade-down border-solid border-2 rounded-lg border-sky-300 bg-sky-100">
+          class="opacity-0 invisible group-hover:opacity-100 group-hover:visible absolute w-28 mt-2  text-gray-800 shadow-lg transition duration-300 ease-in-out transform group-hover:animate-fade-down border-solid border-2 rounded-lg border-indigo-300 bg-indigo-100">
           <p class="px-4 py-2 text-sm text-center font-semibold text-gray-600 hover:text-gray-800">
             차트로 이동
           </p>
@@ -65,8 +65,8 @@ onMounted(async () => {
         {
           label: 'KOSDAQ',
           fill: true,
-          backgroundColor: 'rgba(54, 162, 235, 0.5)',
-          borderColor: 'rgba(54, 162, 235, 1)',
+          backgroundColor: 'rgba(167, 139, 250, 0.5)',
+          borderColor: 'rgba(167, 139, 250, 1)',
           data: response.data.map((data) => parseFloat(data.clpr)),
           tension: 0.2
         },

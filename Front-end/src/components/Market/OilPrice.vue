@@ -1,5 +1,5 @@
 <template>
-  <div class="w-[75%] mx-auto my-8">
+  <div class="w-[65%] mx-auto my-8">
     <div v-if="isLoading" class="flex justify-center items-center h-screen">
       <!-- 스피너 -->
       <div class="animate-spin inline-block w-16 h-16 border-[5px] border-current border-t-transparent text-green-600 rounded-full dark:text-green-500 mr-4"></div>

@@ -3,19 +3,19 @@
   <div class="text-center p-4 dark:bg-slate-800 flex justify-center gap-4">
     <label for="Kospi" class="Radio box-border" :class="{ 'active': Stock === 'Kospi' }">
       <input type="radio" name="Stocks" id="Kospi" checked
-      v-model="Stock" value="Kospi" class="hidden">Kospi
+      v-model="Stock" value="Kospi" class="hidden">KOSPI
     </label>
     <label for="Kosdaq" class="Radio box-border" :class="{ 'active': Stock === 'Kosdaq' }">
       <input type="radio" name="Stocks" id="Kosdaq"
-      v-model="Stock" value="Kosdaq" class="hidden">Kosdaq
+      v-model="Stock" value="Kosdaq" class="hidden">KOSDAQ
     </label>
     <label for="Krx" class="Radio box-border" :class="{ 'active': Stock === 'Krx' }">
       <input type="radio" name="Stocks" id="Krx"
-      v-model="Stock" value="Krx" class="hidden">Krx
+      v-model="Stock" value="Krx" class="hidden">KRX
     </label>
     <label for="Theme" class="Radio box-border" :class="{ 'active': Stock === 'Theme' }">
       <input type="radio" name="Stocks" id="Theme"
-      v-model="Stock" value="Theme" class="hidden">Theme
+      v-model="Stock" value="Theme" class="hidden">테마
     </label>
   </div>
   <div v-if="Stock==='Kospi'" class="dark:bg-slate-800">
@@ -48,9 +48,10 @@ const Stock = ref(stockId.value)
 
 <style scoped>
 .Radio{
-  @apply cursor-pointer bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded;
+  @apply cursor-pointer bg-indigo-400 hover:bg-gradient-to-br from-purple-600 to-blue-500 text-white font-bold py-2 px-4 rounded;
 }
 .Radio.active {
-  @apply bg-blue-600 hover:bg-blue-700
+  @apply bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-blue-700;
+  transform: scale(1.2);
 }
 </style>

@@ -1,9 +1,9 @@
 <template>
-  <div class="w-[75%] mx-auto my-8">
+  <div class="w-[65%] mx-auto my-8">
     <div v-if="isLoading" class="flex justify-center items-center h-screen">
       <!-- 스피너 -->
       <div
-        class="animate-spin inline-block w-16 h-16 border-[5px] border-current border-t-transparent text-blue-600 rounded-full dark:text-blue-500 mr-4">
+        class="animate-spin inline-block w-16 h-16 border-[5px] border-current border-t-transparent text-yellow-400 rounded-full dark:text-blue-500 mr-4">
       </div>
       <span class="text-lg font-semibold text-gray-600 dark:text-gray-300">
         데이터 로드 중...
@@ -13,8 +13,8 @@
       <div class="text-2xl">국내 금 시세</div>
       <div class="flex justify-start space-x-4 mt-4">
         <button v-for="period in periods" :key="period.value" @click="applyZoom(period.value)"
-          :class="{ 'bg-yellow-500 font-extrabold': selectedPeriod === period.value, 'bg-blue-500': selectedPeriod !== period.value }"
-          class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+          :class="{ 'bg-yellow-500 font-extrabold': selectedPeriod === period.value, 'bg-yellow-600': selectedPeriod !== period.value }"
+          class="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-400">
           {{ period.label }}
         </button>
       </div>
