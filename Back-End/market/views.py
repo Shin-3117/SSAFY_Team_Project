@@ -32,7 +32,7 @@ def api_test(request, code):
         params = {
             'serviceKey': API_KEY3,
             'resultType': 'json',
-            # 'numOfRows': 2875
+            'beginBasDt': str(date.today() - timedelta(days=2)).replace("-", "")
         }
     elif code == 'gold':
         url = BASE_URL + GOLD_URL
@@ -85,8 +85,8 @@ def save_gold(request):
         params = {
             'serviceKey': API_KEY3,
             'resultType': 'json',
-            'numOfRows': 959,
-            'isinCd': 'KRD040200002'
+            'isinCd': 'KRD040200002',
+            'beginBasDt': str(date.today() - timedelta(days=1)).replace("-", ""),
         }
         response = requests.get(url, params=params).json()
         items = response.get('response').get('body').get('items').get('item')
@@ -107,16 +107,15 @@ def save_gold(request):
 
 # DB에 저장(주가지수시세)
 @api_view(['GET'])
-@permission_classes([IsAdminUser])
+# @permission_classes([IsAdminUser])
 def save_stock(request):
     try:
         url = STOCK_URL
         params = {
             'serviceKey': API_KEY3,
             'resultType': 'json',
-            'numOfRows': 10000,
-            'beginBasDt': '20220101',
-            'pageNo': 8,
+            'numOfRows': 1000,
+            'beginBasDt': str(date.today() - timedelta(days=1)).replace("-", ""),
         }
         response = requests.get(url, params=params).json()
         items = response.get('response').get('body').get('items').get('item')
