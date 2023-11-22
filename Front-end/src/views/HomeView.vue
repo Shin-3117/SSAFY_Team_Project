@@ -1,9 +1,9 @@
 <template>
   <main class="grid grid-cols-12 gap-3 p-2 lg:p-4">
-    <Kospi class="col-span-12 sm:col-span-6"/>
-    <kosdaq class="col-span-12 sm:col-span-6 "/>
-    <gold class="col-span-12 sm:col-span-6 "/>
-    <oil class="col-span-12 sm:col-span-6 "/>
+    <Kospi class="col-span-12 sm:col-span-6 xl:col-span-3"/>
+    <kosdaq class="col-span-12 sm:col-span-6 xl:col-span-3"/>
+    <gold class="col-span-12 sm:col-span-6 xl:col-span-3"/>
+    <oil class="col-span-12 sm:col-span-6 xl:col-span-3"/>
 
     <MainExchange class="col-span-12 sm:col-span-3 xl:col-span-2 xl:col-start-2"/>
     <News class="sm:col-span-9 col-span-12 xl:col-span-8"/>
