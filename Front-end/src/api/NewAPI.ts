@@ -18,7 +18,7 @@ const getNews = async () => {
       `${baseURL}/data/0/`, {
     })
     const data:New[] = response.data
-    console.log(response)
+    // console.log(response)
     return data
   } catch(error){
     console.error(error)

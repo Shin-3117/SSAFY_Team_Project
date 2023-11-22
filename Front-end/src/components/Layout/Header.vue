@@ -19,9 +19,9 @@
           >환율</RouterLink>
         <RouterLink to="/map" class="navLink"
           >은행 Map</RouterLink>
-        <RouterLink to="/market" class="navLink "
+        <RouterLink to="/market/gold" class="navLink "
           >상품 시세</RouterLink>
-        <RouterLink to="/stock" class="navLink "
+        <RouterLink to="/stock/Kospi" class="navLink "
           >주가 지수 시세</RouterLink>
         <RouterLink to="/recommend" class="navLink"
         >추천</RouterLink>
