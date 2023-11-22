@@ -1,8 +1,8 @@
 <template>
-  <div class="w-[75%] mx-auto my-8">
+  <div class="w-[65%] mx-auto my-8">
     <div v-if="isLoading" class="flex justify-center items-center h-screen">
       <!-- 스피너 -->
-      <div class="animate-spin inline-block w-16 h-16 border-[5px] border-current border-t-transparent text-blue-600 rounded-full dark:text-blue-500 mr-4"></div>
+      <div class="animate-spin inline-block w-16 h-16 border-[5px] border-current border-t-transparent text-indigo-600 rounded-full dark:text-blue-500 mr-4"></div>
       <span class="text-lg font-semibold text-gray-600 dark:text-gray-300">
         데이터 로드 중...
       </span>
@@ -10,7 +10,8 @@
     <div v-else class="flex justify-start space-x-4 mt-4">
       <div class="text-2xl">KOSDAQ 지수</div>
       <div class="relative">
-        <button @click="showDropdown = !showDropdown" class="flex items-center bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+        <button @click="showDropdown = !showDropdown" 
+          class="flex items-center bg-gradient-to-br from-purple-600 to-blue-500 text-white px-4 py-2 rounded">
           {{ selectedCategory }}
           <svg :class="{ 'rotate-180': showDropdown }" class="w-4 h-4 ml-2" xmlns="http://www.w3.org/2000/svg" fill="none"
             viewBox="0 0 24 24" stroke="currentColor">
@@ -20,7 +21,7 @@
         <div v-if="showDropdown"
           class="absolute mt-2 py-1 w-48 bg-white border border-gray-200 rounded shadow-xl overflow-auto max-h-60">
           <a v-for="category in categories" :key="category" @click="selectCategory(category)"
-            class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-500 hover:text-white">
+            class="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-400 hover:text-white">
             {{ category }}
           </a>
         </div>
@@ -28,7 +29,7 @@
     </div>
     <div class="flex justify-start space-x-4 mt-4">
       <button v-for="period in periods" :key="period.value" @click="applyZoom(period.value)"
-        :class="{'bg-green-500 font-extrabold': selectedPeriod === period.value, 'bg-blue-500': selectedPeriod !== period.value}"
+        :class="{ 'bg-gradient-to-br from-purple-600 to-blue-500 font-extrabold': selectedPeriod === period.value, 'bg-indigo-400': selectedPeriod !== period.value }"
         class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
         {{ period.label }}
       </button>
@@ -136,8 +137,8 @@ onMounted(async () => {
           label: selectedCategory.value,
           data: KosdaqData.value.map(data => data.clpr),
           fill: true,
-          backgroundColor: 'rgba(135, 206, 235, 0.2)',
-          borderColor: 'skyblue',
+          backgroundColor: 'rgba(167, 139, 250, 0.2)',
+          borderColor: 'rgba(167, 139, 250, 1)',
           tension: 0.1
         }]
       };
@@ -147,7 +148,7 @@ onMounted(async () => {
         data: chartData,
         options: {
           hoverRadius: 18,
-          hoverBackgroundColor: 'skyblue',
+          hoverBackgroundColor: 'rgba(167, 139, 250, 1)',
           responsive: true,
           interaction: {
           intersect: false,

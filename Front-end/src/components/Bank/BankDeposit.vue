@@ -239,10 +239,10 @@ onMounted(async () => {
   background-color: rgb(0, 0, 0,0.5);
 }
 .Radio{
-  @apply cursor-pointer bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded;
+  @apply cursor-pointer bg-indigo-400 hover:bg-gradient-to-br from-purple-600 to-blue-500 text-white font-bold py-2 px-4 rounded-md;
 }
 .Radio.active {
-  @apply bg-blue-600 hover:bg-blue-700
+  @apply bg-gradient-to-br from-purple-600 to-blue-500 border-4 border-indigo-500;
 }
 .iconImg{
   width: 24px;
