@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from django.conf import settings
 from django.http import JsonResponse
 import requests
-from datetime import datetime
+from datetime import datetime, date, timedelta
 from .serializers import OilSerializer, GoldSerializer, KospiSeriesSerializer, KosdaqSeriesSerializer, KrxSeriesSerializer, ThemeIndexSerializer
 from .models import Oil, Gold, KospiSeries, KosdaqSeries, KrxSeries, ThemeIndex
 # permission Decorators
@@ -25,14 +25,14 @@ API_KEY3 = settings.API_KEY3
 
 # Create your views here.
 @api_view(['GET'])
-@permission_classes([IsAdminUser])
+# @permission_classes([IsAdminUser])
 def api_test(request, code):
     if code == 'oil':
         url = BASE_URL + OIL_URL
         params = {
             'serviceKey': API_KEY3,
             'resultType': 'json',
-            'numOfRows': 2875,
+            # 'numOfRows': 2875
         }
     elif code == 'gold':
         url = BASE_URL + GOLD_URL
@@ -55,7 +55,7 @@ def save_oil(request):
         params = {
             'serviceKey': API_KEY3,
             'resultType': 'json',
-            'numOfRows': 2875,
+            'beginBasDt': str(date.today() - timedelta(days=1)).replace("-", ""),
         }
         response = requests.get(url, params=params).json()
         items = response.get('response').get('body').get('items').get('item')
