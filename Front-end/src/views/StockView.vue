@@ -39,8 +39,11 @@ import Kosdaq from '@/components/Stock/Kosdaq.vue';
 import Krx from '@/components/Stock/Krx.vue';
 import Theme from '@/components/Stock/Theme.vue';
 import { ref } from 'vue';
+import { useRoute } from 'vue-router';
 
-const Stock = ref('Kospi')
+const route = useRoute()
+const stockId = ref(route.params.stockId);
+const Stock = ref(stockId.value)
 </script>
 
 <style scoped>
