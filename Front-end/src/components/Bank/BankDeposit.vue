@@ -68,7 +68,7 @@
           <li class="grid grid-cols-8" 
           @click="setModalOpen(deposit)">
             <span class="p-2 col-span-3 flex">{{deposit.fin_prdt_cd.fin_prdt_nm}}
-              <img v-if="deposit.is_subscribed" src="@/assets/star-fill.png" alt="star" class="iconImg">
+              <img v-if="deposit.is_subscribed" src="@/assets/img/star-fill.png" alt="star" class="iconImg">
             </span>
             <span class="p-2 col-span-1">{{deposit.intr_rate}}</span>
             <span class="p-2 col-span-1">{{deposit.intr_rate2}}</span>
@@ -99,8 +99,8 @@
               ).then(()=>{
                 isModalOpen.subscribe = !isModalOpen.subscribe
                 changeData()})">
-              <img v-if="isModalOpen.subscribe" src="@/assets/star-fill.png" alt="star" class="iconImg">
-              <img v-if="!isModalOpen.subscribe" src="@/assets/star-null.png" alt="star" class="iconImg">
+              <img v-if="isModalOpen.subscribe" src="@/assets/img/star-fill.png" alt="star" class="iconImg">
+              <img v-if="!isModalOpen.subscribe" src="@/assets/img/star-null.png" alt="star" class="iconImg">
             </button>
             
             <button v-if="!isModalOpen.data?.rsrv_type"
@@ -113,8 +113,8 @@
               ).then(()=>{
                 isModalOpen.subscribe = !isModalOpen.subscribe
                 changeData()})">
-              <img v-if="isModalOpen.subscribe" src="@/assets/star-fill.png" alt="star" class="iconImg">
-              <img v-if="!isModalOpen.subscribe" src="@/assets/star-null.png" alt="star" class="iconImg">
+              <img v-if="isModalOpen.subscribe" src="@/assets/img/star-fill.png" alt="star" class="iconImg">
+              <img v-if="!isModalOpen.subscribe" src="@/assets/img/star-null.png" alt="star" class="iconImg">
             </button>
           </div>
         </div>
@@ -123,20 +123,25 @@
           <p class="font-bold">가입 제한: {{ isModalOpen.data?.fin_prdt_cd.join_deny }}</p>
           <p class="ml-2 text-gray-500">1: 제한없음, 2: 서민전용, 3: 일부제한</p>
         </div>
-        <p class="mb-4">가입 대상: {{ isModalOpen.data?.fin_prdt_cd.join_member }}</p>
-        <p class="mb-4">가입 방법: {{ isModalOpen.data?.fin_prdt_cd.join_way }}</p>
-        <p class="mb-4">우대조건: {{ isModalOpen.data?.fin_prdt_cd.spcl_cnd }}</p>
-        <p class="mb-4 font-bold">기타 유의사항:</p>
-        <p class="mb-4">{{ isModalOpen.data?.fin_prdt_cd.etc_note }}</p>
-        <hr class="my-4">
-        <p class="mb-4 font-bold">금리 적용 방식: {{ isModalOpen.data?.intr_rate_type_nm }}</p>
-        <p class="mb-4">기본금리: {{ isModalOpen.data?.intr_rate }}</p>
-        <p class="mb-4">우대금리: {{ isModalOpen.data?.intr_rate2 }}</p>
-        <p class="mb-4">저축기간: {{ isModalOpen.data?.save_trm }}</p>
-        <p class="mb-4">{{ isModalOpen.data?.rsrv_type }}</p>
-        <p class="mb-4">{{ isModalOpen.data?.rsrv_type_nm }}</p>
-        <hr class="my-4">
-        <p>{{ isModalOpen.data?.is_subscribed }}</p>
+        <div class="flex flex-col text-start  gap-4">
+          <p class="font-bold">금리 적용 방식: {{ isModalOpen.data?.intr_rate_type_nm }}</p>
+          <div class="flex gap-4">
+            <p class="">기본금리: {{ isModalOpen.data?.intr_rate }}</p>
+            <p class="">우대금리: {{ isModalOpen.data?.intr_rate2 }}</p>
+            <p class="">저축기간: {{ isModalOpen.data?.save_trm }}</p>
+            <p class="">{{ isModalOpen.data?.rsrv_type_nm }}</p>
+          </div>
+          <p class="">가입 대상: {{ isModalOpen.data?.fin_prdt_cd.join_member }}</p>
+          <p class="">가입 방법: {{ isModalOpen.data?.fin_prdt_cd.join_way }}</p>
+          <hr>
+          <p class="">우대조건: 
+            <p class="">{{ isModalOpen.data?.fin_prdt_cd.spcl_cnd }}</p>
+          </p>
+          <p class=" font-bold">기타 유의사항:</p>
+          <p class="">{{ isModalOpen.data?.fin_prdt_cd.etc_note }}</p>
+          
+        </div>
+        <!-- <p>{{ isModalOpen.data?.is_subscribed }}</p> -->
         <!-- <p>{{ isModalOpen.data }}</p> -->
       </div>
     </div>

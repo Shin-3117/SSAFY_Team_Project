@@ -4,8 +4,7 @@ import Exchange from '@/components/Exchange/Exchange.vue';
 </script>
 
 <template>
-  <main>
-    <h1>환율</h1>
+  <main class="flex justify-center">
     <Exchange/>
   </main>
 </template>

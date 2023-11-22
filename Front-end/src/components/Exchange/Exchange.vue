@@ -1,7 +1,7 @@
 <template>
-  <div class="grid">
+  <div class="grid card">
     <!-- Column Headers -->
-    <div class="font-bold grid grid-cols-7 bg-slate-100 dark:bg-slate-900">
+    <div class="card font-bold grid grid-cols-7 gap-6 bg-slate-100 dark:bg-slate-900">
       <span class="col-span-3">외화</span>
       <span class="col-span-2">가격</span>
       <!-- <span class="col-span-2">1000원 당 외화</span> -->
@@ -10,7 +10,7 @@
 
     <!-- Exchange Data Items -->
     <div v-for="data in exchangeData" :key="data.id" @click="reset(data.id)"
-    class="grid grid-cols-7 bg-slate-50 dark:bg-slate-950 hover:bg-gray-200 dark:hover:bg-gray-800">
+    class="card grid grid-cols-7 gap-6 bg-slate-50 dark:bg-slate-950 hover:bg-gray-200 dark:hover:bg-gray-800">
       <span class="col-span-3">{{ data.cur_unit }} - {{ data.cur_nm }}</span>
       <span class="col-span-2">{{ data.deal_bas_r }}</span>
       <!-- <span class="col-span-2">{{ (data.krw_to_cur*1000).toFixed(2)}}</span> -->
@@ -82,5 +82,7 @@ onMounted(async () => {
 </script>
 
 <style scoped>
-
+.card{
+  @apply rounded-xl border p-2;
+}
 </style>

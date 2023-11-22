@@ -1,5 +1,5 @@
 <template>
-  <mian>
+  <main class="view">
     <div class="text-center p-4 dark:bg-slate-800">
       <label for="gold" class="Radio box-border" :class="{ 'active': market === 'gold' }">
         <input type="radio" name="markets" id="gold" checked
@@ -16,7 +16,7 @@
     <div v-if="market==='oil'" class="dark:bg-slate-800">
       <OilPriceView/>
     </div>
-  </mian>
+  </main>
 </template>
 
 <script setup lang="ts">

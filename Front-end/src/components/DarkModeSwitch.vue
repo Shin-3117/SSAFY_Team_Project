@@ -2,8 +2,8 @@
   <button @click="toggleDark()"
   class="btn animate-rotate-y">
     <!-- {{ isDark ? "Dark" : "Light" }} Mode -->
-    <img src="@/assets/sun-solid.svg" alt="Light Mode" v-if="!isDark" class="modeImg animate-rotate-y">
-    <img src="@/assets/moon-solid.svg" alt="Dark Mode" v-if="isDark" class="modeImg animate-rotate-y">
+    <img src="@/assets/img/sun-solid.svg" alt="Light Mode" v-if="!isDark" class="modeImg animate-rotate-y">
+    <img src="@/assets/img/moon-solid.svg" alt="Dark Mode" v-if="isDark" class="modeImg animate-rotate-y">
   </button>
 </template>
 

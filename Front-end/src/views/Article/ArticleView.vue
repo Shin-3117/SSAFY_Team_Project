@@ -1,10 +1,16 @@
 <template>
-  <main class="max-w-7xl mx-auto p-4">
+<main class="p-4">
+  <article class="max-w-7xl mx-auto">
     <div class="flex justify-between items-center">
       <h2 class="text-3xl font-bold mb-4">Article</h2>
-      <RouterLink to="/article/post" 
-      class="bg-blue-500 hover:bg-blue-700 text-white
-      font-bold py-2 px-4 rounded-full">게시판 작성</RouterLink>
+      <div v-if="authStore.token!==null">
+        <RouterLink to="/article/post"
+        class="bg-blue-500 hover:bg-blue-700 text-white
+        font-bold py-2 px-4 rounded-full">게시판 작성</RouterLink>
+      </div>
+      <div v-else>
+        로그인 후, 게시글 작성이 가능합니다.
+      </div>
     </div>
     <section>
       <div class="grid grid-cols-8 bg-gray-200 dark:bg-gray-900 p-2">
@@ -25,16 +31,19 @@
         </ul>
       </div>
     </section>
-  </main>
+  </article>
+</main>
 </template>
 
 <script setup lang="ts">
 import {getArticles, getArticle, postComment} from '@/api/articleAPI'
 import { ref, onMounted } from 'vue'
 import type {ArticlesType} from '@/interface/ArticlesType'
+import { useAuthStore } from '../../stores/auth';
 
 const isLoading = ref(true)
 const Articles = ref<ArticlesType[] | null>(null)
+const authStore = useAuthStore()
 
 onMounted(async () => {
   try {

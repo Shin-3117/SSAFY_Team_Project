@@ -6,10 +6,7 @@ import MapBankList from '@/components/Map/MapBankList.vue'
 </script>
 
 <template>
-  <main>
-    <h1>지도</h1>
-    <!-- <Map/> -->
-    <!-- <MapBank/> -->
+  <main class="flex justify-center">
     <MapBankList/>
   </main>
 </template>

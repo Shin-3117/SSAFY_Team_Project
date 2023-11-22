@@ -1,5 +1,5 @@
 <template>
-<mian class="">
+<main>
   <div class="text-center p-4 dark:bg-slate-800">
     <label for="Kospi" class="Radio box-border" :class="{ 'active': Stock === 'Kospi' }">
       <input type="radio" name="Stocks" id="Kospi" checked
@@ -30,7 +30,7 @@
   <div v-if="Stock==='Theme'" class="dark:bg-slate-800">
     <Theme/>
   </div>
-</mian>
+</main>
 </template>
 
 <script setup lang="ts">

@@ -11,13 +11,13 @@
   <div class="flex sm:flex-col">  
     <div class="card">
       <!-- {{ USDData }} -->
-      <img src="@/assets/flag/Flag_of_the_United_States.svg" alt="일장기"
+      <img src="@/assets/img/flag/Flag_of_the_United_States.svg" alt="일장기"
         >
       <p class="font-bold">1달러 = {{ USDData?.deal_bas_r }} 원</p>
     </div>
     <div class="card">
       <!-- {{ JPYData }} -->
-      <img src="@/assets/flag/Flag_of_Japan.svg" alt="일장기">
+      <img src="@/assets/img/flag/Flag_of_Japan.svg" alt="일장기">
       <p class="font-bold">100엔 = {{ JPYData?.deal_bas_r*100 }} 원</p>
     </div>
   </div>
