@@ -154,32 +154,32 @@ def save_stock(request):
 def send_data(request, code):
     try:
         if code == 'oil':
-            oil_instances = Oil.objects.all()
+            oil_instances = Oil.objects.order_by('-basDt')
             oil_serializer = OilSerializer(oil_instances, many=True)
             return Response(oil_serializer.data)
         
         elif code == 'gold':
-            gold_instances = Gold.objects.all()
+            gold_instances = Gold.objects.order_by('-basDt')
             gold_serializer = GoldSerializer(gold_instances, many=True)
             return Response(gold_serializer.data)
         
         elif code == 'kospi':
-            kospi_instances = KospiSeries.objects.all()
+            kospi_instances = KospiSeries.objects.order_by('-basDt')
             kospi_serializer = KospiSeriesSerializer(kospi_instances, many=True)
             return Response(kospi_serializer.data)
         
         elif code == 'kosdaq':
-            kosdaq_instances = KosdaqSeries.objects.all()
+            kosdaq_instances = KosdaqSeries.objects.order_by('-basDt')
             kosdaq_serializer = KosdaqSeriesSerializer(kosdaq_instances, many=True)
             return Response(kosdaq_serializer.data)
         
         elif code == 'krx':
-            krx_instances = KrxSeries.objects.all()
+            krx_instances = KrxSeries.objects.order_by('-basDt')
             krx_serializer = KrxSeriesSerializer(krx_instances, many=True)
             return Response(krx_serializer.data)
         
         elif code == 'theme':
-            theme_instances = ThemeIndex.objects.all()
+            theme_instances = ThemeIndex.objects.order_by('-basDt')
             theme_serializer = ThemeIndexSerializer(theme_instances, many=True)
             return Response(theme_serializer.data)
 
