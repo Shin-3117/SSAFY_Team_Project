@@ -1,5 +1,5 @@
 <template>
-  <mian class="">
+  <mian>
     <div class="text-center p-4 dark:bg-slate-800">
       <label for="gold" class="Radio box-border" :class="{ 'active': market === 'gold' }">
         <input type="radio" name="markets" id="gold" checked

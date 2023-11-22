@@ -13,7 +13,7 @@ const getExchange = async (country='ALL') => {
     const response = await axios.get(
       `${baseURL}/info/${country}/`, {
     })
-    console.log(response)
+    // console.log(response)
     return response.data
   } catch(error){
     console.error(error)

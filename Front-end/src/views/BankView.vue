@@ -3,8 +3,7 @@ import BankDeposit from '@/components/Bank/BankDeposit.vue';
 </script>
 
 <template>
-  <main>
-    <h1 class="text-xl">예금, 적금 추천</h1>
+  <main class="text-center">
     <BankDeposit/>
   </main>
 </template>

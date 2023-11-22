@@ -213,6 +213,6 @@ onMounted(async () => {
   @apply bg-gray-400;
 }
 .input{
-  @apply border border-slate-600 p-1 w-full max-w-md;
+  @apply w-full max-w-md;
 }
 </style>

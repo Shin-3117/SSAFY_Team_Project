@@ -7,13 +7,16 @@ import Footer from './components/Layout/Footer.vue';
 <template>
   <Header/>
 
-  <RouterView class="bg-white  dark:bg-slate-800 dark:text-slate-200"/>
+  <RouterView class="view bg-white  dark:bg-slate-800 dark:text-slate-200"/>
 
   <Footer/>
 </template>
 
 <style>
 input{
-  @apply border border-slate-500 dark:bg-slate-900 mb-4
+  @apply border border-slate-500 dark:bg-slate-900 mb-4 rounded-xl px-2
+}
+.view{
+  min-height: calc(100vh - 88px - 92px);
 }
 </style>

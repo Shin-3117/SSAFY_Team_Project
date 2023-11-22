@@ -1,5 +1,5 @@
 <template>
-  <article>
+  <article class="p-4 max-w-7xl">
     <div class="flex justify-between items-center">
       <div>
         <label for="deposit" class="Radio" :class="{ 'active': radioValue.Saving === 'deposit' }">
@@ -142,7 +142,7 @@
     </div>
     
   <div v-if="depositList">
-    <ul class="flex justify-center items-center space-x-2 bg-slate-50 dark:bg-slate-950">
+    <ul class="flex justify-center items-center space-x-2 bg-slate-100 dark:bg-slate-950">
       <li
         v-for="page in pageNation"
         :key="page"

@@ -3,11 +3,11 @@
     <nav class="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8" aria-label="Global">
       <div class="flex mr-6">
         <RouterLink to="/" class="">
-          <span>Your Company</span>
+          <h1 class="">Simple</h1>
         </RouterLink>
       </div>
       <div class="flex lg:hidden">
-        <button type="button" class="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-500" @click="mobileMenuOpen = true">
+        <button type="button" class="p-2 inline-flex items-center justify-center text-gray-500" @click="mobileMenuOpen = true">
           <span class="sr-only">Open main menu</span>
           <Bars3Icon class="h-6 w-6" aria-hidden="true" />
         </button>
@@ -28,13 +28,13 @@
         <RouterLink to="/article" class="navLink"
         >게시판</RouterLink>
       </PopoverGroup>
-      <div class="hidden lg:flex lg:flex-1 lg:justify-end">
+      <div class="hidden lg:flex ">
         <AuthBtn/>
         <DarkModeSwitch/>
       </div>
     </nav>
 
-    <Dialog as="div" class="lg:hidden " @close="mobileMenuOpen = false" :open="mobileMenuOpen">
+    <Dialog as="div" class="lg:hidden" @close="mobileMenuOpen = false" :open="mobileMenuOpen">
       <div class="fixed inset-0 z-10" />
       <DialogPanel class="fixed inset-y-0 right-0 z-10 w-full overflow-y-auto  px-6 py-6 sm:max-w-sm sm:ring-1 
         bg-white sm:ring-gray-900/10
