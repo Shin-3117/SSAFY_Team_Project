@@ -55,12 +55,12 @@ const router = createRouter({
       component: () => import('../views/UserInfoView.vue')
     },
     {
-      path: '/market',
+      path: '/market/:marketId',
       name: 'market',
       component: () => import('../views/MarketView.vue')
     },
     {
-      path: '/stock',
+      path: '/stock/:stockId',
       name: 'stock',
       component: () => import('../views/StockView.vue')
     }

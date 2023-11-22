@@ -23,8 +23,11 @@
 import GoldPriceView from '@/components/Market/GoldPrice.vue';
 import OilPriceView from '@/components/Market/OilPrice.vue';
 import { ref } from 'vue';
+import { useRoute } from 'vue-router';
 
-const market = ref('gold')
+const route = useRoute()
+const marketId = ref(route.params.marketId);
+const market = ref(marketId.value)
 </script>
 
 <style scoped>

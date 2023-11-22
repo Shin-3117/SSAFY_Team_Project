@@ -3,6 +3,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from django.conf import settings
 from django.http import JsonResponse
+from django.db.models import Subquery, OuterRef, Max
 import requests
 from datetime import datetime, date, timedelta
 from .serializers import OilSerializer, GoldSerializer, KospiSeriesSerializer, KosdaqSeriesSerializer, KrxSeriesSerializer, ThemeIndexSerializer
@@ -182,5 +183,41 @@ def send_data(request, code):
             theme_serializer = ThemeIndexSerializer(theme_instances, many=True)
             return Response(theme_serializer.data)
 
+    except Exception as e:
+        return Response({'error': str(e)}, status=500)
+
+
+@api_view(['GET'])
+@cache_page(60 * 15)
+def send_main(request, code):
+    try:
+        if code == 'oil':
+            # 각 유종별로 최신 날짜 기준의 7개 데이터를 가져오기 위한 쿼리셋
+            recent_oils_per_category = Oil.objects.filter(
+                basDt__in=Subquery(
+                    Oil.objects.filter(
+                        oilCtg=OuterRef('oilCtg')
+                    ).order_by('-basDt').values('basDt')[:7]
+                )
+            ).order_by('oilCtg', '-basDt')
+
+            oil_serializer = OilSerializer(recent_oils_per_category, many=True)
+            return Response(oil_serializer.data)
+        
+        elif code == 'gold':
+            gold_instances = Gold.objects.order_by('-basDt')[:7]
+            gold_serializer = GoldSerializer(gold_instances, many=True)
+            return Response(gold_serializer.data)
+        
+        elif code == 'kospi':
+            kospi_instances = KospiSeries.objects.filter(idxNm='코스피').order_by('-basDt')[:7]
+            kospi_serializer = KospiSeriesSerializer(kospi_instances, many=True)
+            return Response(kospi_serializer.data)
+        
+        elif code == 'kosdaq':
+            kosdaq_instances = KosdaqSeries.objects.filter(idxNm='코스닥').order_by('-basDt')[:7]
+            kosdaq_serializer = KosdaqSeriesSerializer(kosdaq_instances, many=True)
+            return Response(kosdaq_serializer.data)
+        
     except Exception as e:
         return Response({'error': str(e)}, status=500)
