@@ -5,15 +5,15 @@ import { createPinia } from 'pinia'
 
 import App from './App.vue'
 import router from './router'
+import { setDefaultOptions } from 'date-fns';
+import { ko } from 'date-fns/locale';
 
 const app = createApp(App)
 
 app.use(createPinia())
 app.use(router)
 
-// window.addEventListener('beforeunload', () => {
-//   // 로컬 스토리지에서 'login' 데이터 삭제
-//   localStorage.removeItem('login');
-// });
+// date-fns의 전역 로케일 설정
+setDefaultOptions({ locale: ko });
 
 app.mount('#app')

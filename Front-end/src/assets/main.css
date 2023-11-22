@@ -1,2 +1,3 @@
-@import './reset.css';
-@import './set_tailwind.css';
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
