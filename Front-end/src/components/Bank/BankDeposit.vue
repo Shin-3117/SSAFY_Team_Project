@@ -1,6 +1,6 @@
 <template>
-  <article class="p-4 max-w-7xl">
-    <div class="flex justify-between items-center">
+  <article class="p-4 max-w-7xl card">
+    <div class="flex justify-between items-center card">
       <div>
         <label for="deposit" class="Radio" :class="{ 'active': radioValue.Saving === 'deposit' }">
           <input type="radio" name="Saving" id="deposit" checked
@@ -53,27 +53,27 @@
       >조회</button>
     </div>
 
-    <div class="grid">
-      <div class="grid grid-cols-8 bg-slate-100 dark:bg-slate-900 font-bold">
+    <div class="grid card">
+      <div class="grid grid-cols-8 bg-slate-100 dark:bg-slate-900 font-bold rounded-xl">
         <p class="p-2 col-span-3">상품명</p>
-        <p class="p-2 col-span-1">금리</p>
-        <p class="p-2 col-span-1">우대금리</p>
-        <p class="p-2 col-span-1">기간</p>
-        <p class="p-2 col-span-2">은행</p>
+        <p class="p-2 col-span-1 table">금리</p>
+        <p class="p-2 col-span-1 table">우대금리</p>
+        <p class="p-2 col-span-1 table">기간</p>
+        <p class="p-2 col-span-2 table">은행</p>
       </div>
       <div v-if="isLoading"> Loading...</div>
       <div v-else v-if="depositList">
         <ul v-for="deposit in depositList.results" 
-        class="bg-slate-50 dark:bg-slate-950 hover:bg-gray-200 dark:hover:bg-gray-800">
+        class="bg-slate-50 dark:bg-slate-950 hover:bg-gray-200 dark:hover:bg-gray-800 rounded-xl">
           <li class="grid grid-cols-8" 
           @click="setModalOpen(deposit)">
             <span class="p-2 col-span-3 flex">{{deposit.fin_prdt_cd.fin_prdt_nm}}
               <img v-if="deposit.is_subscribed" src="@/assets/img/star-fill.png" alt="star" class="iconImg">
             </span>
-            <span class="p-2 col-span-1">{{deposit.intr_rate}}</span>
-            <span class="p-2 col-span-1">{{deposit.intr_rate2}}</span>
-            <span class="p-2 col-span-1">{{deposit.save_trm}}</span>
-            <span class="p-2 col-span-2">{{deposit.fin_prdt_cd.kor_co_nm}}</span>
+            <span class="p-2 col-span-1 table">{{deposit.intr_rate}}</span>
+            <span class="p-2 col-span-1 table">{{deposit.intr_rate2}}</span>
+            <span class="p-2 col-span-1 table">{{deposit.save_trm}}</span>
+            <span class="p-2 col-span-2 table">{{deposit.fin_prdt_cd.kor_co_nm}}</span>
           </li>
         </ul>
       </div>
@@ -147,13 +147,13 @@
     </div>
     
   <div v-if="depositList">
-    <ul class="flex justify-center items-center space-x-2 bg-slate-100 dark:bg-slate-950">
+    <ul class="flex justify-center items-center space-x-2 bg-slate-100 dark:bg-slate-950 rounded-xl">
       <li
         v-for="page in pageNation"
         :key="page"
         @click="setPage(page)"
         :class="{ 'bg-gray-500 text-white': page === currentPage }"
-        class="px-3 py-2 cursor-pointer border border-gray-300 rounded-md
+        class="px-4 py-2 cursor-pointer border border-gray-300 rounded-xl
         hover:bg-gray-200 dark:hover:bg-gray-800 "
       >
         {{ page }}
@@ -248,5 +248,11 @@ onMounted(async () => {
   width: 24px;
   height: 24px;
   fill: #FFEA00;
+}
+.table{
+  border-left: solid gray;
+}
+.card{
+  @apply rounded-xl border p-2;
 }
 </style>

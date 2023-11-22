@@ -2,7 +2,7 @@
   <div class="w-[75%] mx-auto my-8">
     <div v-if="isLoading" class="flex justify-center items-center h-screen">
       <!-- 스피너 -->
-      <div class="animate-spin inline-block w-16 h-16 border-[5px] border-current border-t-transparent text-blue-600 rounded-full dark:text-blue-500 mr-4"></div>
+      <div class="animate-spin inline-block w-16 h-16 border-[5px] border-current border-t-transparent text-green-600 rounded-full dark:text-green-500 mr-4"></div>
       <span class="text-lg font-semibold text-gray-600 dark:text-gray-300">
         데이터 로드 중...
       </span>
@@ -10,15 +10,15 @@
     <div v-else class="flex justify-start space-x-4 mt-4">
       <div class="text-2xl">유가 시세</div>
       <button v-for="category in categories" :key="category"    @click="applyCategory(category)"
-        :class="{'bg-green-500 font-extrabold': selectedCategory === category, 'bg-blue-500': selectedCategory !== category}"
-        class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+        :class="{'bg-green-600 font-extrabold': selectedCategory === category, 'bg-green-500': selectedCategory !== category}"
+        class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
         {{ category }}
       </button>
     </div>
     <div class="flex justify-start space-x-4 mt-4">
       <button v-for="period in periods" :key="period.value" @click="applyZoom(period.value)"
-        :class="{'bg-green-500 font-extrabold': selectedPeriod === period.value, 'bg-blue-500': selectedPeriod !== period.value}"
-        class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+        :class="{'bg-green-600 font-extrabold': selectedPeriod === period.value, 'bg-green-500': selectedPeriod !== period.value}"
+        class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
         {{ period.label }}
       </button>
     </div>
@@ -41,11 +41,11 @@ Chart.register(zoomPlugin);
 const chartRef = ref<Chart>;
 const oilData = ref<OilData[]>([]);
 
-const selectedCategory = ref('경유')
+const selectedCategory = ref('휘발유')
 const selectedPeriod = ref('1M');
 const isLoading = ref(true);
 
-const categories = ['경유', '등유', '휘발유'];
+const categories = ['휘발유', '경유', '등유'];
 
 const periods = reactive([
   { label: '1주일', value: '1W' },

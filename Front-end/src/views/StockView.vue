@@ -1,6 +1,6 @@
 <template>
 <main>
-  <div class="text-center p-4 dark:bg-slate-800">
+  <div class="text-center p-4 dark:bg-slate-800 flex justify-center gap-4">
     <label for="Kospi" class="Radio box-border" :class="{ 'active': Stock === 'Kospi' }">
       <input type="radio" name="Stocks" id="Kospi" checked
       v-model="Stock" value="Kospi" class="hidden">Kospi

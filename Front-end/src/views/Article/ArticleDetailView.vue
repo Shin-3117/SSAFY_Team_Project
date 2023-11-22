@@ -1,27 +1,28 @@
 <template>
-  <main class=" p-4">
-    <div class="border border-slate-600  p-4" v-if="Article">
-      <h2 class="text-2xl font-bold mb-2">{{ Article.title }}</h2>
+  <main class=" p-4 flex justify-center">
+    <div class="p-4" v-if="Article">
       <RouterLink to="/article" class="text-blue-500 hover:underline mb-2">게시판으로</RouterLink>
-      <br>
-      <!-- <p>{{ Article }}</p> -->
-      <div v-if="isWriter" class="mb-2">
-        <RouterLink :to="`/article/${Article.id}/put`" class="btn btn-blue">수정하기</RouterLink>
-        <button @click="deleteArticleR(Article.id)" class="btn btn-red">삭제</button>
+      <h2 class="text-2xl font-bold mb-2">{{ Article.title }}</h2>
+      <div class="flex justify-between">
+        <RouterLink :to="`/userInfo/${Article.user.username}`" class="text-blue-500 hover:underline mb-2">
+          <span>작성자: {{ Article.user.username }}</span>
+        </RouterLink>
+        <!-- <span>{{ Article.updated_at }}</span> -->
+        <div v-if="isWriter" class="">
+          <RouterLink :to="`/article/${Article.id}/put`" class="">수정하기</RouterLink> | 
+          <button @click="deleteArticleR(Article.id)" class="">삭제</button>
+        </div>
       </div>
 
-      <button @click="likeArticleR(Article.id)" class="btn btn-blue">
-        <img v-if="!isLike" src="../../assets/like-null.png" alt="LikeButton" class="w-6 h-6">
-        <img v-if="isLike" src="../../assets/like-fill.png" alt="LikeButton" class="w-6 h-6">
-      </button>
-      <br>
-      <RouterLink :to="`/userInfo/${Article.user.username}`" class="text-blue-500 hover:underline mb-2">
-        <span>작성자: {{ Article.user.username }}</span>
-      </RouterLink>
-      <span> | {{ Article.updated_at }} | </span>
+      
 
       <div v-html="Article.content" class="mt-4"></div>
-      <br><hr class="my-4">
+      <button @click="likeArticleR(Article.id)" class="btn btn-blue my-4">
+        <img v-if="!isLike" src="../../assets/img/like-null.png" alt="LikeButton" class="w-6 h-6">
+        <img v-if="isLike" src="../../assets/img/like-fill.png" alt="LikeButton" class="w-6 h-6">
+      </button>
+      
+      <hr class="my-4">
 
       <form v-on:submit.prevent="postCommentR(Article.id, commentContent)" class="flex">
         <input type="text" id="content" v-model="commentContent" class="input">

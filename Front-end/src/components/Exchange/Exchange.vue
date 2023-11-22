@@ -23,7 +23,7 @@
             <input type="number" id="fm" placeholder=" \ -> $" v-model="money">
           </label>
           <input type="submit" value="계산하기">
-          <p class="ml-2">{{ exMoney }} \</p>
+          <p class="ml-2">{{ exMoney }} ￦</p>
         </form>
         <form @submit.prevent="exChange(data.krw_to_cur,2)" v-if="isSelect===data.id"
         class="flex">

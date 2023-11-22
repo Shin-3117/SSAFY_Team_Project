@@ -1,11 +1,11 @@
 <template>
   <main class="view">
-    <div class="text-center p-4 dark:bg-slate-800">
-      <label for="gold" class="Radio box-border" :class="{ 'active': market === 'gold' }">
+    <div class="text-center p-4 dark:bg-slate-800 flex justify-center gap-4">
+      <label for="gold" class="Radio box-border bg-yellow-500 hover:bg-yellow-700" :class="{ 'active': market === 'gold' }">
         <input type="radio" name="markets" id="gold" checked
         v-model="market" value="gold" class="hidden">금 시세
       </label>
-      <label for="oil" class="Radio box-border" :class="{ 'active': market === 'oil' }">
+      <label for="oil" class="Radio box-border bg-green-500 hover:bg-green-700" :class="{ 'active2': market === 'oil' }">
         <input type="radio" name="markets" id="oil"
         v-model="market" value="oil" class="hidden">석유 시세
       </label>
@@ -29,9 +29,12 @@ const market = ref('gold')
 
 <style scoped>
 .Radio{
-  @apply cursor-pointer bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded;
+  @apply cursor-pointer text-white font-bold py-2 px-4 rounded;
 }
 .Radio.active {
-  @apply bg-blue-600 hover:bg-blue-700
+  @apply bg-yellow-600 hover:bg-yellow-700
+}
+.Radio.active2 {
+  @apply bg-green-600 hover:bg-green-700
 }
 </style>
