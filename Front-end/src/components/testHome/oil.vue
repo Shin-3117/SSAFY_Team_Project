@@ -1,18 +1,18 @@
 <template>
-  <div :class="`w-80 mx-auto my-8 border-4 rounded-xl p-2 border-${currentColor}`">
+  <div :class="`w-80 mx-auto my-8 border-4 rounded-xl p-2 ${currentColor}`">
     <div class="flex justify-between items-center mb-4 ml-1">
-      <span class="text-xl font-semibold animate-rotate-x animate-twice animate-duration-[1200ms]">
-        <span :class="`text-2xl font-semibold text-${currentColor}`">{{ currentOil }} {{ latestPrice }}</span>
+      <span class="text-xl text-black font-semibold animate-rotate-x animate-twice animate-duration-[1200ms]">
+        {{ currentOil }} <span :class="`text-2xl font-semibold ${currentColor}`"> {{ latestPrice }}</span>
       </span>
       <div class="relative group">
         <router-link to="/Market/oil">
-          <div :class="`border-solid border-2 rounded-lg border-${currentColor} mr-1 animate-rotate-y animate-twice animate-duration-[1200ms] bg-${currentColor}`">
+          <div :class="`border-solid border-2 rounded-lg ${currentColor} mr-1 animate-rotate-y animate-twice animate-duration-[1200ms]`">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
               <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18L9 11.25l4.306 4.307a11.95 11.95 0 015.814-5.519l2.74-1.22m0 0l-5.94-2.28m5.94 2.28l-2.28 5.941" />
             </svg>
           </div>
         </router-link>
-        <div :class="`opacity-0 invisible group-hover:opacity-100 group-hover:visible absolute w-28 mt-2 text-gray-800 shadow-lg transition duration-300 ease-in-out transform group-hover:animate-fade-down border-solid border-2 rounded-lg border-${currentColor} bg-white`">
+        <div :class="`opacity-0 invisible group-hover:opacity-100 group-hover:visible absolute w-28 mt-2 text-gray-800 shadow-lg transition duration-300 ease-in-out transform group-hover:animate-fade-down border-solid border-2 rounded-lg ${currentColor} bg-white`">
           <p class="px-4 py-2 text-sm text-center font-semibold text-gray-600 hover:text-gray-800">
             차트로 이동
           </p>
@@ -51,9 +51,9 @@ let myChart = null;
 let currentOilIndex = 0;
 const oilTypes = ['경유', '등유', '휘발유'];
 const oilColors = {
-  경유: '[#FF6384]',
-  등유: '[#36A2EB]',
-  휘발유: '[#4BC0C0]',
+  경유: 'border-[#FF6384] text-[#FF6384]',
+  등유: 'border-[#36A2EB] text-[#36A2EB]',
+  휘발유: 'border-[#4BC0C0] text-[#4BC0C0]',
 };
 
 onMounted(async () => {
@@ -142,7 +142,7 @@ onMounted(async () => {
     const intervalId = setInterval(() => {
       currentOilIndex = (currentOilIndex + 1) % oilTypes.length;
       updateLatestPriceAndColor();
-    }, 1500);
+    }, 1700);
 
     onUnmounted(() => {
       clearInterval(intervalId);

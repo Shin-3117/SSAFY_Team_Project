@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="flex justify-center">
     Home
     <Kospi />
     <kosdaq />
