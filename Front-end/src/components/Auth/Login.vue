@@ -45,7 +45,7 @@ const logIn = function () {
 
 <template>
 <div class="background" v-on:click.self="loginState.open()">
-  <section class="LoginFormBox bg-slate-200 dark:bg-slate-800">
+  <section class="LoginFormBox bg-slate-700 dark:bg-slate-800">
     <h2>Login</h2>
     <form v-on:submit.prevent="logIn">
       <label for="ID">아이디 입력

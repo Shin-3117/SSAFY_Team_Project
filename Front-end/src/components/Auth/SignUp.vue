@@ -1,6 +1,6 @@
 <template>
 <div class="background">
-  <div class="formBox bg-slate-200 dark:bg-slate-800">
+  <div class="formBox bg-slate-700 dark:bg-slate-800">
     <div class="relative">
       <h2>Signup</h2>
       <button v-on:click="signupState.open()"

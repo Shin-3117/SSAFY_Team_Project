@@ -20,20 +20,16 @@
     </div>
     <div class="mt-4">
       <p class="text-lg font-bold">Selected: {{ select.city }} - {{ select.gu }}</p>
-        <button
-          class="bg-blue-400 text-white px-4 py-2 mt-2 rounded"
+      <div class="flex justify-between">
+        <button class="Radio"
           @click="moveMap(select.lat, select.long)"
-        >
-        View Map
-      </button>
-      <button
-        class="text-blue-400 hover:underline ml-2"
-        @click="reSearch()"
-        >
-        Search Again from Current Location
-      </button>
+        >위치로 이동 </button>
+        <button class="Radio"
+          @click="reSearch()"
+          >지금 위치 다시 검색 </button>
+      </div>
     </div>
-    <div id="map" class="mt-4 h-64"></div>
+    <div id="map"></div>
   </div>
   <div class="p-4">
     <h2 class="text-lg font-bold">검색결과</h2>
@@ -198,10 +194,13 @@ onMounted(async () => {
 #map {
   width: 400px;
   height: 400px;
-  margin: 20px;
+  margin-top: 12px;
 }
 .container{
-  width: 480px;
- 
+  width: 440px;
+}
+.Radio{
+  @apply cursor-pointer bg-indigo-400 hover:bg-gradient-to-br from-purple-600 to-blue-500 
+  text-white font-bold py-2 px-4 rounded-md mr-1;
 }
 </style>

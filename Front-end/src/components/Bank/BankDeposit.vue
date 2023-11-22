@@ -1,5 +1,5 @@
 <template>
-  <article class="p-4 max-w-7xl card">
+  <article class="wrap p-4 card">
     <div class="flex justify-between items-center card">
       <div>
         <label for="deposit" class="Radio" :class="{ 'active': radioValue.Saving === 'deposit' }">
@@ -48,16 +48,18 @@
       </div>
 
       <button @click="changeData()" 
-      class="bg-blue-500 hover:bg-blue-700 
-      text-white font-bold py-2 px-4 rounded"
+      class="bg-gradient-to-br from-purple-600 to-blue-500 
+  text-white font-bold py-2 px-4 rounded-md mr-1"
       >조회</button>
     </div>
 
     <div class="grid card">
       <div class="grid grid-cols-8 bg-slate-100 dark:bg-slate-900 font-bold rounded-xl">
         <p class="p-2 col-span-3">상품명</p>
-        <p class="p-2 col-span-1 table">금리</p>
-        <p class="p-2 col-span-1 table">우대금리</p>
+        <p class="p-2 col-span-1 table"
+        :class="{ 'font-bold bg-slate-200': isNormalRate }">금리</p>
+        <p class="p-2 col-span-1 table"
+        :class="{ 'font-bold bg-slate-200': !isNormalRate }">우대금리</p>
         <p class="p-2 col-span-1 table">기간</p>
         <p class="p-2 col-span-2 table">은행</p>
       </div>
@@ -70,8 +72,10 @@
             <span class="p-2 col-span-3 flex">{{deposit.fin_prdt_cd.fin_prdt_nm}}
               <img v-if="deposit.is_subscribed" src="@/assets/img/star-fill.png" alt="star" class="iconImg">
             </span>
-            <span class="p-2 col-span-1 table">{{deposit.intr_rate}}</span>
-            <span class="p-2 col-span-1 table">{{deposit.intr_rate2}}</span>
+            <span class="p-2 col-span-1 table"
+            :class="{ 'font-bold': isNormalRate }">{{deposit.intr_rate}}</span>
+            <span class="p-2 col-span-1 table"
+            :class="{ 'font-bold': !isNormalRate }">{{deposit.intr_rate2}}</span>
             <span class="p-2 col-span-1 table">{{deposit.save_trm}}</span>
             <span class="p-2 col-span-2 table">{{deposit.fin_prdt_cd.kor_co_nm}}</span>
           </li>
@@ -160,12 +164,11 @@
       </li>
     </ul>
   </div>
-
   </article>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import type {BankDataType, SavingType} from '@/interface/BankDataType'
 import {getBankList, postDeposit, postSaving} from '../../api/bankDeposit';
 import { useAuthStore } from '@/stores/auth';
@@ -178,7 +181,7 @@ const radioValue = ref({
 const depositList = ref<BankDataType | null>(null);
 const isLoading = ref(true);
 const currentPage = ref(1)
-const currentPath = ref('')
+const currentPath = ref('n/')
 const pageNation = ref<number[]>([])
 const token = authStore.token
 
@@ -186,6 +189,14 @@ const isModalOpen = ref({
   state: false,
   data: null as SavingType | null,
   subscribe: false
+})
+
+const isNormalRate = computed(()=>{
+  if(currentPath.value.charAt(currentPath.value.length-2)==='2'){
+    return false
+  } else {
+    return true
+  }
 })
 
 const setModalOpen = (deposit:SavingType|null) =>{
@@ -235,14 +246,20 @@ onMounted(async () => {
 </script>
 
 <style scoped>
+.wrap{
+  width: 80%;
+  min-width: 820px;
+  max-width: 1200px;
+}
 .modalBackground{
   background-color: rgb(0, 0, 0,0.5);
 }
 .Radio{
-  @apply cursor-pointer bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded;
+  @apply cursor-pointer bg-indigo-400 hover:bg-gradient-to-br from-purple-600 to-blue-500 
+  text-white font-bold py-2 px-4 rounded-md mr-1;
 }
 .Radio.active {
-  @apply bg-blue-600 hover:bg-blue-700
+  @apply bg-gradient-to-br from-purple-600 to-blue-500 border-4 border-indigo-500;
 }
 .iconImg{
   width: 24px;

@@ -4,7 +4,7 @@
       <RouterLink to="/article" class="text-blue-500 hover:underline mb-2">게시판으로</RouterLink>
       <h2 class="text-2xl font-bold mb-2">{{ Article.title }}</h2>
       <div class="flex justify-between">
-        <RouterLink :to="`/userInfo/${Article.user.username}`" class="text-blue-500 hover:underline mb-2">
+        <RouterLink :to="`/userInfo/${Article.user.username}`" class="hover:underline mb-2">
           <span>작성자: {{ Article.user.username }}</span>
         </RouterLink>
         <!-- <span>{{ Article.updated_at }}</span> -->
@@ -14,10 +14,10 @@
         </div>
       </div>
 
-      
-
       <div v-html="Article.content" class="mt-4"></div>
-      <button @click="likeArticleR(Article.id)" class="btn btn-blue my-4">
+      <button @click="likeArticleR(Article.id)" 
+      class="bg-indigo-400 hover:bg-gradient-to-br from-purple-600 to-blue-500 
+      p-3 rounded-full">
         <img v-if="!isLike" src="../../assets/img/like-null.png" alt="LikeButton" class="w-6 h-6">
         <img v-if="isLike" src="../../assets/img/like-fill.png" alt="LikeButton" class="w-6 h-6">
       </button>
@@ -26,7 +26,7 @@
 
       <form v-on:submit.prevent="postCommentR(Article.id, commentContent)" class="flex">
         <input type="text" id="content" v-model="commentContent" class="input">
-        <input type="submit" value="댓글작성" class="btn btn-blue w-24">
+        <input type="submit" value="댓글작성" class="Radio">
       </form>
 
       <div v-if="Article.comments" class="space-y-4 ">
@@ -34,36 +34,40 @@
         <hr class="my-2">
         <ul v-for="comment in Article.comments" :key="comment.id" class="space-y-2">
           <li class="items-start">
-            <p class="font-bold">{{ comment.user.username }}</p>
+            <div class="flex justify-between">
+              <p class="font-bold">{{ comment.user.username }}</p>
+              <div class="flex space-x-2" v-if="authStore.userID===comment.user.username ? true : false">
+                <button @click="()=>{putId=comment.id; putContent=comment.content}">수정 |</button> 
+                <button @click="deleteComment(Article.id, comment.id)">삭제</button>
+              </div>
+            </div>
             <div class="flex-grow">
               <p>{{ comment.content }}</p>
-              <div class="flex space-x-2" v-if="authStore.userID===comment.user.username ? true : false">
-                <button @click="()=>{putId=comment.id; putContent=comment.content}" class="btn btn-gray">수정</button>
-                <button @click="deleteComment(Article.id, comment.id)" class="btn btn-red">삭제</button>
-              </div>
 
               <form v-on:submit.prevent="putComment(Article.id, comment.id, putContent,comment.user.username)" 
               v-if="putId===comment.id" class="flex">
                 <input type="text" v-model="putContent" class="input">
-                <input type="submit" value="수정하기" class="btn btn-blue w-24">
+                <input type="submit" value="수정하기" class="Radio">
               </form>
 
               <details v-if="comment.replies" class="">
                 <summary class="font-bold cursor-pointer">대댓글 {{ comment.replies.length }} | </summary>
                 <form v-on:submit.prevent="postCommentR(Article.id, replieContent, comment.id)" class="flex">
                   <input type="text" v-model="replieContent" class="input">
-                  <input type="submit" value="대댓글작성" class="btn btn-blue w-28">
+                  <input type="submit" value="대댓글작성" class="Radio">
                 </form>
 
 
                 <ul v-for="replie in comment.replies" :key="replie.id" class="ml-4 space-y-2">
                   <li >
-                    <div class="flex items-start">
-                      <span class="font-bold mr-2">{{ replie.user.username }}:</span>
-                      <span>{{ replie.content }}</span>
+                    <div class="flex items-start justify-between">
+                      <div>
+                        <span class="font-bold mr-2">{{ replie.user.username }}:</span>
+                        <span>{{ replie.content }}</span>
+                      </div>
                       <div class="flex space-x-2" v-if="authStore.userID===replie.user.username ? true : false">
-                        <button @click="putReplieId=replie.id; putContent=replie.content" class="btn btn-gray">수정</button>
-                        <button @click="deleteComment(Article.id, replie.id)" class="btn btn-red">삭제</button>
+                        <button @click="putReplieId=replie.id; putContent=replie.content" >수정 | </button>
+                        <button @click="deleteComment(Article.id, replie.id)" >삭제</button>
                       </div>
                     </div>
 
@@ -214,6 +218,10 @@ onMounted(async () => {
   @apply bg-gray-400;
 }
 .input{
-  @apply w-full max-w-md;
+  @apply w-full;
+}
+.Radio{
+  @apply cursor-pointer bg-indigo-400 hover:bg-gradient-to-br from-purple-600 to-blue-500 
+  text-white font-bold py-1 px-2 rounded-md mr-1;
 }
 </style>

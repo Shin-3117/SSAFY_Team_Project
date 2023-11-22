@@ -1,9 +1,11 @@
 <template>
-  <header class="bg-slate-100 dark:bg-slate-900 dark:text-white">
+  <header class="bg-slate-800 dark:bg-slate-900 text-white">
     <nav class="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8" aria-label="Global">
       <div class="flex mr-6">
-        <RouterLink to="/" class="">
-          <h1 class="">Simple</h1>
+        <RouterLink to="/" class="flex justify-center items-center">
+          <h1 class="hidden">SSInvest</h1>
+          <img src="../../assets/img/Logo/LogoImg.png" alt="Logo" class="h-10">
+          <img src="../../assets/img/Logo/LogoWord.png" alt="Logo" class="h-6 lg:hidden xl:block">
         </RouterLink>
       </div>
       <div class="flex lg:hidden">
@@ -28,7 +30,7 @@
         <RouterLink to="/article" class="navLink"
         >게시판</RouterLink>
       </PopoverGroup>
-      <div class="hidden lg:flex ">
+      <div class="hidden lg:flex gap-2">
         <AuthBtn/>
         <DarkModeSwitch/>
       </div>
@@ -37,11 +39,13 @@
     <Dialog as="div" class="lg:hidden" @close="mobileMenuOpen = false" :open="mobileMenuOpen">
       <div class="fixed inset-0 z-10" />
       <DialogPanel class="fixed inset-y-0 right-0 z-10 w-full overflow-y-auto  px-6 py-6 sm:max-w-sm sm:ring-1 
-        bg-white sm:ring-gray-900/10
-        dark:bg-slate-900 dark:text-white dark:sm:ring-gray-100/10">
+      bg-slate-800  sm:ring-gray-900/10
+        dark:bg-slate-900 text-white dark:sm:ring-gray-100/10">
         <div class="flex items-center justify-between">
-          <RouterLink to="/" class="-m-1.5 p-1.5">
-            <span>Your Company</span>
+          <RouterLink to="/" class="-m-1.5 p-1.5 flex justify-center items-center">
+            <h2 class="hidden">SSInvest</h2>
+            <img src="../../assets/img/Logo/LogoImg.png" alt="Logo" class="h-10">
+            <img src="../../assets/img/Logo/LogoWord.png" alt="Logo" class="h-6 lg:hidden xl:block">
           </RouterLink>
           <button type="button" class="-m-2.5 rounded-md p-2.5 text-gray-500" @click="mobileMenuOpen = false">
             <span class="sr-only">Close menu</span>
@@ -66,7 +70,7 @@
               <RouterLink to="/article" class="dialogLink"
                 >게시판</RouterLink>
             </div>
-            <div class="py-6">
+            <div class="py-6 flex gap-2">
               <AuthBtn/>
               <DarkModeSwitch/>
             </div>
@@ -102,7 +106,7 @@ const mobileMenuOpen = ref(false)
 .dialogLink{
   @apply -mx-3 block rounded-lg px-3 py-2 
   text-base font-semibold leading-7 
-  hover:bg-gray-50
+  hover:bg-gray-900
   dark:hover:bg-gray-950;
 }
 </style>
