@@ -8,44 +8,58 @@
       </span>
     </div>
     <div v-else class="flex justify-start space-x-4 mt-4">
-      <div class="text-2xl">유가 시세</div>
-      <button v-for="category in categories" :key="category"    @click="applyCategory(category)"
-        :class="{'bg-green-500 font-extrabold': selectedCategory === category, 'bg-blue-500': selectedCategory !== category}"
-        class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
-        {{ category }}
-      </button>
+      <div class="text-2xl">KOSPI 지수</div>
+      <div class="relative">
+        <button @click="showDropdown = !showDropdown"
+          class="flex items-center bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+          {{ selectedCategory }}
+          <svg :class="{ 'rotate-180': showDropdown }" class="w-4 h-4 ml-2" xmlns="http://www.w3.org/2000/svg" fill="none"
+            viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+          </svg>
+        </button>
+        <div v-if="showDropdown"
+          class="absolute mt-2 py-1 w-48 bg-white border border-gray-200 rounded shadow-xl overflow-auto max-h-60">
+          <a v-for="category in categories" :key="category" @click="selectCategory(category)"
+            class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-500 hover:text-white">
+            {{ category }}
+          </a>
+        </div>
+      </div>
     </div>
     <div class="flex justify-start space-x-4 mt-4">
       <button v-for="period in periods" :key="period.value" @click="applyZoom(period.value)"
-        :class="{'bg-green-500 font-extrabold': selectedPeriod === period.value, 'bg-blue-500': selectedPeriod !== period.value}"
+        :class="{ 'bg-green-500 font-extrabold': selectedPeriod === period.value, 'bg-blue-500': selectedPeriod !== period.value }"
         class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
         {{ period.label }}
       </button>
     </div>
-    <canvas id="oilChart"></canvas>
+    <canvas id="kospiChart"></canvas>
   </div>
 </template>
   
 <script setup lang="ts">
 import { onMounted, ref, reactive } from 'vue';
-import { getOilData } from '@/api/Market/oil.js';
+import { getKospiData } from '@/api/Stock/kospi';
 import { Chart, registerables } from 'chart.js';
 import zoomPlugin from "chartjs-plugin-zoom";
 import 'chartjs-adapter-date-fns';
 import { subDays, subMonths, subYears, format } from 'date-fns';
-import type { OilData } from '@/api/Market/oil.js';
+import { KospiData } from '@/api/Stock/kospi';
 
 Chart.register(...registerables);
 Chart.register(zoomPlugin);
 
 const chartRef = ref<Chart>;
-const oilData = ref<OilData[]>([]);
+const KospiData = ref<KospiData[]>([]);
 
-const selectedCategory = ref('경유')
+const selectedCategory = ref('코스피')
 const selectedPeriod = ref('1M');
+const showDropdown = ref(false);
 const isLoading = ref(true);
 
-const categories = ['경유', '등유', '휘발유'];
+const categories = ['코스피', '코스피 100', '코스피 200',
+  '코스피 200 TOP 10', '코스피 200 건설', '코스피 200 경기소비재', '코스피 200 금융', '코스피 200 비중상한 20%', '코스피 200 비중상한 25%', '코스피 200 비중상한 30%', '코스피 200 산업재', '코스피 200 생활소비재', '코스피 200 에너지/화학', '코스피 200 정보기술', '코스피 200 중공업', '코스피 200 중소형주', '코스피 200 철강/소재', '코스피 200 초대형제외 지수', '코스피 200 커뮤니케이션서비스', '코스피 200 헬스케어', '코스피 50', '코스피 대형주', '코스피 소형주', '코스피 중형주', '코스피200제외 코스피지수', '건설업', '금융업', '기계', '보험', '비금속광물', '서비스업', '섬유의복', '운수장비', '운수창고업', '유통업', '음식료품', '의료정밀', '의약품', '전기가스업', '전기전자', '제조업', '종이목재', '증권', '철강금속', '통신업', '화학'];
 
 const periods = reactive([
   { label: '1주일', value: '1W' },
@@ -55,15 +69,21 @@ const periods = reactive([
   { label: '전체', value: 'ALL' }
 ]);
 
+function selectCategory(category) {
+  selectedCategory.value = category;
+  showDropdown.value = false;
+  applyCategory(category);
+};
+
 const applyCategory = (Category) => {
   selectedCategory.value = Category
-  const filteredData = oilData.value.filter(data => data.oilCtg === Category);
+  const filteredData = KospiData.value.filter(data => data.idxNm === Category);
   updateChart(filteredData);
 };
 
 const applyZoom = (periodValue) => {
   selectedPeriod.value = periodValue;
-  const filteredData = oilData.value.filter(data => data.oilCtg === selectedCategory.value);
+  const filteredData = KospiData.value.filter(data => data.idxNm === selectedCategory.value);
   const endDate = new Date(filteredData[0].basDt);
   let startDate;
 
@@ -81,7 +101,7 @@ const applyZoom = (periodValue) => {
       startDate = subYears(endDate, 1);
       break;
     case 'ALL':
-      startDate = new Date(oilData.value[oilData.value.length - 1].basDt); // 가장 오래된 데이터 날짜
+      startDate = new Date(KospiData.value[KospiData.value.length - 1].basDt); // 가장 오래된 데이터 날짜
       break;
     default:
       startDate = subDays(endDate, 1);
@@ -98,28 +118,28 @@ const applyZoom = (periodValue) => {
 const updateChart = (filteredData) => {
   if (chartRef.value) {
     chartRef.value.data.labels = filteredData.map(data => data.basDt);
-    chartRef.value.data.datasets[0].data = filteredData.map(data => data.wtAvgPrcDisc);
-    chartRef.value.data.datasets[0].label = `${selectedCategory.value} 시세(원/L)`;
-    applyZoom('1M'); // 유종을 변경할 때 기본적으로 1개월
+    chartRef.value.data.datasets[0].data = filteredData.map(data => data.clpr);
+    chartRef.value.data.datasets[0].label = selectedCategory.value;
+    applyZoom('1M'); // 변경할 때 기본적으로 1개월
     chartRef.value.update();
   }
 };
 
 onMounted(async () => {
-  const ctx = document.getElementById('oilChart') as HTMLCanvasElement;
+  const ctx = document.getElementById('kospiChart') as HTMLCanvasElement;
 
   if (ctx) {
     try {
-      oilData.value = await getOilData();
+      KospiData.value = await getKospiData();
 
       const chartData = {
-        labels: oilData.value.map(data => data.basDt),
+        labels: KospiData.value.map(data => data.basDt),
         datasets: [{
-          label: `${selectedCategory.value} 시세(원/L)`,
-          data: oilData.value.map(data => data.wtAvgPrcDisc),
+          label: selectedCategory.value,
+          data: KospiData.value.map(data => data.clpr),
           fill: true,
-          backgroundColor: 'rgba(0,128,0, 0.2)',
-          borderColor: 'green',
+          backgroundColor: 'rgba(135, 206, 235, 0.2)',
+          borderColor: 'skyblue',
           tension: 0.1
         }]
       };
@@ -129,10 +149,10 @@ onMounted(async () => {
         data: chartData,
         options: {
           hoverRadius: 18,
-          hoverBackgroundColor: 'green',
+          hoverBackgroundColor: 'skyblue',
           responsive: true,
           interaction: {
-          intersect: false,
+            intersect: false,
           },
           scales: {
             y: {
@@ -193,14 +213,13 @@ onMounted(async () => {
         }
       });
 
-      // 기본적으로 첫 번째 유종을 표시
+      // 기본적으로 코스피 표시
       applyCategory(selectedCategory.value);
     } catch (error) {
-      console.error('There was an error fetching the oil data: ', error);
+      console.error('There was an error fetching the kospi data: ', error);
     } finally {
       isLoading.value = false; // 로딩 완료
     }
   }
 });
 </script>
-@/api/Market/oil@/api/Market/oil

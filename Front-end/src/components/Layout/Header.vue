@@ -21,6 +21,8 @@
           >은행 Map</RouterLink>
         <RouterLink to="/market" class="navLink "
           >상품 시세</RouterLink>
+        <RouterLink to="/stock" class="navLink "
+          >주가 지수 시세</RouterLink>
         <RouterLink to="/recommend" class="navLink"
         >추천</RouterLink>
         <RouterLink to="/article" class="navLink"
@@ -50,15 +52,19 @@
           <div class="-my-6 divide-y divide-gray-500/10">
             <div class="space-y-2 py-6">
               <RouterLink to="/bank" class="dialogLink"
-              >예금 적금</RouterLink>
+                >예금 적금</RouterLink>
               <RouterLink to="/ExchangeRate" class="dialogLink"
-              >환율</RouterLink>
+                >환율</RouterLink>
               <RouterLink to="/map" class="dialogLink"
-              >내 주위 은행 찾기</RouterLink>
+                >내 주위 은행 찾기</RouterLink>
+              <RouterLink to="/market" class="dialogLink"
+                >상품 시세</RouterLink>
+              <RouterLink to="/stock" class="dialogLink"
+                >주가 지수 시세</RouterLink>
               <RouterLink to="/recommend" class="dialogLink"
-              >추천</RouterLink>
+                >추천</RouterLink>
               <RouterLink to="/article" class="dialogLink"
-              >게시판</RouterLink>
+                >게시판</RouterLink>
             </div>
             <div class="py-6">
               <AuthBtn/>
