@@ -31,12 +31,12 @@
     </div>
     <div id="map"></div>
   </div>
-  <div class="p-4 border-2 border-indigo-400 rounded-lg mt-4">
+  <div class="p-4 border-2 border-indigo-400 rounded-lg mt-4 w-96">
     <h2 class="text-lg font-bold border-2 p-3 rounded-xl border-indigo-300">검색결과</h2>
     <br>
     <div class="border-2 p-3 rounded-xl border-indigo-300">
     <ul v-if="searchList">
-      <li v-for="result in searchList" class="py-1">
+      <li v-for="result in searchList" class="py-1 animate-fade">
         {{ result }}
       </li>
     </ul>

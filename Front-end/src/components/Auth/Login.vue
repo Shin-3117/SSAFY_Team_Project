@@ -45,20 +45,22 @@ const logIn = function () {
 
 <template>
 <div class="background" v-on:click.self="loginState.open()">
-  <section class="LoginFormBox bg-slate-700 dark:bg-slate-800">
+  <section class="LoginFormBox bg-indigo-400 text-white dark:bg-slate-800
+  animate-jump-in animate-once animate-duration-500
+  rounded-lg">
     <h2>Login</h2>
     <form v-on:submit.prevent="logIn">
       <label for="ID">아이디 입력
         <span class="errorMsg">{{ IDerror.isError ? IDerror.errorMsg : '' }}</span>
       </label>
-      <input type="text" id="ID" v-model="ID">
+      <input type="text" id="ID" v-model="ID" class="text-black">
       <br>
       <label for="PW">비밀번호 입력
         <span class="errorMsg">{{ PWerror.isError ? PWerror.errorMsg : '' }}</span>
       </label>
-      <input type="password" id="PW" v-model="PW">
+      <input type="password" id="PW" v-model="PW" class="text-black">
       <br>
-      <input type="submit" value="로그인" class="btn btn-blue">
+      <input type="submit" value="로그인" class="Radio">
     </form>
   </section>
 </div>
@@ -94,13 +96,14 @@ form{
 .errorMsg{
   color: rgb(192, 2, 2);
 }
-.btn {
-  @apply font-bold py-2 px-4;
+
+.Radio{
+  @apply cursor-pointer bg-indigo-500 hover:bg-gradient-to-br from-purple-700 to-blue-600 
+  text-white font-bold py-2 px-4 rounded-full mr-1;
 }
-.btn-blue {
-  @apply bg-blue-500 text-white;
-}
-.btn-blue:hover {
-  @apply bg-blue-700;
+
+input {
+  color: black;
+  @apply dark:text-white;
 }
 </style>

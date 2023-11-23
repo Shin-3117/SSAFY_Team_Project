@@ -9,16 +9,16 @@
     <RouterLink to="/ExchangeRate">주요 국가 환율</RouterLink>
   </h2>
   <div class="flex sm:flex-col">  
-    <div class="card max-h-44">
+    <div class="card max-h-44 my-2">
       <!-- {{ USDData }} -->
-      <img src="@/assets/img/flag/Flag_of_the_United_States.svg" alt="일장기"
-        class="flagImg">
+      <img src="@/assets/img/flag/Flag_of_the_United_States.svg" alt="미국기"
+        class="flagImg border-2 border-black">
       <p class="font-bold">1달러 = {{ USDData?.deal_bas_r }} 원</p>
     </div>
     <div class="card ">
       <!-- {{ JPYData }} -->
       <img src="@/assets/img/flag/Flag_of_Japan.svg" alt="일장기"
-      class="flagImg">
+      class="flagImg border-2 border-black">
       <p class="font-bold">100엔 = {{ JPYData?.deal_bas_r*100 }} 원</p>
     </div>
   </div>

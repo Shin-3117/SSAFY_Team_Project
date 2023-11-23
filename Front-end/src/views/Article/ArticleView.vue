@@ -1,19 +1,18 @@
 <template>
-<main class="p-4">
-  <article class="max-w-7xl mx-auto">
+<main class="p-4 animate-fade-right animate-once animate-duration-1000">
+  <article class="mx-auto w-2/4">
     <div class="flex justify-between items-center">
-      <h2 class="text-3xl font-bold mb-4">Article</h2>
+      <h2 class="text-3xl font-bold mb-4">게시판</h2>
       <div v-if="authStore.token!==null">
         <RouterLink to="/article/post"
-        class="bg-blue-500 hover:bg-blue-700 text-white
-        font-bold py-2 px-4 rounded-full">게시판 작성</RouterLink>
+        class="Radio">게시판 작성</RouterLink>
       </div>
       <div v-else>
         로그인 후, 게시글 작성이 가능합니다.
       </div>
     </div>
     <section>
-      <div class="grid grid-cols-8 bg-gray-200 dark:bg-gray-900 p-2">
+      <div class="grid grid-cols-8 bg-indigo-200 rounded-xl dark:bg-gray-900 p-2">
         <p class="col-span-4">제목</p>
         <p class="col-span-1">작성자</p>
         <p class="col-span-3">작성일</p>
@@ -23,9 +22,9 @@
         <ul>
           <RouterLink v-for="article in Articles" :key="article.id" :to="`/article/${article.id}`">
             <li class="grid grid-cols-8 p-2 bg-slate-50 dark:bg-slate-950 hover:bg-gray-200 dark:hover:bg-gray-800">
-              <p class="col-span-4 ">{{ article.title }} | </p>
+              <p class="col-span-4 ">{{ article.title }}</p>
               <p class="col-span-1">{{ article.user.username }}</p>
-              <p class="col-span-3">{{ article.created_at }}</p>
+              <p class="col-span-3">{{ article.created_at.slice(0, 10) }}</p>
             </li>
           </RouterLink>
         </ul>
@@ -59,5 +58,8 @@ onMounted(async () => {
 </script>
 
 <style scoped>
-
+.Radio{
+  @apply cursor-pointer bg-indigo-500 hover:bg-gradient-to-br from-purple-700 to-blue-600 
+  text-white font-bold py-2 px-4 rounded-full mr-1;
+}
 </style>

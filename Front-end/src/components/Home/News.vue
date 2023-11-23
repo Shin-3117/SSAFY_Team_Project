@@ -2,7 +2,7 @@
   <section v-if="news" class="sectionContainer h-96">
     <h2  class="font-bold text-center pb-2">경제 뉴스</h2>
     <ul class="h-80 overflow-y-auto">
-      <li v-for="ne in news">
+      <li v-for="ne in news" class="hover:bg-indigo-200">
         <a :href="ne.originallink" target="_blank" rel="noreferrer noopener"
         class="card flex justify-start">
         <p class="whitespace-nowrap mr-2">{{ ne.pubdate }}</p>

@@ -11,8 +11,8 @@
     <!-- Exchange Data Items -->
     <div class="overflow-auto">
     <div v-for="data in exchangeData" :key="data.id" @click="reset(data.id)"
-    class="card grid grid-cols-7 gap-6 bg-slate-50 hover:bg-indigo-400 dark:bg-indigo-500"
-    :class="{'bg-indigo-300 dark:bg-indigo-700' : isSelect===data.id}">
+    class="card grid grid-cols-7 gap-6 hover:bg-indigo-400 dark:bg-indigo-500"
+    :class="{ 'bg-indigo-300 dark:bg-indigo-700': isSelect===data.id }">
       <span class="col-span-3">{{ data.cur_unit }} - {{ data.cur_nm }}</span>
       <span class="col-span-2">{{ data.deal_bas_r }}</span>
       <!-- <span class="col-span-2">{{ (data.krw_to_cur*1000).toFixed(2)}}</span> -->

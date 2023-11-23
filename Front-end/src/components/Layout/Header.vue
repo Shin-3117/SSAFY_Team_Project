@@ -5,7 +5,7 @@
         <RouterLink to="/" class="flex justify-center items-center">
           <h1 class="hidden">SSInvest</h1>
           <img src="../../assets/img/Logo/LogoImg.png" alt="Logo" class="h-10">
-          <img src="../../assets/img/Logo/LogoWord.png" alt="Logo" class="h-6 lg:hidden xl:block">
+          <img src="../../assets/img/Logo/LogoWord.png" alt="Logo" class="h-6 lg:hidden xl:block ml-2">
         </RouterLink>
       </div>
       <div class="flex lg:hidden">
@@ -21,9 +21,9 @@
           >환율</RouterLink>
         <RouterLink to="/map" class="navLink"
           >은행 Map</RouterLink>
-        <RouterLink to="/market/gold" class="navLink "
+        <RouterLink to="/market/gold" class="navLink"
           >상품 시세</RouterLink>
-        <RouterLink to="/stock/Kospi" class="navLink "
+        <RouterLink to="/stock/Kospi" class="navLink"
           >주가 지수 시세</RouterLink>
         <RouterLink to="/recommend" class="navLink"
         >추천</RouterLink>
@@ -98,11 +98,15 @@ import DarkModeSwitch from '../DarkModeSwitch.vue'
 const mobileMenuOpen = ref(false)
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .navLink {
-  @apply text-sm font-semibold leading-6 
-  ;
+  @apply text-sm font-semibold leading-6;
+  
 }
+.navLink:hover{
+  transform: scale(1.2);
+}
+
 .dialogLink{
   @apply -mx-3 block rounded-lg px-3 py-2 
   text-base font-semibold leading-7 
