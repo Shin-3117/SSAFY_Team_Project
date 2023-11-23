@@ -302,10 +302,77 @@ placeInfo.json에 시군구의 위도, 경도 값을 저장하고 이를 컴포�
 
 ## 2023.11.18 토
 <details>
-<summary>2023.11.18 </summary>
+<summary>2023.11.18 유저 팔로우, 게시판 작성시간 추가</summary>
 <div markdown="1">
 
+### 유저 팔로우
+```TS
+export const followUser = async (username:string) => {
+  try{
+    const response = await axios({
+      method: 'post',
+      url: `${API_URL}/users/follow/${username}/`,
+      headers: {
+        Authorization: `Token ${authStore.token}`,
+      },
+    })
+    console.log(response)
+    alert('follow')
+  } catch(error){
+    console.error(error);
+  }
+}
+```
+토큰을 통해 인증 처리
 
+### 게시판 작성시간 추가
+전체 게시판 data에 작성시간 추가 및 프론트에 반영 
+
+</div>
+</details>
+
+## 2023.11.19 일
+<details>
+<summary>2023.11.19 세션 스토리지에 토큰 저장 기능 구현</summary>
+<div markdown="1">
+
+0. stores/auth에서 회원정보를 관리 중.
+1. 로그인을 진행시, 토큰을 세션 스토리지에 저장
+2. 새로고침을 진행해도 세션 스토리지로 로그인 상태를 유지
+3. 로그아웃, 브라우져 종료시 세션 스토리지 삭제 및 로그아웃
+
+</div>
+</details>
+
+## 2023.11.20 월
+<details>
+<summary>2023.11.19 게시판 좋아요 기능 구현, 예적금 페이지 페이지네이션, 예적금 즐겨찾기 기능 구현</summary>
+<div markdown="1">
+
+### 게시판 좋아요 기능 구현
+아이콘 이미지(좋아요)클릭 시, 좋아요 구현
+
+### 예적금 페이지 페이지네이션
+0. 기존에는 예적금 data를 모두 받아왔음
+1. page개념 도입 제안, 1page 당, data를 20개씩 받도록 수정
+2. 페이지 네이션 기능 추가
+
+### 예적금 즐겨찾기 기능 구현
+로그인 상태인 경우, 즐겨찾기 토글(아이콘) 출력
+즐겨찾기 기능 구현
+
+</div>
+</details>
+
+## 2023.11.21 화
+<details>
+<summary>2023.11.21 예적금 즐겨찾기 기능 캐싱 처리, 게시글 좋아요 토글 처리</summary>
+<div markdown="1">
+
+### 예적금 즐겨찾기 기능 캐싱 처리
+0. 즐겨찾기를 해도 캐싱으로 인해 최신화된 데이터가 들어오지 않음
+1. axios요청시, body에 path를 추가하여 캐싱 초기화 및 최신화된 데이터 반환
+2. 즐겨찾기 유무로 즐겨찾기 아이콘 표시
 
 </div>
 </details>
