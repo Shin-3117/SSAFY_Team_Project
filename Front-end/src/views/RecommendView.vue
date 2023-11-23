@@ -14,7 +14,7 @@
 
     <div v-if="!dataLoaded">
       <div class="animate-fade animate-duration-[1800ms]">
-      <p class="temp font-semibold text-violet-500 text-xl leading-loose ml-40"><br>SS INVEST에서는 금과 석유에 대한 시세와<br>주가지수(KOSPI, KOSDAQ, KRX, 테마) 시세에 대한 데이터를<br>2022년부터 현재까지 약 7만개 보유중입니다.<br><br>현재 날짜로부터 역순으로 포함할 데이터의 개수를 입력하시면<br>해당 기간 동안의 모든 데이터를 분석하여 상승 / 하락에 대한 지표를<br>비율(%)로 제공합니다.<br><br>결과를 참고하여 투자에 도움이 되기를 바랍니다.</p>
+      <p class="temp font-semibold text-violet-500 text-xl leading-loose ml-40"><br>SS INVEST에서는 금과 석유에 대한 시세와<br>주가지수(KOSPI, KOSDAQ, KRX, 테마) 시세에 대한 데이터를<br>2022년부터 현재까지 약 7만개 보유중입니다.<br><br>현재 날짜로부터 역순으로 포함할 데이터의 개수를 입력하시면<br>해당 기간 동안의 모든 데이터를 분석하여 상승 / 하락에 대한<br>추세 지표를 제공합니다.<br><br>결과를 참고하여 투자에 도움이 되기를 바랍니다.</p>
       </div>
     </div>
 
@@ -42,19 +42,19 @@
         <h2 class="text-2xl font-bold mb-4">{{ selectedCategory }} 투자 지표</h2>
         <div class="flex justify-between">
           <div class="w-1/2 pr-2 bg-blue-200">
-            <h3 class="text-lg ml-2 font-semibold mb-2"><span class="text-blue-600">Plus</span>(상승%)</h3>
+            <h3 class="text-lg ml-2 font-semibold mb-2"><span class="text-blue-600">Plus</span>(상승)</h3>
             <ul class="overflow-auto temp2">
               <li v-for="item in positiveItems" :key="item.Name" class="my-2 animate-fade-up animate-duration-[1500ms] ml-2">
-                <span class="font-medium">{{ item.Name }}</span>: <span class="font-bold text-blue-600">{{ item.Indicator }}%</span>
+                <span class="font-medium">{{ item.Name }}</span>: <span class="font-bold text-blue-600">{{ item.Indicator }}</span>
               </li>
             </ul>
           </div>
 
           <div class="w-1/2 px-2 bg-red-200">
-            <h3 class="text-lg font-semibold mb-2"><span class="text-red-600">Minus</span>(하락%)</h3>
+            <h3 class="text-lg font-semibold mb-2"><span class="text-red-600">Minus</span>(하락)</h3>
             <ul class="overflow-auto temp2">
               <li v-for="item in negativeItems" :key="item.Name" class="my-2 animate-fade-down animate-duration-[1500ms]">
-                {{ item.Name }}: <span class="font-bold text-red-600">{{ item.Indicator }}%</span>
+                {{ item.Name }}: <span class="font-bold text-red-600">{{ item.Indicator }}</span>
               </li>
             </ul>
           </div>

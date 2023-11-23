@@ -14,8 +14,30 @@ from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from django.views.decorators.cache import cache_page
 
 import pandas as pd
+from sklearn.linear_model import LinearRegression
+import numpy as np
 
-# 투자 추천 알고리즘(최신 데이터 날짜 기준으로 과거 n개의 데이터를 바탕으로 상승 / 하락세 판별 => 변화율(%)로 응답)
+# 투자 추천 알고리즘(최신 데이터 날짜 기준으로 과거 n개의 데이터를 바탕으로 상승 / 하락세 판별 => 기울기로 응답)
+def calculate_investment_indicator(df, price_column):
+    if df.empty:
+        return None
+
+    # 선형 회귀 모델 생성
+    model = LinearRegression()
+
+    # 날짜를 숫자 형태로 변환
+    df['date_ordinal'] = pd.to_datetime(df['basDt']).apply(lambda x: x.toordinal())
+
+    # 선형 회귀 모델 훈련
+    model.fit(df[['date_ordinal']], df[price_column])
+
+    # 선형 회귀 모델의 기울기 반환
+    trend_slope = model.coef_[0]
+
+    return trend_slope
+
+@api_view(['GET'])
+@cache_page(60 * 15)
 def recommend_data(request, cnt):
     gold_instances = Gold.objects.order_by('-basDt')
     gold_serializer = GoldSerializer(gold_instances, many=True)
@@ -77,73 +99,41 @@ def recommend_data(request, cnt):
     theme_recent.sort_values(by='basDt', inplace=True)
 
     # 투자 지표 계산
-    # def calculate_investment_indicator(current_avg, previous_avg):
-    #     if current_avg > previous_avg:
-    #         return "High"  # 상승세일 경우
-    #     elif current_avg < previous_avg:
-    #         return "Low"   # 하락세일 경우
-    #     else:
-    #         return "Neutral" # 안정세일 경우
-    def calculate_investment_indicator(current_price, previous_price):
-        if previous_price == 0:
-            return 0  # 이전 가격이 0이면 변화율을 계산할 수 없음
+    gold_indicator = calculate_investment_indicator(gold_recent, 'clpr')
 
-        change_rate = (current_price - previous_price) / previous_price * 100
-
-        return change_rate
-
-    # 금 데이터 추세 분석
-    gold_start_price = gold_recent.iloc[0]['clpr']  # 시작 가격
-    gold_end_price = gold_recent.iloc[-1]['clpr']   # 마지막 가격
-    gold_indicator = calculate_investment_indicator(gold_end_price, gold_start_price)
-
-    # 석유 데이터 추세 분석 및 투자 지표 계산
     oil_indicators = {}
     for category in oil_recent['oilCtg'].unique():
         category_data = oil_recent[oil_recent['oilCtg'] == category]
-        start_price = category_data.iloc[0]['wtAvgPrcDisc']
-        end_price = category_data.iloc[-1]['wtAvgPrcDisc']
-        oil_indicators[category] = calculate_investment_indicator(end_price, start_price)
+        oil_indicators[category] = calculate_investment_indicator(category_data, 'wtAvgPrcDisc')
     
-    # 코스피 데이터 추세 분석 및 투자 지표 계산
     kospi_indicators = {}
     for category in kospi_recent['idxNm'].unique():
         category_data = kospi_recent[kospi_recent['idxNm'] == category]
-        start_price = category_data.iloc[0]['clpr']
-        end_price = category_data.iloc[-1]['clpr']
-        kospi_indicators[category] = calculate_investment_indicator(end_price, start_price)
+        kospi_indicators[category] = calculate_investment_indicator(category_data, 'clpr')
     
-    # 코스닥 데이터 추세 분석 및 투자 지표 계산
     kosdaq_indicators = {}
     for category in kosdaq_recent['idxNm'].unique():
         category_data = kosdaq_recent[kosdaq_recent['idxNm'] == category]
-        start_price = category_data.iloc[0]['clpr']
-        end_price = category_data.iloc[-1]['clpr']
-        kosdaq_indicators[category] = calculate_investment_indicator(end_price, start_price)
+        kosdaq_indicators[category] = calculate_investment_indicator(category_data, 'clpr')
     
-    # KRX 데이터 추세 분석 및 투자 지표 계산
     krx_indicators = {}
     for category in krx_recent['idxNm'].unique():
         category_data = krx_recent[krx_recent['idxNm'] == category]
-        start_price = category_data.iloc[0]['clpr']
-        end_price = category_data.iloc[-1]['clpr']
-        krx_indicators[category] = calculate_investment_indicator(end_price, start_price)
+        krx_indicators[category] = calculate_investment_indicator(category_data, 'clpr')
     
-    # 테마 데이터 추세 분석 및 투자 지표 계산
     theme_indicators = {}
     for category in theme_recent['idxNm'].unique():
         category_data = theme_recent[theme_recent['idxNm'] == category]
-        start_price = category_data.iloc[0]['clpr']
-        end_price = category_data.iloc[-1]['clpr']
-        theme_indicators[category] = calculate_investment_indicator(end_price, start_price)
+        theme_indicators[category] = calculate_investment_indicator(category_data, 'clpr')
 
-    # sorted_gold_indicators = sorted(gold_indicator.items(), key=lambda x: x[1], reverse=True)
+    # 각 카테고리별 추세 지표를 기울기에 따라 내림차순으로 정렬
     sorted_oil_indicators = sorted(oil_indicators.items(), key=lambda x: x[1], reverse=True)
     sorted_kospi_indicators = sorted(kospi_indicators.items(), key=lambda x: x[1], reverse=True)
     sorted_kosdaq_indicators = sorted(kosdaq_indicators.items(), key=lambda x: x[1], reverse=True)
     sorted_krx_indicators = sorted(krx_indicators.items(), key=lambda x: x[1], reverse=True)
     sorted_theme_indicators = sorted(theme_indicators.items(), key=lambda x: x[1], reverse=True)
-    # 결과를 JSON 형식으로 포맷팅
+
+    # 결과 정렬 및 JSON 형식으로 포맷팅
     response_data = {
         "금": [{"Name": "금", "Indicator": round(gold_indicator, 2)}],
         "석유": [{"Name": name, "Indicator": round(value, 2)} for name, value in sorted_oil_indicators],
@@ -153,29 +143,16 @@ def recommend_data(request, cnt):
         "테마": [{"Name": name, "Indicator": round(value, 2)} for name, value in sorted_theme_indicators]
     }
 
-    # JSON 응답 반환
     return JsonResponse(response_data)
-    # # 결과 출력
-    # print("Gold Investment Indicator:", gold_indicator)
-    # print("Oil Investment Indicators:")
-    # print(oil_indicators)
-    # print("Kospi Investment Indicators:")
-    # print(kospi_indicators)
-    # print("Kosdaq Investment Indicators:")
-    # print(kosdaq_indicators)
-    # print("KRX Investment Indicators:")
-    # print(krx_indicators)
-    # print("Theme Investment Indicators:")
-    # print(theme_indicators)
 
 
 # 일반 상품(석유, 금)
 # Url
-BASE_URL = "https://apis.data.go.kr/1160100/service/GetGeneralProductInfoService"
+BASE_URL = "http://apis.data.go.kr/1160100/service/GetGeneralProductInfoService"
 OIL_URL = "/getOilPriceInfo"
 GOLD_URL = "/getGoldPriceInfo"
 # 주가지수시세
-STOCK_URL = 'https://apis.data.go.kr/1160100/service/GetMarketIndexInfoService/getStockMarketIndex'
+STOCK_URL = 'http://apis.data.go.kr/1160100/service/GetMarketIndexInfoService/getStockMarketIndex'
 # api_key
 API_KEY3 = settings.API_KEY3
 
