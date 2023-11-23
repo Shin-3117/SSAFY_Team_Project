@@ -12,10 +12,10 @@
 </template>
 
 <script setup lang="ts">
-import KospiWeek from '@/components/Home/KospiWeek.vue.js';
-import KosdaqWeek from '@/components/Home/KosdaqWeek.vue.js';
-import GoldWeek from '@/components/Home/GoldWeek.vue.js';
-import OilWeek from '@/components/Home/OilWeek.vue.js';
+import KospiWeek from '@/components/Home/KospiWeek.vue';
+import KosdaqWeek from '@/components/Home/KosdaqWeek.vue';
+import GoldWeek from '@/components/Home/GoldWeek.vue';
+import OilWeek from '@/components/Home/OilWeek.vue';
 import MainExchange from '@/components/Home/MainExchange.vue';
 import News from '@/components/Home/News.vue';
 </script>

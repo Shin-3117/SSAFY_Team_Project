@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import BankDeposit from '@/components/Bank/BankList.vue.js';
+import BankDeposit from '@/components/Bank/BankList.vue';
 </script>
 
 <template>
