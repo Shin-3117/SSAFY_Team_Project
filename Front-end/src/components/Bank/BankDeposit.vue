@@ -1,6 +1,6 @@
 <template>
-  <article class="wrap p-4 card">
-    <div class="flex justify-between items-center card">
+  <article class="wrap px-4 rounded-xl border-2 border-indigo-400 py-2 my-4 animate-fade animate-duration-[1000ms]">
+    <div class="flex justify-between items-center card bg-indigo-200">
       <div>
         <label for="deposit" class="Radio" :class="{ 'active': radioValue.Saving === 'deposit' }">
           <input type="radio" name="Saving" id="deposit" checked
@@ -54,19 +54,20 @@
     </div>
 
     <div class="grid card">
-      <div class="grid grid-cols-8 bg-slate-100 dark:bg-slate-900 font-bold rounded-xl">
+      <div class="grid grid-cols-8 dark:bg-slate-900 font-bold rounded-xl temp2 bg-indigo-200">
         <p class="p-2 col-span-3">상품명</p>
         <p class="p-2 col-span-1 table"
-        :class="{ 'font-bold bg-slate-200': isNormalRate }">금리</p>
+        :class="{ 'font-bold bg-indigo-300': isNormalRate }">금리</p>
         <p class="p-2 col-span-1 table"
-        :class="{ 'font-bold bg-slate-200': !isNormalRate }">우대금리</p>
+        :class="{ 'font-bold bg-indigo-300': !isNormalRate }">우대금리</p>
         <p class="p-2 col-span-1 table">기간</p>
         <p class="p-2 col-span-2 table">은행</p>
       </div>
       <div v-if="isLoading"> Loading...</div>
-      <div v-else v-if="depositList">
+      <div v-else v-if="depositList"
+      class="overflow-auto temp">
         <ul v-for="deposit in depositList.results" 
-        class="bg-slate-50 dark:bg-slate-950 hover:bg-gray-200 dark:hover:bg-gray-800 rounded-xl">
+        class="bg-slate-50 dark:bg-slate-950 hover:bg-indigo-200 dark:hover:bg-gray-800 rounded-xl">
           <li class="grid grid-cols-8" 
           @click="setModalOpen(deposit)">
             <span class="p-2 col-span-3 flex">{{deposit.fin_prdt_cd.fin_prdt_nm}}
@@ -88,7 +89,7 @@
     class="modalBackground fixed top-0 left-0 z-10
     w-screen h-screen
     flex justify-center items-center">
-      <div class="bg-white dark:bg-slate-600 w-4/5 p-3" @click.stop>
+      <div class="bg-white dark:bg-slate-600 w-4/5 p-3 border-4 border-indigo-400 animate-fade" @click.stop>
         <div class="flex  items-center justify-between mb-4">
           <p>{{ isModalOpen.data?.fin_prdt_cd.kor_co_nm }}</p>
           <p class="font-bold text-lg">{{ isModalOpen.data.fin_prdt_cd.fin_prdt_nm }}</p>
@@ -151,14 +152,14 @@
     </div>
     
   <div v-if="depositList">
-    <ul class="flex justify-center items-center space-x-2 bg-slate-100 dark:bg-slate-950 rounded-xl">
+    <ul class="flex justify-center items-center space-x-2 dark:bg-slate-950 rounded-xl bg-indigo-200">
       <li
         v-for="page in pageNation"
         :key="page"
         @click="setPage(page)"
-        :class="{ 'bg-gray-500 text-white': page === currentPage }"
-        class="px-4 py-2 cursor-pointer border border-gray-300 rounded-xl
-        hover:bg-gray-200 dark:hover:bg-gray-800 "
+        :class="{ 'bg-indigo-500 text-white': page === currentPage }"
+        class="px-4 py-2 cursor-pointer border border-gray-300 rounded-xl bg-indigo-100
+        hover:bg-indigo-400 dark:hover:bg-gray-800 my-2"
       >
         {{ page }}
       </li>
@@ -267,9 +268,32 @@ onMounted(async () => {
   fill: #FFEA00;
 }
 .table{
-  border-left: solid gray;
+  border-left: solid;
+  @apply border-indigo-200;
 }
 .card{
   @apply rounded-xl border p-2;
+}
+
+/* WebKit browsers (Chrome, Safari) */
+::-webkit-scrollbar {
+  width: 10px; /* width of the scrollbar */
+
+}
+
+::-webkit-scrollbar-track {
+
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-gray-400; /* color of the scrollbar handle */
+  border-radius: 6px; /* roundness of the scrollbar handle */
+}
+
+.temp{
+  height: 620px;
+}
+.temp2{
+  margin-right: 10px;
 }
 </style>

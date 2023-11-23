@@ -1,16 +1,16 @@
 <template>
-<div class="md:flex">
-  <div class="container p-4">
-    <div class="flex ">
+<div class="md:flex md:items-start animate-fade animate-duration-[1000ms]">
+  <div class="container p-4 border-2 mt-4 mr-2 rounded-lg border-indigo-400">
+    <div class="flex border-2 p-1 rounded-lg border-indigo-300">
       <select v-model="select.city" 
-        class="p-2 cursor-pointer border border-gray-300 rounded 
+        class="p-2 cursor-pointer border border-indigo-300 rounded 
         bg-white dark:bg-gray-800">
         <option value="" disabled>Select City</option>
         <option v-for="(city, key) in placeInfo" :key="key" :value="key">{{ key }}</option>
       </select>
       <div>
         <select v-model="select.gu" 
-          class="p-2  cursor-pointer border border-gray-300 rounded
+          class="p-2  cursor-pointer border border-indigo-300 rounded
           bg-white dark:bg-gray-800" >
           <option value="" disabled>Select District</option>
           <option v-for="(place, gu) in placeInfo[select.city]" :key="gu" :value="gu"
@@ -26,19 +26,21 @@
         >위치로 이동 </button>
         <button class="Radio"
           @click="reSearch()"
-          >지금 위치 다시 검색 </button>
+          >현재 위치에서 검색 </button>
       </div>
     </div>
     <div id="map"></div>
   </div>
-  <div class="p-4">
-    <h2 class="text-lg font-bold">검색결과</h2>
+  <div class="p-4 border-2 border-indigo-400 rounded-lg mt-4">
+    <h2 class="text-lg font-bold border-2 p-3 rounded-xl border-indigo-300">검색결과</h2>
     <br>
+    <div class="border-2 p-3 rounded-xl border-indigo-300">
     <ul v-if="searchList">
-      <li v-for="result in searchList">
+      <li v-for="result in searchList" class="py-1">
         {{ result }}
       </li>
     </ul>
+    </div>
   </div>
 
 </div>

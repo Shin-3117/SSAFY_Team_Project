@@ -145,12 +145,12 @@ def recommend_data(request, cnt):
     sorted_theme_indicators = sorted(theme_indicators.items(), key=lambda x: x[1], reverse=True)
     # 결과를 JSON 형식으로 포맷팅
     response_data = {
-        "Gold": [{"Name": "금", "Indicator": round(gold_indicator, 2)}],
-        "Oil": [{"Name": name, "Indicator": round(value, 2)} for name, value in sorted_oil_indicators],
-        "Kospi": [{"Name": name, "Indicator": round(value, 2)} for name, value in sorted_kospi_indicators],
-        "Kosdaq": [{"Name": name, "Indicator": round(value, 2)} for name, value in sorted_kosdaq_indicators],
+        "금": [{"Name": "금", "Indicator": round(gold_indicator, 2)}],
+        "석유": [{"Name": name, "Indicator": round(value, 2)} for name, value in sorted_oil_indicators],
+        "KOSPI": [{"Name": name, "Indicator": round(value, 2)} for name, value in sorted_kospi_indicators],
+        "KOSDAQ": [{"Name": name, "Indicator": round(value, 2)} for name, value in sorted_kosdaq_indicators],
         "KRX": [{"Name": name, "Indicator": round(value, 2)} for name, value in sorted_krx_indicators],
-        "Theme": [{"Name": name, "Indicator": round(value, 2)} for name, value in sorted_theme_indicators]
+        "테마": [{"Name": name, "Indicator": round(value, 2)} for name, value in sorted_theme_indicators]
     }
 
     # JSON 응답 반환
