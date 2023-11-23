@@ -8,5 +8,5 @@ urlpatterns = [
     path('save_stock/', views.save_stock),
     path('send_data/<str:code>/', views.send_data),
     path('send_main/<str:code>/', views.send_main),
-    path('recommend_data/<int:cnt>/', views.recommend_data),
+    path('recommend_data/<int:cnt>/<int:fn>/', views.recommend_data),
 ]

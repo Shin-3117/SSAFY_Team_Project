@@ -16,11 +16,12 @@ from django.views.decorators.cache import cache_page
 import pandas as pd
 from sklearn.linear_model import LinearRegression
 import numpy as np
+from datetime import timedelta
 
 # 투자 추천 알고리즘(최신 데이터 날짜 기준으로 과거 n개의 데이터를 바탕으로 상승 / 하락세 판별 => 기울기로 응답)
 def calculate_investment_indicator(df, price_column):
     if df.empty:
-        return None
+        return None, None
 
     # 선형 회귀 모델 생성
     model = LinearRegression()
@@ -34,11 +35,11 @@ def calculate_investment_indicator(df, price_column):
     # 선형 회귀 모델의 기울기 반환
     trend_slope = model.coef_[0]
 
-    return trend_slope
+    return trend_slope, model
 
 @api_view(['GET'])
 @cache_page(60 * 15)
-def recommend_data(request, cnt):
+def recommend_data(request, cnt, fn):
     gold_instances = Gold.objects.order_by('-basDt')
     gold_serializer = GoldSerializer(gold_instances, many=True)
     gold_data = gold_serializer.data
@@ -99,32 +100,47 @@ def recommend_data(request, cnt):
     theme_recent.sort_values(by='basDt', inplace=True)
 
     # 투자 지표 계산
-    gold_indicator = calculate_investment_indicator(gold_recent, 'clpr')
+    gold_indicator, gold_model = calculate_investment_indicator(gold_recent, 'clpr')
 
     oil_indicators = {}
+    oil_models = {}
     for category in oil_recent['oilCtg'].unique():
         category_data = oil_recent[oil_recent['oilCtg'] == category]
-        oil_indicators[category] = calculate_investment_indicator(category_data, 'wtAvgPrcDisc')
+        indicator, model = calculate_investment_indicator(category_data, 'wtAvgPrcDisc')
+        oil_indicators[category] = indicator
+        oil_models[category] = model
     
     kospi_indicators = {}
+    kospi_models = {}
     for category in kospi_recent['idxNm'].unique():
         category_data = kospi_recent[kospi_recent['idxNm'] == category]
-        kospi_indicators[category] = calculate_investment_indicator(category_data, 'clpr')
+        indicator, model = calculate_investment_indicator(category_data, 'clpr')
+        kospi_indicators[category] = indicator
+        kospi_models[category] = model
     
     kosdaq_indicators = {}
+    kosdaq_models = {}
     for category in kosdaq_recent['idxNm'].unique():
         category_data = kosdaq_recent[kosdaq_recent['idxNm'] == category]
-        kosdaq_indicators[category] = calculate_investment_indicator(category_data, 'clpr')
+        indicator, model = calculate_investment_indicator(category_data, 'clpr')
+        kosdaq_indicators[category] = indicator
+        kosdaq_models[category] = model
     
     krx_indicators = {}
+    krx_models = {}
     for category in krx_recent['idxNm'].unique():
         category_data = krx_recent[krx_recent['idxNm'] == category]
-        krx_indicators[category] = calculate_investment_indicator(category_data, 'clpr')
+        indicator, model = calculate_investment_indicator(category_data, 'clpr')
+        krx_indicators[category] = indicator
+        krx_models[category] = model
     
     theme_indicators = {}
+    theme_models = {}
     for category in theme_recent['idxNm'].unique():
         category_data = theme_recent[theme_recent['idxNm'] == category]
-        theme_indicators[category] = calculate_investment_indicator(category_data, 'clpr')
+        indicator, model = calculate_investment_indicator(category_data, 'clpr')
+        theme_indicators[category] = indicator
+        theme_models[category] = model
 
     # 각 카테고리별 추세 지표를 기울기에 따라 내림차순으로 정렬
     sorted_oil_indicators = sorted(oil_indicators.items(), key=lambda x: x[1], reverse=True)
@@ -143,6 +159,51 @@ def recommend_data(request, cnt):
         "테마": [{"Name": name, "Indicator": round(value, 2)} for name, value in sorted_theme_indicators]
     }
 
+    # 금 데이터에 대한 미래 가격 예측
+    latest_date_gold = pd.to_datetime(gold_recent['basDt'].max())
+    prediction_date_gold = latest_date_gold + timedelta(days=fn)
+    prediction_date_ordinal_gold = prediction_date_gold.toordinal()
+    predicted_price_gold = gold_model.predict([[prediction_date_ordinal_gold]])[0]
+
+    # 예측 결과를 응답 데이터에 추가
+    response_data['금'].append({"Name": "금 예상 가격", "Predicted Price": round(predicted_price_gold, 2)})
+
+    # 동일한 방식으로 석유, KOSPI, KOSDAQ, KRX, 테마 등에 대해서도 예측을 수행하고 결과를 response_data에 추가
+    for category, model in oil_models.items():
+        latest_date_oil = pd.to_datetime(oil_recent['basDt'].max())
+        prediction_date_oil = latest_date_oil + timedelta(days=fn)
+        prediction_date_ordinal_oil = prediction_date_oil.toordinal()
+        predicted_price_oil = model.predict([[prediction_date_ordinal_oil]])[0]
+        response_data['석유'].append({"Name": f"{category} 예상 가격", "Predicted Price": round(predicted_price_oil, 2)})
+    
+    for category, model in kospi_models.items():
+        latest_date_kospi = pd.to_datetime(kospi_recent['basDt'].max())
+        prediction_date_kospi = latest_date_kospi + timedelta(days=fn)
+        prediction_date_ordinal_kospi = prediction_date_kospi.toordinal()
+        predicted_price_kospi = model.predict([[prediction_date_ordinal_kospi]])[0]
+        response_data['KOSPI'].append({"Name": f"{category} 예상 가격", "Predicted Price": round(predicted_price_kospi, 2)})
+    
+    for category, model in kosdaq_models.items():
+        latest_date_kosdaq = pd.to_datetime(kosdaq_recent['basDt'].max())
+        prediction_date_kosdaq = latest_date_kosdaq + timedelta(days=fn)
+        prediction_date_ordinal_kosdaq = prediction_date_kosdaq.toordinal()
+        predicted_price_kosdaq = model.predict([[prediction_date_ordinal_kosdaq]])[0]
+        response_data['KOSDAQ'].append({"Name": f"{category} 예상 가격", "Predicted Price": round(predicted_price_kosdaq, 2)})
+    
+    for category, model in krx_models.items():
+        latest_date_krx = pd.to_datetime(krx_recent['basDt'].max())
+        prediction_date_krx = latest_date_krx + timedelta(days=fn)
+        prediction_date_ordinal_krx = prediction_date_krx.toordinal()
+        predicted_price_krx = model.predict([[prediction_date_ordinal_krx]])[0]
+        response_data['KRX'].append({"Name": f"{category} 예상 가격", "Predicted Price": round(predicted_price_krx, 2)})
+    
+    for category, model in theme_models.items():
+        latest_date_theme = pd.to_datetime(theme_recent['basDt'].max())
+        prediction_date_theme = latest_date_theme + timedelta(days=fn)
+        prediction_date_ordinal_theme = prediction_date_theme.toordinal()
+        predicted_price_theme = model.predict([[prediction_date_ordinal_theme]])[0]
+        response_data['테마'].append({"Name": f"{category} 예상 가격", "Predicted Price": round(predicted_price_theme, 2)})
+    
     return JsonResponse(response_data)
 
 
