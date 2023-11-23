@@ -2,7 +2,7 @@
   <div :class="`w-80 mx-auto my-8 border-4 rounded-xl p-2 ${currentColor}`">
     <div class="flex justify-between items-center mb-4 ml-1">
       <span class="text-xl text-black dark:text-slate-200 font-semibold animate-rotate-x animate-twice animate-duration-[1200ms]">
-        {{ currentOil }} <span :class="`text-2xl font-semibold ${currentColor}`"> {{ latestPrice }}</span>
+        {{ currentOil }} <span :class="`text-2xl font-semibold ${currentColor}`"> {{ latestPrice }}<span class="text-xl">원/L</span></span>
       </span>
       <div class="relative group">
         <router-link to="/Market/oil">
@@ -157,7 +157,7 @@ function updateLatestPriceAndColor() {
   currentOil.value = currentOilType;
   const currentOilData = oilData.value[currentOilType];
   if (currentOilData && currentOilData.length > 0) {
-    latestPrice.value = currentOilData[0].price + '원/L';
+    latestPrice.value = currentOilData[0].price;
     currentColor.value = oilColors[currentOilType];
   }
 }

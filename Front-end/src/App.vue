@@ -17,6 +17,6 @@ input{
   @apply border border-slate-500 dark:bg-slate-900 mb-4 rounded-xl px-2
 }
 .view{
-  min-height: calc(100vh - 88px - 92px);
+  min-height: calc(100vh - 88px);
 }
 </style>

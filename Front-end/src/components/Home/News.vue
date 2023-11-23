@@ -33,7 +33,7 @@ onMounted( async ()=>{
 }
 /* WebKit browsers (Chrome, Safari) */
 ::-webkit-scrollbar {
-  width: 12px; /* width of the scrollbar */
+  width: 10px; /* width of the scrollbar */
 
 }
 
@@ -42,11 +42,7 @@ onMounted( async ()=>{
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: rgba(128, 128, 128, 0.5); /* color of the scrollbar handle */
+  @apply bg-gray-400; /* color of the scrollbar handle */
   border-radius: 6px; /* roundness of the scrollbar handle */
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background-color: gold; /* color of the scrollbar handle on hover */
 }
 </style>

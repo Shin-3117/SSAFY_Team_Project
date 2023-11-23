@@ -1,7 +1,7 @@
 <template>
-  <div class="grid card">
+  <div class="grid rounded-xl border-2 p-2 temp mt-4 border-indigo-400 animate-fade animate-duration-[1000ms]">
     <!-- Column Headers -->
-    <div class="card font-bold grid grid-cols-7 gap-6 bg-slate-100 dark:bg-slate-900">
+    <div class="card font-bold grid grid-cols-7 gap-6 bg-indigo-400">
       <span class="col-span-3">외화</span>
       <span class="col-span-2">가격</span>
       <!-- <span class="col-span-2">1000원 당 외화</span> -->
@@ -9,8 +9,10 @@
     </div>
 
     <!-- Exchange Data Items -->
+    <div class="overflow-auto">
     <div v-for="data in exchangeData" :key="data.id" @click="reset(data.id)"
-    class="card grid grid-cols-7 gap-6 bg-slate-50 dark:bg-slate-950 hover:bg-gray-200 dark:hover:bg-gray-800">
+    class="card grid grid-cols-7 gap-6 bg-slate-50 hover:bg-indigo-400 dark:bg-indigo-500"
+    :class="{'bg-indigo-300 dark:bg-indigo-700' : isSelect===data.id}">
       <span class="col-span-3">{{ data.cur_unit }} - {{ data.cur_nm }}</span>
       <span class="col-span-2">{{ data.deal_bas_r }}</span>
       <!-- <span class="col-span-2">{{ (data.krw_to_cur*1000).toFixed(2)}}</span> -->
@@ -36,6 +38,7 @@
       </div>
     </div>
   </div>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -44,7 +47,7 @@ import { ref, onMounted } from 'vue';
 import type ExchangeType from '@/interface/ExchangeType';
 const exchangeData = ref<ExchangeType[]|null>(null);
 const isLoading = ref(true);
-const isSelect = ref(23)
+const isSelect = ref(1)
 const money = ref(1)
 const money2 = ref(1000)
 const exMoney = ref(0)
@@ -84,5 +87,24 @@ onMounted(async () => {
 <style scoped>
 .card{
   @apply rounded-xl border p-2;
+}
+
+.temp{
+  height: 720px;
+}
+
+/* WebKit browsers (Chrome, Safari) */
+::-webkit-scrollbar {
+  width: 10px; /* width of the scrollbar */
+
+}
+
+::-webkit-scrollbar-track {
+
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-gray-400; /* color of the scrollbar handle */
+  border-radius: 6px; /* roundness of the scrollbar handle */
 }
 </style>
