@@ -11,17 +11,17 @@
       </label>
     </div>
     <div v-if="market==='gold'" class="dark:bg-slate-800">
-      <GoldPriceView/>
+      <GoldPrice/>
     </div>
     <div v-if="market==='oil'" class="dark:bg-slate-800">
-      <OilPriceView/>
+      <OilPrice/>
     </div>
   </main>
 </template>
 
 <script setup lang="ts">
-import GoldPriceView from '@/components/Market/GoldPrice.vue';
-import OilPriceView from '@/components/Market/OilPrice.vue';
+import GoldPrice from '@/components/Market/GoldPrice.vue';
+import OilPrice from '@/components/Market/OilPrice.vue';
 import { ref } from 'vue';
 import { useRoute } from 'vue-router';
 

@@ -1,9 +1,9 @@
 <template>
   <main class="grid grid-cols-12 gap-2 p-2 2xl:px-40">
-    <Kospi class="col-span-12 sm:col-span-6 xl:col-span-3"/>
-    <kosdaq class="col-span-12 sm:col-span-6 xl:col-span-3"/>
-    <gold class="col-span-12 sm:col-span-6 xl:col-span-3"/>
-    <oil class="col-span-12 sm:col-span-6 xl:col-span-3"/>
+    <KospiWeek class="col-span-12 sm:col-span-6 xl:col-span-3"/>
+    <KosdaqWeek class="col-span-12 sm:col-span-6 xl:col-span-3"/>
+    <GoldWeek class="col-span-12 sm:col-span-6 xl:col-span-3"/>
+    <OilWeek class="col-span-12 sm:col-span-6 xl:col-span-3"/>
 
     <MainExchange class="col-span-12 sm:col-span-3 flex justify-center"/>
     <News class="col-span-12 sm:col-span-9  2xl:mx-9"/>
@@ -12,10 +12,10 @@
 </template>
 
 <script setup lang="ts">
-import Kospi from '@/components/testHome/kospi.vue';
-import kosdaq from '@/components/testHome/kosdaq.vue';
-import gold from '@/components/testHome/gold.vue';
-import oil from '@/components/testHome/oil.vue';
+import KospiWeek from '@/components/Home/KospiWeek.vue.js';
+import KosdaqWeek from '@/components/Home/KosdaqWeek.vue.js';
+import GoldWeek from '@/components/Home/GoldWeek.vue.js';
+import OilWeek from '@/components/Home/OilWeek.vue.js';
 import MainExchange from '@/components/Home/MainExchange.vue';
 import News from '@/components/Home/News.vue';
 </script>
