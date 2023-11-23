@@ -7,10 +7,10 @@ class WebsiteUser(HttpUser):
     # def test(self):
     #     self.client.get("market/send_data/kospi/")
 
-    # @task
-    # def test(self):
-    #     self.client.get("market/send_data/kosdaq/")
-
     @task
     def test(self):
-        self.client.get("market/recommend_data/365/")
+        self.client.get("market/send_data/kosdaq/")
+
+    # @task
+    # def test(self):
+    #     self.client.get("market/recommend_data/365/")

@@ -7,6 +7,9 @@ import requests
 from datetime import datetime
 from .serializers import NewsSerializer
 from .models import News
+# permission Decorators
+from rest_framework.decorators import permission_classes
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
 
 
 # Url
@@ -17,6 +20,7 @@ API_SECRET = settings.API_SECRET
 
 # Create your views here.
 @api_view(['GET'])
+@permission_classes([IsAdminUser])
 def api_test(request):
     url = URL
     headers = {

@@ -158,7 +158,7 @@ API_KEY3 = settings.API_KEY3
 
 # Create your views here.
 @api_view(['GET'])
-# @permission_classes([IsAdminUser])
+@permission_classes([IsAdminUser])
 def api_test(request, code):
     if code == 'oil':
         url = BASE_URL + OIL_URL
@@ -280,7 +280,7 @@ def save_stock(request):
         return JsonResponse({"error": str(e)}, status=500)
 
 
-
+# 시세 데이터 전송
 @api_view(['GET'])
 @cache_page(60 * 15)
 def send_data(request, code):
@@ -319,6 +319,7 @@ def send_data(request, code):
         return Response({'error': str(e)}, status=500)
 
 
+# 메인 페이지용 데이터 전송
 @api_view(['GET'])
 @cache_page(60 * 15)
 def send_main(request, code):
