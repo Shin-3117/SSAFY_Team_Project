@@ -4,20 +4,21 @@
     Loading...
   </div>
   
-<div v-if="!isLoading" class="card">
+<div v-if="!isLoading" class="container">
   <h2 class="font-bold text-center">
     <RouterLink to="/ExchangeRate">주요 국가 환율</RouterLink>
   </h2>
   <div class="flex sm:flex-col">  
-    <div class="card">
+    <div class="card max-h-44">
       <!-- {{ USDData }} -->
       <img src="@/assets/img/flag/Flag_of_the_United_States.svg" alt="일장기"
-        >
+        class="flagImg">
       <p class="font-bold">1달러 = {{ USDData?.deal_bas_r }} 원</p>
     </div>
-    <div class="card">
+    <div class="card ">
       <!-- {{ JPYData }} -->
-      <img src="@/assets/img/flag/Flag_of_Japan.svg" alt="일장기">
+      <img src="@/assets/img/flag/Flag_of_Japan.svg" alt="일장기"
+      class="flagImg">
       <p class="font-bold">100엔 = {{ JPYData?.deal_bas_r*100 }} 원</p>
     </div>
   </div>
@@ -50,7 +51,15 @@ onMounted(async () => {
 </script>
 
 <style scoped>
+.container{
+  @apply border-4 rounded-xl p-2 border-slate-500
+  flex flex-col justify-center items-center
+  max-h-96 max-w-fit;
+}
 .card{
-  @apply rounded-xl border p-2;
+  @apply rounded-xl border-2 p-2 flex flex-col justify-center items-center border-slate-500;
+}
+.flagImg{
+  max-height: 120px;
 }
 </style>

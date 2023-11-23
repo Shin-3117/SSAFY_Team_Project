@@ -1,5 +1,5 @@
 <template>
-  <section v-if="news" class="card h-96">
+  <section v-if="news" class="sectionContainer h-96">
     <h2  class="font-bold text-center pb-2">경제 뉴스</h2>
     <ul class="h-80 overflow-y-auto">
       <li v-for="ne in news">
@@ -25,8 +25,11 @@ onMounted( async ()=>{
 </script>
 
 <style scoped>
+.sectionContainer{
+  @apply border-4 rounded-xl p-2 border-slate-500;
+}
 .card{
-  @apply rounded-xl border p-2;
+  @apply rounded-xl border-2 p-2 border-slate-500;
 }
 /* WebKit browsers (Chrome, Safari) */
 ::-webkit-scrollbar {

@@ -1,12 +1,12 @@
 <template>
-  <main class="grid grid-cols-12 gap-2 p-2 lg:p-4">
+  <main class="grid grid-cols-12 gap-2 p-2 2xl:px-40">
     <Kospi class="col-span-12 sm:col-span-6 xl:col-span-3"/>
     <kosdaq class="col-span-12 sm:col-span-6 xl:col-span-3"/>
     <gold class="col-span-12 sm:col-span-6 xl:col-span-3"/>
     <oil class="col-span-12 sm:col-span-6 xl:col-span-3"/>
 
-    <MainExchange class="col-span-12 sm:col-span-3 2xl:ml-12"/>
-    <News class="col-span-12 sm:col-span-9  2xl:mr-12"/>
+    <MainExchange class="col-span-12 sm:col-span-3 flex justify-center"/>
+    <News class="col-span-12 sm:col-span-9  2xl:mx-9"/>
     
   </main>
 </template>

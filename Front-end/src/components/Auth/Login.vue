@@ -75,6 +75,7 @@ const logIn = function () {
   display: flex;
   justify-content: center;
   align-items: center;
+  @apply text-black dark:text-white;
 }
 .LoginFormBox{
   width: 80%;

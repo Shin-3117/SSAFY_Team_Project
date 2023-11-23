@@ -145,6 +145,7 @@ const signUp = function () {
   display: flex;
   justify-content: center;
   align-items: center;
+  @apply text-black dark:text-white;
 }
 .formBox{
   width: 80%;
