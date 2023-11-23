@@ -1,10 +1,12 @@
 <template>
 <div class="background">
-  <div class="formBox bg-slate-700 dark:bg-slate-800">
+  <div class="formBox bg-indigo-400 text-white dark:bg-slate-800
+  animate-fade animate-once animate-duration-600
+  rounded-lg">
     <div class="relative">
       <h2>Signup</h2>
       <button v-on:click="signupState.open()"
-      class="absolute top-0 right-0">X 모달창 닫기</button>
+      class="absolute top-0 right-0 text-xl">✕</button>
     </div>
 
     <form @submit.prevent="signUp">
@@ -53,7 +55,7 @@
       <input type="number" id="money" v-model="money">
 
       <br>
-      <input type="submit" value="회원가입" class="btn btn-blue">
+      <input type="submit" value="회원가입" class="Radio">
     </form>
   </div>
 </div>
@@ -162,13 +164,13 @@ form{
   flex-direction: column;
 }
 
-.btn {
-  @apply font-bold py-2 px-4 ;
+.Radio{
+  @apply cursor-pointer bg-indigo-500 hover:bg-gradient-to-br from-purple-700 to-blue-600 
+  text-white font-bold py-2 px-4 rounded-full mr-1;
 }
-.btn-blue {
-  @apply bg-blue-500 text-white;
-}
-.btn-blue:hover {
-  @apply bg-blue-700;
+
+input {
+  color: black;
+  @apply dark:text-white;
 }
 </style>

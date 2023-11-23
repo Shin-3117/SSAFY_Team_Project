@@ -1,6 +1,6 @@
 <template>
-  <main class=" p-4 flex justify-center">
-    <div class="p-4" v-if="Article">
+  <main class="p-4 flex justify-center animate-fade-left animate-once animate-duration-1000">
+    <div class="p-4 w-2/4" v-if="Article">
       <RouterLink to="/article" class="text-blue-500 hover:underline mb-2">게시판으로</RouterLink>
       <h2 class="text-2xl font-bold mb-2">{{ Article.title }}</h2>
       <div class="flex justify-between">
@@ -14,7 +14,7 @@
         </div>
       </div>
 
-      <div v-html="Article.content" class="mt-4"></div>
+      <div v-html="Article.content" class="my-8"></div>
       <button @click="likeArticleR(Article.id)" 
       class="bg-indigo-400 hover:bg-gradient-to-br from-purple-600 to-blue-500 
       p-3 rounded-full">
@@ -74,7 +74,7 @@
                     <form v-on:submit.prevent="putComment(Article.id, replie.id, putContent,replie.user.username)"
                      v-if="putReplieId===replie.id" class="flex">
                       <input type="text" v-model="putContent" class="input">
-                      <input type="submit" value="수정하기" class="btn btn-blue w-24">
+                      <input type="submit" value="수정하기" class="Radio">
                     </form>
                   </li>
                 </ul>
@@ -222,6 +222,6 @@ onMounted(async () => {
 }
 .Radio{
   @apply cursor-pointer bg-indigo-400 hover:bg-gradient-to-br from-purple-600 to-blue-500 
-  text-white font-bold py-1 px-2 rounded-md mr-1;
+  text-white font-bold py-1 px-2 rounded-full mr-1;
 }
 </style>
