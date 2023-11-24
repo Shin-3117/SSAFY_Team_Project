@@ -57,7 +57,7 @@ onMounted(async () => {
 
   try {
     const response = await axios.get<KosdaqData[]>(`${baseURL}/market/send_main/kosdaq/`);
-    console.log(response)
+    // console.log(response)
     kosdaq_cur.value = parseFloat(response.data[0].clpr)
     const data = {
       labels: response.data.map((data) => data.basDt),

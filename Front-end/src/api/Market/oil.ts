@@ -12,6 +12,6 @@ export interface OilData {
 
 // Oil 데이터를 가져오는 함수
 export function getOilData(): Promise<OilData[]> {
-  console.log('susecs')
+  // console.log('susecs')
   return axios.get<OilData[]>(`${API_BASE_URL}/market/send_data/oil/`).then(response => response.data);
 }

@@ -53,7 +53,7 @@ export const postArticle = async (title:string, content:string) => {
         Authorization: `Token ${authStore.token}`,
       },
     })
-    console.log(response)
+    // console.log(response)
 
     return response.data
   } catch(error){

@@ -43,7 +43,7 @@ export const useAuthStore = defineStore('auth', () => {
       }
     })
       .then((res) => {
-        console.log(res)
+        // console.log(res)
         const password = password1
         logIn({ username, password })
       })
@@ -62,7 +62,7 @@ export const useAuthStore = defineStore('auth', () => {
       }
     })
       .then((res) => {
-        console.log(res.data)
+        // console.log(res.data)
         token.value = res.data.key
         userID.value = username
         const localValue = {

@@ -12,19 +12,19 @@
       </div>
     </div>
     <section>
-      <div class="grid grid-cols-8 bg-indigo-200 rounded-xl dark:bg-gray-900 p-2">
-        <p class="col-span-4">제목</p>
-        <p class="col-span-1">작성자</p>
-        <p class="col-span-3">작성일</p>
+      <div class="grid grid-cols-9 bg-indigo-200 rounded-xl dark:bg-gray-900 p-2">
+        <p class="col-span-5">제목</p>
+        <p class="col-span-2">작성자</p>
+        <p class="col-span-2">작성일</p>
       </div>
       <div v-if="isLoading" class="text-center">Loading...</div>
       <div v-else>
         <ul>
           <RouterLink v-for="article in Articles" :key="article.id" :to="`/article/${article.id}`">
-            <li class="grid grid-cols-8 p-2 bg-slate-50 dark:bg-slate-950 hover:bg-gray-200 dark:hover:bg-gray-800">
-              <p class="col-span-4 ">{{ article.title }}</p>
-              <p class="col-span-1">{{ article.user.username }}</p>
-              <p class="col-span-3">{{ article.created_at.slice(0, 10) }}</p>
+            <li class="grid grid-cols-9 p-2 bg-slate-50 dark:bg-slate-950 hover:bg-gray-200 dark:hover:bg-gray-800">
+              <p class="col-span-5">{{ article.title }}</p>
+              <p class="col-span-2">{{ article.user.username }}</p>
+              <p class="col-span-2">{{ article.created_at.slice(0, 10) }}</p>
             </li>
           </RouterLink>
         </ul>

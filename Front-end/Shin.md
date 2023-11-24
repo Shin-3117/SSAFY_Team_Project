@@ -316,7 +316,7 @@ export const followUser = async (username:string) => {
         Authorization: `Token ${authStore.token}`,
       },
     })
-    console.log(response)
+    // console.log(response)
     alert('follow')
   } catch(error){
     console.error(error);

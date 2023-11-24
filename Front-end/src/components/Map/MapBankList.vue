@@ -140,7 +140,7 @@ const displayMarker = (place) => {
         position: new kakao.maps.LatLng(place.y, place.x) 
     });
     markers.push(marker)
-    console.log(markers)
+    // console.log(markers)
     // 마커에 클릭이벤트를 등록합니다
     kakao.maps.event.addListener(marker, 'click', function() {
         // 마커를 클릭하면 장소명이 인포윈도우에 표출됩니다
@@ -176,7 +176,7 @@ const deleteMarkers = () => {
 onMounted(async () => {
   if (window.kakao && window.kakao.maps) {
     initMap(); 
-    console.log('scrit add ok')
+    // console.log('scrit add ok')
   } else {
     const script = document.createElement('script');
     /* global kakao */

@@ -1,5 +1,5 @@
 <template>
-  <div class="container mx-auto p-6 flex flex-col items-center">
+  <div class=" mx-auto p-6 flex flex-col items-center">
     <h1 class="text-2xl font-semibold mb-4 animate-fade animate-duration-[1800ms]">투자 추천</h1>
     <!-- 사용자 입력 UI -->
     <div class="flex items-center mb-4 animate-fade animate-duration-[1800ms]">
@@ -7,7 +7,7 @@
         focus:outline-none focus:border-indigo-500 w-96 
         font-semibold text-center">
         <input v-model="futureDays" placeholder="예측할 미래 일수 (n일 후)" class="m-2 p-2 border-2 border-gray-300 rounded-md 
-      focus:outline-none focus:border-indigo-500 w-96 
+      focus:outline-none focus:border-indigo-500 w-72 
       font-semibold text-center">
       <button @click="loadData" class="p-2 bg-indigo-500 text-white rounded hover:bg-indigo-600 focus:outline-none">
         데이터 로드
@@ -147,9 +147,9 @@ export default defineComponent({
       negativeItems,
       predictionItems,
       debugData() {
-        console.log('Investment Data:', investmentData.value);
-        console.log('Positive Items:', positiveItems.value);
-        console.log('Negative Items:', negativeItems.value);
+        // console.log('Investment Data:', investmentData.value);
+        // console.log('Positive Items:', positiveItems.value);
+        // console.log('Negative Items:', negativeItems.value);
       }
     };
   }

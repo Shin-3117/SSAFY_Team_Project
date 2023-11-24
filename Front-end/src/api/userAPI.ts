@@ -11,7 +11,7 @@ export const userInfo = async (username:string) => {
       method: 'get',
       url: `${API_URL}/users/profile/${username}/`
     })
-    console.log(response)
+    // console.log(response)
     return response.data
   } catch(error){
     console.error(error);
@@ -31,7 +31,7 @@ export const deleteUser = async (username:string,password:string) => {
         Authorization: `Token ${authStore.token}`,
       },
     })
-    console.log(response)
+    // console.log(response)
     await authStore.logOut()
     // return response.data
   } catch(error){
@@ -48,7 +48,7 @@ export const followUser = async (username:string) => {
         Authorization: `Token ${authStore.token}`,
       },
     })
-    console.log(response)
+    // console.log(response)
     alert('follow')
   } catch(error){
     console.error(error);
