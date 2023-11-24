@@ -1,5 +1,5 @@
 <template>
-  <div :class="`w-80 mx-auto my-8 border-4 rounded-xl p-2 ${currentColor}`">
+  <div :class="`w-80 mx-auto my-8 border-4 rounded-xl p-2 h-56 ${currentColor}`">
     <div class="flex justify-between items-center mb-4 ml-1">
       <span class="text-xl text-black dark:text-slate-200 font-semibold animate-rotate-x animate-twice animate-duration-[1200ms]">
         {{ currentOil }} <span :class="`text-2xl font-semibold ${currentColor}`"> {{ latestPrice }}<span class="text-xl">원/L</span></span>
