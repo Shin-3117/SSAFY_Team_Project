@@ -5,7 +5,7 @@
       <h2 class="text-3xl font-bold mb-4">게시판</h2>
       <div v-if="authStore.token!==null">
         <RouterLink to="/article/post"
-        class="Radio">게시판 작성</RouterLink>
+        class="Radio">게시글 작성</RouterLink>
       </div>
       <div v-else>
         로그인 후, 게시글 작성이 가능합니다.

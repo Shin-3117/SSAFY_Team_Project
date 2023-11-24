@@ -6,7 +6,6 @@
       <div class="Radio w-32 text-center">팔로우 하기</div>
       </p>
       <h2 class="mt-4 text-xl font-extrabold">유저이름 : {{ info.username }}</h2>
-      <p class="mt-4 text-lg font-semibold">이메일 : {{ info.email }}</p>
       <p class="mt-4 text-lg font-semibold">성별 : {{ info.gender === 0 ? "남성" : "여성" }}</p>
       <p class="mt-4 text-lg font-semibold">생년월일 : {{ info.birthday }}</p>
       <p class="my-4 text-lg font-semibold">보유금액 : {{ info.money }}</p>
