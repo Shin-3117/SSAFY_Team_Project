@@ -13,7 +13,7 @@
       <!-- {{ USDData }} -->
       <img src="@/assets/img/flag/Flag_of_the_United_States.svg" alt="미국기"
         class="flagImg border-2 border-black">
-      <p class="font-bold">1달러 = {{ USDData?.deal_bas_r }} 원</p>
+      <p class="font-bold">1달러 = {{ parseFloat(USDData?.deal_bas_r).toFixed(2) }} 원</p>
     </div>
     <div class="card ">
       <!-- {{ JPYData }} -->

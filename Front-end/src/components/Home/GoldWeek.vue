@@ -1,5 +1,5 @@
 <template>
-  <div class="w-80 mx-auto my-8 border-4 rounded-xl p-2 border-yellow-200">
+  <div class="w-80 mx-auto my-8 border-4 rounded-xl p-2 border-yellow-200 h-56">
     <div class="flex justify-between items-center mb-4 ml-1">
       <span class="text-xl font-semibold animate-rotate-x animate-twice animate-duration-[1200ms]">
         금 시세 <span class="text-2xl text-yellow-500 font-semibold">{{ gold_cur }}<span class="text-xl">원/g</span></span>
